@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AutoPresenceApp</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string-array name="userType_array">
+        <item>student</item>
+        <item>professor</item>
+    </string-array>
+</resources>
