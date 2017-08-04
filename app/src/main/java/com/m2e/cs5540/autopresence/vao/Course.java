@@ -7,6 +7,25 @@ public class Course {
    private String id;
    private String name;
    private String location;
+   private String semester;
+   private String time;
+
+   public String getSemester() {
+      return semester;
+   }
+
+   public void setSemester(String semester) {
+      this.semester = semester;
+   }
+
+   public String getTime() {
+      return time;
+   }
+
+   public void setTime(String time) {
+      this.time = time;
+   }
+
    private MeetingDate[] meetingDates;
 
    public String getId() {
