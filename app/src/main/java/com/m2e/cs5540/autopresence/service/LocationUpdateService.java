@@ -9,22 +9,35 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
-import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.location.AppLocationListener;
+import com.m2e.cs5540.autopresence.util.AppUtil;
+import com.m2e.cs5540.autopresence.vao.Course;
+import com.m2e.cs5540.autopresence.vao.CourseRegistration;
+import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
+import com.m2e.cs5540.autopresence.vao.UserAttendance;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
+import com.m2e.cs5540.autopresence.vao.UserRole;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by maeswara on 7/15/2017.
  */
 public class LocationUpdateService extends IntentService {
-   private static final SimpleDateFormat sdf = new SimpleDateFormat
-         ("dd-MMM-yyyy HH:mm:ss");
+   private static final String TAG = "LocationUpdateService";
+   private static final SimpleDateFormat dateOnlySdf = new SimpleDateFormat(
+         "dd-MMM-yyyy");
+   private static final SimpleDateFormat timeOnlySdf = new SimpleDateFormat(
+         "HH:mm");
+   private static final SimpleDateFormat dateAndTimeSdf = new SimpleDateFormat(
+         "dd-MMM-yyyy HH:mm:ss");
    private boolean run = true;
    private AppLocationListener locationListener = new AppLocationListener();
    private LocationManager locationManager;
@@ -56,6 +69,7 @@ public class LocationUpdateService extends IntentService {
          Location location = locationListener.getLocation();
          if (location != null) {
             sendLocationUpdateToDatabase(location);
+            updateUserAttendance(location);
          }
       }
    }
@@ -64,10 +78,69 @@ public class LocationUpdateService extends IntentService {
       DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
       UserCoordinate userCoordinate = new UserCoordinate();
       userCoordinate.setUserId(userId);
-      userCoordinate.setLastUpdateTime(sdf.format(new Date()));
+      userCoordinate.setLastUpdateTime(dateAndTimeSdf.format(new Date()));
       userCoordinate.setCurrentLatitude(location.getLatitude());
       userCoordinate.setCurrentLongitude(location.getLongitude());
       databaseUtil.updateUserCoordinate(userCoordinate);
+   }
+
+   private void updateUserAttendance(Location location) {
+      DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
+      List<CourseRegistration> courseRegistrationList =
+            databaseUtil.getUserCourseRegistrations(userId);
+      for (CourseRegistration courseReg : courseRegistrationList) {
+         Course course = DatabaseUtil.getInstance().getCourse(
+               courseReg.getCourseId());
+         if (course != null) {
+            if (course.getMeetingDates() != null) {
+               for (MeetingDate meetingDate : course.getMeetingDates()) {
+                  if (AppUtil.isCurrentTimeInMeetingTime(meetingDate)) {
+                     List<Float> professorDistanceList = getProfessorDistances(
+                           location, course);
+                     for (float dist : professorDistanceList) {
+                        if (dist <= 50) {
+                           UserAttendance userAttendance = new UserAttendance();
+                           userAttendance.setUserId(userId);
+                           userAttendance.setCourseId(course.getId());
+                           userAttendance.setAttendanceDate(
+                                 dateOnlySdf.format(new Date()));
+                           userAttendance.setAttendanceTime(
+                                 timeOnlySdf.format(new Date()));
+                           DatabaseUtil.getInstance().registerAttendance(
+                                 userAttendance);
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   private List<Float> getProfessorDistances(Location currLocation,
+         Course course) {
+      List<Float> distanceList = new ArrayList<>();
+      List<CourseRegistration> courseRegistrationList =
+            DatabaseUtil.getInstance().getCourseRegistrations(course.getId());
+      for (CourseRegistration courseReg : courseRegistrationList) {
+         if (courseReg.getRole() == UserRole.PROFESSOR_ROLE) {
+            User user = DatabaseUtil.getInstance().getUserById(
+                  courseReg.getUserId());
+            UserCoordinate profCoordinate =
+                  DatabaseUtil.getInstance().getUserCoordinate(user.getId());
+            if (profCoordinate != null) {
+               float[] results = new float[3];
+               Location.distanceBetween(currLocation.getLatitude(),
+                     currLocation.getLongitude(),
+                     profCoordinate.getCurrentLatitude(),
+                     profCoordinate.getCurrentLongitude(), results);
+               distanceList.add(results[0]);
+               Log.d(TAG, "Current distance from professor " + user.getName() +
+                     ": " + results[0]);
+            }
+         }
+      }
+      return distanceList;
    }
 
    private void registerLocationListener() {

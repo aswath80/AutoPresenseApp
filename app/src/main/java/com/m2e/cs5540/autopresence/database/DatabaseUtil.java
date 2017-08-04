@@ -12,6 +12,7 @@ import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseRegistration;
 import com.m2e.cs5540.autopresence.vao.User;
+import com.m2e.cs5540.autopresence.vao.UserAttendance;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
 import com.m2e.cs5540.autopresence.vao.UserRegistration;
 
@@ -26,7 +27,8 @@ import java.util.Map;
 public class DatabaseUtil {
 
    private static final String TAG = DatabaseUtil.class.getName();
-   private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+   private DatabaseReference database =
+         FirebaseDatabase.getInstance().getReference();
    private static DatabaseUtil databaseUtil = new DatabaseUtil();
 
    private DatabaseUtil() {
@@ -37,7 +39,7 @@ public class DatabaseUtil {
    }
 
    public void createUser(User user) {
-      User existingUser = getUser(user.getLogin());
+      User existingUser = getUserByLogin(user.getLogin());
       if (existingUser != null) {
          throw new AppException("User with login " + user.getLogin() + " " +
                "already exists in the system!");
@@ -91,7 +93,7 @@ public class DatabaseUtil {
    }
 
    public void updateUserRegistration(UserRegistration reg) {
-      try{
+      try {
          DatabaseReference userRegsRef = database.child("userRegistrations");
          Log.d(TAG, "$$$ userRegsRef: " + userRegsRef);
          if (userRegsRef != null) {
@@ -99,9 +101,32 @@ public class DatabaseUtil {
          }
       } catch (Exception e) {
          Log.e(TAG, "User Registration failed", e);
-         throw new AppException("Error saving user info for user " +
-                  " into firebase. Cause: " + e.getClass().getName() + ": " + e.getMessage(), e);
+         throw new AppException(
+               "Error saving user info for user " + " into firebase. Cause: " +
+                     e.getClass().getName() + ": " + e.getMessage(), e);
       }
+   }
+
+   public UserCoordinate getUserCoordinate(String userId) {
+      try {
+         DatabaseReference userCoordsRef = database.child("userCoordinates");
+         Log.d(TAG, "$$$ userCoordsRef: " + userCoordsRef);
+         Log.d(TAG, "$$$ userId: " + userId);
+         if (userCoordsRef != null) {
+            UserCoordinate userCoordinate = getChildOnce(
+                  userCoordsRef.orderByChild("userId").equalTo(userId),
+                  UserCoordinate.class);
+            Log.d(TAG, "$$$ userCoordinate: " + userCoordinate);
+            return userCoordinate;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "updateUserCoordinate failed", e);
+         throw new AppException(
+               "Error getting userCoordinate info for user " + userId +
+                     " from firebase. Cause: " + e.getClass().getName() + ": " +
+                     e.getMessage(), e);
+      }
+      return null;
    }
 
    public void updateUserCoordinate(UserCoordinate userCoordinate) {
@@ -131,6 +156,29 @@ public class DatabaseUtil {
       }
    }
 
+   public void registerAttendance(UserAttendance userAttendance) {
+      try {
+         DatabaseReference userAttendancesRef = database.child(
+               "userAttendances");
+         Log.d(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
+         Log.d(TAG, "$$$ userId: " + userAttendance.getUserId());
+         if (userAttendancesRef != null) {
+            DatabaseReference currUserAttendanceRef = getChildReference(
+                  userAttendancesRef.orderByChild("attendanceDate")
+                        .equalTo(userAttendance.getAttendanceDate()));
+            Log.d(TAG, "$$$ currUserCoordinateRef: " + currUserAttendanceRef);
+            if (currUserAttendanceRef == null) {
+               currUserAttendanceRef.push().setValue(userAttendance);
+            }
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "updateUserCoordinate failed", e);
+         throw new AppException("Error updating userAttendance info for user " +
+               userAttendance.getUserId() + " into firebase. Cause: " +
+               e.getClass().getName() + ": " + e.getMessage(), e);
+      }
+   }
+
    private Map<String, Object> getUserCoordinateUpdateMap(
          UserCoordinate userCoordinate) {
       try {
@@ -149,7 +197,7 @@ public class DatabaseUtil {
       }
    }
 
-   public User getUser(String login) {
+   public User getUserByLogin(String login) {
       try {
          DatabaseReference usersRef = database.child("users");
          Log.d(TAG, "$$$ usersRef: " + usersRef);
@@ -164,6 +212,74 @@ public class DatabaseUtil {
          throw new AppException("Error querying user info for login " + login +
                " from firebase. Cause: " + e.getClass().getName() + ": " +
                e.getMessage(), e);
+      }
+      return null;
+   }
+
+   public User getUserById(String userId) {
+      try {
+         DatabaseReference usersRef = database.child("users");
+         Log.d(TAG, "$$$ usersRef: " + usersRef);
+         if (usersRef != null) {
+            Query userQuery = usersRef.orderByChild("id").equalTo(userId);
+            //Log.d(TAG, "$$$ userQuery: " + userQuery.getRef());
+            User user = getChildOnce(userQuery, User.class);
+            return user;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getUser failed", e);
+         throw new AppException(
+               "Error querying user info for userId " + userId +
+                     " from firebase. Cause: " + e.getClass().getName() + ": " +
+                     e.getMessage(), e);
+      }
+      return null;
+   }
+
+   public List<CourseRegistration> getUserCourseRegistrations(String userId) {
+      try {
+         DatabaseReference courseRegsRef = database.child(
+               "courseRegistrations");
+         Log.d(TAG, "$$$ courseRegsRef: " + courseRegsRef);
+         if (courseRegsRef != null) {
+            Query courseRegistrationQuery = courseRegsRef.orderByChild("userId")
+                  .equalTo(userId);
+            Log.d(TAG,
+                  "$$$ courseRegistrationQuery: " + courseRegistrationQuery);
+            List<CourseRegistration> courseRegistrationList = getChildrenOnce(
+                  courseRegistrationQuery, CourseRegistration.class);
+            return courseRegistrationList;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getCourse failed", e);
+         throw new AppException(
+               "Error querying course registration info for userId " + userId +
+                     " from firebase. Cause: " + e.getClass().getName() + ": " +
+                     e.getMessage(), e);
+      }
+      return null;
+   }
+
+   public List<CourseRegistration> getCourseRegistrations(String courseId) {
+      try {
+         DatabaseReference courseRegsRef = database.child(
+               "courseRegistrations");
+         Log.d(TAG, "$$$ courseRegsRef: " + courseRegsRef);
+         if (courseRegsRef != null) {
+            Query courseRegistrationQuery = courseRegsRef.orderByChild(
+                  "courseId").equalTo(courseId);
+            Log.d(TAG,
+                  "$$$ courseRegistrationQuery: " + courseRegistrationQuery);
+            List<CourseRegistration> courseRegistrationList = getChildrenOnce(
+                  courseRegistrationQuery, CourseRegistration.class);
+            return courseRegistrationList;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getCourse failed", e);
+         throw new AppException(
+               "Error querying course registration info for courseId " +
+                     courseId + " from firebase. Cause: " +
+                     e.getClass().getName() + ": " + e.getMessage(), e);
       }
       return null;
    }
@@ -230,6 +346,49 @@ public class DatabaseUtil {
       return objList.size() > 0 ? objList.get(0) : null;
    }
 
+   private <T extends Object> List<T> getChildrenOnce(Query dbQuery,
+         final Class<T> valueType) {
+      final Exception[] exceptions = {null};
+      final boolean[] wait = {true};
+      final List<T> objList = new ArrayList<>();
+      Log.d(TAG, "$$$ Waiting for DB results for : " + dbQuery);
+      dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override public void onDataChange(DataSnapshot dataSnapshot) {
+            Log.d(TAG, "$$$ debug: " + dataSnapshot.getValue());
+            if (dataSnapshot.exists()) {
+               for (DataSnapshot dbSnapshot : dataSnapshot.getChildren()) {
+                  objList.add(dbSnapshot.getValue(valueType));
+               }
+            }
+            wait[0] = false;
+            Log.d(TAG, "$$$ " + valueType.getSimpleName() + " received from " +
+                  "database = " + objList);
+         }
+
+         @Override public void onCancelled(DatabaseError databaseError) {
+            Log.e(TAG, "getValueOnce failed", databaseError.toException());
+            databaseError.toException().printStackTrace();
+            exceptions[0] = databaseError.toException();
+            wait[0] = false;
+         }
+      });
+      while (wait[0] == true && objList.size() == 0) {
+         try {
+            Thread.sleep(10);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+      if (exceptions[0] != null) {
+         throw new AppException("getValueOnce failed. Cause: " +
+               exceptions[0].getClass().getName() + ": " +
+               exceptions[0].getMessage(), exceptions[0]);
+      }
+      Log.d(TAG,
+            "$$$ Returning " + objList + " for " + valueType.getSimpleName());
+      return objList;
+   }
+
    private DatabaseReference getChildReference(Query dbQuery) {
       final Exception[] exceptions = {null};
       final boolean[] wait = {true};
@@ -269,6 +428,4 @@ public class DatabaseUtil {
       Log.d(TAG, "$$$ Returning " + objList + " for DatabaseReference");
       return objList.size() > 0 ? objList.get(0) : null;
    }
-
-
 }

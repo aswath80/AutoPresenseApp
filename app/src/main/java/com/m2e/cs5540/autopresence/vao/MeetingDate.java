@@ -8,6 +8,7 @@ public class MeetingDate {
    private String endDate;
    private String startTime;
    private String endTime;
+   private String meetingDays;
 
    public String getStartDate() {
       return startDate;
@@ -39,5 +40,13 @@ public class MeetingDate {
 
    public void setEndTime(String endTime) {
       this.endTime = endTime;
+   }
+
+   public String getMeetingDays() {
+      return meetingDays;
+   }
+
+   public void setMeetingDays(String meetingDays) {
+      this.meetingDays = meetingDays;
    }
 }
