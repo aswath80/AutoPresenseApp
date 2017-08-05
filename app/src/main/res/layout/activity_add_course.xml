@@ -39,33 +39,56 @@
                 android:hint="Course Name" />
         </android.support.design.widget.TextInputLayout>
 
-        <!-- Semester Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <Spinner
-                android:id="@+id/semester"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Semester"/>
-        </android.support.design.widget.TextInputLayout>
-
         <!-- Class time -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/cTime"
+            <EditText android:id="@+id/sTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="time"
-                android:hint="Class Time"/>
+                android:hint="Class Start Time"/>
         </android.support.design.widget.TextInputLayout>
 
-        <!-- Class Location Button -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/eTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:hint="Class End Time"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Class Date -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/sDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="Class Start Date"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/eDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="Class End Date"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Class time Button -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,6 +101,41 @@
                 android:hint="Class Location"/>
         </android.support.design.widget.TextInputLayout>
 
+        <!-- Class Weeks -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <CheckBox android:id="@+id/sunday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Sunday"/>
+            <CheckBox android:id="@+id/monday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Monday"/>
+            <CheckBox android:id="@+id/tuesday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tuesday"/>
+            <CheckBox android:id="@+id/wednesday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Wednesday"/>
+            <CheckBox android:id="@+id/thrusday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Thrusday"/>
+            <CheckBox android:id="@+id/friday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Friday"/>
+            <CheckBox android:id="@+id/saturday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Saturday"/>
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_Add_Course"

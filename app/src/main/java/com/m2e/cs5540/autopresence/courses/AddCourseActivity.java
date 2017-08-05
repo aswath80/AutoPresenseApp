@@ -2,24 +2,24 @@ package com.m2e.cs5540.autopresence.courses;
 
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
-import com.m2e.cs5540.autopresence.login.LoginActivity;
-import com.m2e.cs5540.autopresence.permit.PermitActivity;
+import com.m2e.cs5540.autopresence.vao.Course;
+import com.m2e.cs5540.autopresence.vao.MeetingDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddCourseActivity extends BaseActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
@@ -28,11 +28,19 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
 
     private EditText courseId;
     private EditText courseName;
-    private EditText classTime;
     private EditText classLocation;
 
-    private Spinner semester;
-    private ArrayAdapter<CharSequence> spinnerAdapter;
+    private EditText csTime;
+    private EditText ceTime;
+
+    private EditText csDate;
+    private EditText ceDate;
+
+    private List<CheckBox> weekdays;
+    private char[] days = {'0','0','0','0','0','0','0'};
+
+    //private Spinner semester;
+    //private ArrayAdapter<CharSequence> spinnerAdapter;
     private Button submitButton;
 
     @Override
@@ -44,14 +52,36 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
 
         this.courseId       = (EditText) findViewById(R.id.cId);
         this.courseName     = (EditText) findViewById(R.id.cName);
-        this.classTime      = (EditText) findViewById(R.id.cTime);
         this.classLocation  = (EditText) findViewById(R.id.cLocation);
 
-        this.semester   = (Spinner) findViewById(R.id.semester);
-        spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.semester, android.R.layout.simple_spinner_dropdown_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        semester.setAdapter(spinnerAdapter);
+        this.csTime         = (EditText) findViewById(R.id.sTime);
+        this.ceTime         = (EditText) findViewById(R.id.eTime);
 
+        this.csDate         = (EditText) findViewById(R.id.sDate);
+        this.ceDate         = (EditText) findViewById(R.id.eDate);
+
+        weekdays = new ArrayList<>(6);
+
+        weekdays.add((CheckBox) findViewById(R.id.sunday));
+        weekdays.add((CheckBox) findViewById(R.id.monday));
+        weekdays.add((CheckBox) findViewById(R.id.tuesday));
+        weekdays.add((CheckBox) findViewById(R.id.wednesday));
+        weekdays.add((CheckBox) findViewById(R.id.thrusday));
+        weekdays.add((CheckBox) findViewById(R.id.friday));
+        weekdays.add((CheckBox) findViewById(R.id.saturday));
+
+        for (int i = 0; i < weekdays.size(); i++) {
+            CheckBox cb = weekdays.get(i);
+            final int j = i ;
+            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    days[j] = (isChecked == true) ? '1' : '0';
+                    Log.d(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called, days value is: " + String.valueOf(days));
+                }
+            });
+        }
+        
         this.submitButton = (Button)findViewById(R.id.btn_Add_Course);
         submitButton.setOnClickListener(this);
     }
@@ -59,12 +89,38 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
     @Override
     public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called");
-        return new AddCourseAsyncTaskLoader(this, courseId, courseName, classLocation, classTime,
-                semester.getSelectedItem().toString());
+
+        Course course = new Course();
+        course.setId(courseId.getText().toString());
+        course.setName(courseName.getText().toString());
+        course.setLocation(classLocation.getText().toString());
+
+        MeetingDate md = new MeetingDate();
+        md.setStartDate(csDate.getText().toString());
+        md.setEndDate(ceDate.getText().toString());
+        md.setStartTime(csTime.getText().toString());
+        md.setEndTime(ceTime.getText().toString());
+
+        course.setMeetingDates(md);
+        course.setWeekdays(String.valueOf(days));
+
+
+        return new AddCourseAsyncTaskLoader(this, course);
     }
 
     @Override
-    public void onLoadFinished(Loader<AsyncLoaderStatus> loader, AsyncLoaderStatus data) {
+    public void onLoadFinished(Loader<AsyncLoaderStatus> loader, AsyncLoaderStatus loaderStatus) {
+
+        Log.d(TAG, "$$$$$$ RegisterActivity.onLoadFinished called");
+        if (loaderStatus.hasException()) {
+            Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Course has been added successfully.",
+                    Toast.LENGTH_LONG).show();
+        }
+        //finish();
+        //startActivity(getIntent());
     }
 
     @Override
@@ -75,8 +131,6 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         addCourse();
     }
-
-
 
     public void addCourse(){
         Log.d(TAG, "Adding Course");

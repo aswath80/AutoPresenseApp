@@ -33,12 +33,14 @@ public class ProfessorActivity extends AppCompatActivity {
         if (id == R.id.addCourse) {
             Intent intent = new Intent(getApplicationContext(), AddCourseActivity.class);
             startActivityForResult(intent, 0);
+            finish();
             return true;
         }
 
         if (id == R.id.addPermit) {
             Intent intent = new Intent(getApplicationContext(), PermitActivity.class);
             startActivityForResult(intent, 0);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

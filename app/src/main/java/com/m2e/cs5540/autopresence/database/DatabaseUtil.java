@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseRegistration;
+import com.m2e.cs5540.autopresence.vao.Permit;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
@@ -89,6 +90,23 @@ public class DatabaseUtil {
                courseRegistration.getUserId() + " - " +
                courseRegistration.getCourseId() + " into firebase. Cause: " +
                e.getClass().getName() + ": " + e.getMessage(), e);
+      }
+   }
+
+   public void createPermit(Permit permit){
+      try {
+         DatabaseReference permitRegsRef = database.child(
+                 "Permits");
+         Log.d(TAG, "$$$ permitRegsRef: " + permitRegsRef);
+         if (permitRegsRef != null) {
+            permitRegsRef.push().setValue(permit);
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getUser failed", e);
+         throw new AppException("Error saving user info for Course Pemit " +
+                 permit.getCourseId() + " - " +
+                 permit.getCin() + " into firebase. Cause: " +
+                 e.getClass().getName() + ": " + e.getMessage(), e);
       }
    }
 
@@ -304,6 +322,39 @@ public class DatabaseUtil {
       return null;
    }
 
+   public List<String> getAllCourse() {
+
+      final List<String> allCourses = new ArrayList<>();
+      try {
+         DatabaseReference coursesRef = database.child("courses");
+         Log.d(TAG, "$$$ coursesRef: " + coursesRef);
+
+         coursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               Map<String,Object> cources = (Map<String,Object>)dataSnapshot.getValue();
+
+               //iterate through each courses
+               for (Map.Entry<String, Object> entry : cources.entrySet()){
+                  Map singlecourse = (Map) entry.getValue();
+                  allCourses.add((String) singlecourse.get("id"));
+               }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+               Log.e(TAG, "getAllCourse failed", databaseError.toException());
+               databaseError.toException().printStackTrace();
+            }
+         });
+      } catch (Exception e) {
+         Log.e(TAG, "getCourse failed", e);
+         throw new AppException(
+                 "Error querying course info for courseId " + e.getMessage(), e);
+      }
+      return allCourses;
+   }
+
    private <T extends Object> T getChildOnce(Query dbQuery,
          final Class<T> valueType) {
       final Exception[] exceptions = {null};
@@ -311,6 +362,7 @@ public class DatabaseUtil {
       final List<T> objList = new ArrayList<>();
       Log.d(TAG, "$$$ Waiting for DB results for : " + dbQuery);
       dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+
          @Override public void onDataChange(DataSnapshot dataSnapshot) {
             Log.d(TAG, "$$$ debug: " + dataSnapshot.getValue());
             if (dataSnapshot.exists()) {

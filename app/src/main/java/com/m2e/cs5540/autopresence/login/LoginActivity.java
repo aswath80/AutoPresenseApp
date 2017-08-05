@@ -54,6 +54,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
          public void onClick(View v) {
             Intent intent = new Intent(getApplicationContext(), ProfessorActivity.class);
             startActivityForResult(intent, 0);
+
          }
       });
 

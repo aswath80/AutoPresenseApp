@@ -1,5 +1,7 @@
 package com.m2e.cs5540.autopresence.vao;
 
+import java.util.List;
+
 /**
  * Created by maeswara on 7/15/2017.
  */
@@ -7,26 +9,24 @@ public class Course {
    private String id;
    private String name;
    private String location;
-   private String semester;
-   private String time;
+   private String weekdays;
+   private MeetingDate meetingDates;
 
-   public String getSemester() {
-      return semester;
+   public MeetingDate getMeetingDates() {
+      return meetingDates;
    }
 
-   public void setSemester(String semester) {
-      this.semester = semester;
+   public void setMeetingDates(MeetingDate meetingDates) {
+      this.meetingDates = meetingDates;
    }
 
-   public String getTime() {
-      return time;
+   public String getWeekdays() {
+      return weekdays;
    }
 
-   public void setTime(String time) {
-      this.time = time;
+   public void setWeekdays(String weekdays) {
+      this.weekdays = weekdays;
    }
-
-   private MeetingDate[] meetingDates;
 
    public String getId() {
       return id;
@@ -52,11 +52,4 @@ public class Course {
       this.location = location;
    }
 
-   public MeetingDate[] getMeetingDates() {
-      return meetingDates;
-   }
-
-   public void setMeetingDates(MeetingDate[] meetingDates) {
-      this.meetingDates = meetingDates;
-   }
 }

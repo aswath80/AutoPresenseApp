@@ -9,6 +9,10 @@ import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.register.RegisterAsyncTaskLoader;
 import com.m2e.cs5540.autopresence.vao.Course;
+import com.m2e.cs5540.autopresence.vao.MeetingDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kumar on 8/3/2017.
@@ -19,21 +23,12 @@ public class AddCourseAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus>
     private static final String TAG = RegisterAsyncTaskLoader.class.getName();
     private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
 
-    private String id;
-    private String name;
-    private String semester;
-    private String time;
-    private String location;
+    private Course course;
 
-    public AddCourseAsyncTaskLoader(Context context, EditText cid,
-                                    EditText cname, EditText clocation, EditText ctime, String semster) {
+    public AddCourseAsyncTaskLoader(Context context, Course course) {
+
         super(context);
-        this.id = cid.getText().toString();
-        this.name = cname.getText().toString();
-        this.semester = semster;
-        this.time = ctime.getText().toString();
-        this.location = clocation.getText().toString();
-
+        this.course = course;
         onContentChanged();
         Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader created");
     }
@@ -51,13 +46,6 @@ public class AddCourseAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus>
 
         AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
         Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader loadInBackground");
-
-        Course course = new Course();
-        course.setId(id);
-        course.setName(name);
-        course.setLocation(location);
-        course.getLocation();
-        course.setSemester(semester);
 
         try {
             databaseUtil.createCourse(course);
