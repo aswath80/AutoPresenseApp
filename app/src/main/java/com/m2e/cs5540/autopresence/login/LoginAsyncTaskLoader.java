@@ -8,6 +8,7 @@ import android.widget.EditText;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
+import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.vao.User;
 
 /**
@@ -23,12 +24,12 @@ public class LoginAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
       super(context);
       this.usernameEditText = usernameEditText;
       onContentChanged();
-      Log.d(TAG, "$$$$ LoginAsyncTaskLoader created");
+      Log.i(TAG, "$$$$ LoginAsyncTaskLoader created");
    }
 
    @Override protected void onStartLoading() {
-      Log.d(TAG, "$$$$ LoginAsyncTaskLoader onStartLoading");
-      //Log.d(TAG, "$$$$ LoginAsyncTaskLoader takeContentChanged() = " +
+      Log.i(TAG, "$$$$ LoginAsyncTaskLoader onStartLoading");
+      //Log.i(TAG, "$$$$ LoginAsyncTaskLoader takeContentChanged() = " +
       //      takeContentChanged());
       if (takeContentChanged()) {
          forceLoad();
@@ -37,21 +38,30 @@ public class LoginAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
 
    @Override public AsyncLoaderStatus loadInBackground() {
       AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
-      Log.d(TAG, "$$$$ LoginAsyncTaskLoader loadInBackground");
+      Log.i(TAG, "$$$$ LoginAsyncTaskLoader loadInBackground");
       try {
-         User user = databaseUtil.getUser(
-               usernameEditText.getText().toString());
-         Log.d(TAG, "$$$$ Logged in user = " + user.getName());
-         AppContext.initContext(user);
-         loaderStatus.setResult(user);
+         String userLogin = usernameEditText.getText().toString();
+         if (userLogin != null && !userLogin.isEmpty()) {
+            User user = databaseUtil.getUserByLogin(userLogin);
+            if (user != null) {
+               Log.i(TAG, "$$$$ Logged in user = " + user.getName());
+               AppContext.initContext(user);
+               loaderStatus.setResult(user);
+            } else {
+               loaderStatus.setException(new AppException(
+                     "User " + userLogin + "" + " not found in the system!"));
+            }
+         }
       } catch (Exception e) {
+         e.printStackTrace();
          loaderStatus.setException(e);
       }
+
       return loaderStatus;
    }
 
    @Override public void deliverResult(AsyncLoaderStatus data) {
       super.deliverResult(data);
-      Log.d(TAG, "$$$$ LoginAsyncTaskLoader deliverResult " + data);
+      Log.i(TAG, "$$$$ LoginAsyncTaskLoader deliverResult " + data);
    }
 }

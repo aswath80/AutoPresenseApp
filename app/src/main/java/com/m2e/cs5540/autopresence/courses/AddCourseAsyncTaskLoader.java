@@ -26,12 +26,12 @@ public class AddCourseAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus>
         super(context);
         this.course = course;
         onContentChanged();
-        Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader created");
+        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader created");
     }
 
     @Override
     protected void onStartLoading() {
-        Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader onStartLoading");
+        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader onStartLoading");
         if (takeContentChanged()) {
             forceLoad();
         }
@@ -41,7 +41,7 @@ public class AddCourseAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus>
     public AsyncLoaderStatus loadInBackground() {
 
         AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
-        Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader loadInBackground");
+        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader loadInBackground");
 
         try {
             databaseUtil.createCourse(course);
@@ -54,6 +54,6 @@ public class AddCourseAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus>
     @Override
     public void deliverResult(AsyncLoaderStatus data) {
         super.deliverResult(data);
-        Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader deliverResult " + data);
+        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader deliverResult " + data);
     }
 }

@@ -48,7 +48,7 @@ public class AppUtil {
             Date toDate = meetingDateFormat.parse(meetingDate.getEndDate());
             Date today = new Date();
             if (today.after(fromDate) && today.before(toDate)) {
-               Log.d(TAG, "Date matched!");
+               Log.i(TAG, "Date matched!");
                Date fromTime = meetingTimeFormat.parse(
                      meetingDate.getStartTime());
                Calendar fromTimeCal = Calendar.getInstance();
@@ -65,7 +65,7 @@ public class AppUtil {
 
                if (todayCal.getTime().after(fromTimeCal.getTime()) &&
                      todayCal.getTime().before(toTimeCal.getTime())) {
-                  Log.d(TAG, "Time matched!");
+                  Log.i(TAG, "Time matched!");
                   int todayDayOfWeek = todayCal.get(Calendar.DAY_OF_WEEK);
                   return meetingDate.getMeetingDays().substring(
                         todayDayOfWeek - 1, todayDayOfWeek).equals("1");

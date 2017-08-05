@@ -15,12 +15,6 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
-import com.m2e.cs5540.autopresence.register.RegisterActivity;
-import com.m2e.cs5540.autopresence.register.RegisterAsyncTaskLoader;
-import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StudentEnrollment extends BaseActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
@@ -41,7 +35,7 @@ public class StudentEnrollment extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "$$$$$$ onCreate() Invoked... ");
+        Log.i(TAG, "$$$$$$ onCreate() Invoked... ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_enrollment);
 
@@ -80,7 +74,7 @@ public class StudentEnrollment extends BaseActivity implements View.OnClickListe
 
     private void studentCourseEnroll() {
 
-        Log.d(TAG, "StudentCourseEnroll");
+        Log.i(TAG, "StudentCourseEnroll");
         addButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(StudentEnrollment.this, R.style.Theme_AppCompat_Light_DarkActionBar);
@@ -106,7 +100,7 @@ public class StudentEnrollment extends BaseActivity implements View.OnClickListe
 
     @Override
     public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "$$$$$$ StudentEnrollment.onCreateLoader called");
+        Log.i(TAG, "$$$$$$ StudentEnrollment.onCreateLoader called");
         return new EnrollmentAsyncTaskLoader(this, CIN, courseIdText,
                 termText.getSelectedItem().toString(), yearText.getSelectedItem().toString());
     }
@@ -114,7 +108,7 @@ public class StudentEnrollment extends BaseActivity implements View.OnClickListe
     @Override
     public void onLoadFinished(Loader<AsyncLoaderStatus> loader, AsyncLoaderStatus loaderStatus) {
 
-        Log.d(TAG, "$$$$$$ StudentEnrollmentActivity.onLoadFinished called");
+        Log.i(TAG, "$$$$$$ StudentEnrollmentActivity.onLoadFinished called");
         if (loaderStatus.hasException()) {
             Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
                     Toast.LENGTH_LONG).show();

@@ -16,7 +16,10 @@ import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
 import com.m2e.cs5540.autopresence.register.RegisterActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
+import com.m2e.cs5540.autopresence.students.StudentsActivity;
+import com.m2e.cs5540.autopresence.util.AppUtil;
 import com.m2e.cs5540.autopresence.vao.User;
+import com.m2e.cs5540.autopresence.vao.UserRole;
 
 /**
  * Created by maeswara on 7/8/2017.
@@ -26,23 +29,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
    private static final String TAG = LoginActivity.class.getName();
    private EditText usernameEditText;
+   private EditText passwordEditText;
    private Button loginButton;
    private Button register;
    private Button professorsHome;
-
 
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.login_layout);
       this.usernameEditText = (EditText) findViewById(R.id.usernameText);
+      this.passwordEditText = (EditText) findViewById(R.id.passwordText);
 
       this.register = (Button) findViewById(R.id.btn_signup);
       this.register.setOnClickListener(new View.OnClickListener() {
 
-         @Override
-         public void onClick(View v) {
+         @Override public void onClick(View v) {
             // Start the Signup activity
-            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+            Intent intent = new Intent(getApplicationContext(),
+                  RegisterActivity.class);
             startActivityForResult(intent, 0);
          }
       });
@@ -50,9 +54,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
       this.professorsHome = (Button) findViewById(R.id.btn_Professor);
       this.professorsHome.setOnClickListener(new View.OnClickListener() {
 
-         @Override
-         public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(), ProfessorActivity.class);
+         @Override public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(),
+                  ProfessorActivity.class);
             startActivityForResult(intent, 0);
          }
       });
@@ -66,52 +70,81 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
    }
 
    @Override public void onClick(View v) {
-      EditText userNameText = (EditText) findViewById(R.id.usernameText);
-      String username = userNameText.getText().toString();
+      String username = usernameEditText.getText().toString();
+      String password = passwordEditText.getText().toString();
 
-      EditText passwordText = (EditText) findViewById(R.id.passwordText);
-      String password = userNameText.getText().toString();
-
-      Log.d(TAG, "$$$$$$ Login process start... ");
+      Log.i(TAG, "$$$$$$ Login process start... ");
 
       if (username == null || username.isEmpty() || password == null ||
             password.isEmpty()) {
          Toast.makeText(this, "Enter a valid " + "username and password!",
                Toast.LENGTH_SHORT).show();
       } else {
-         Log.d(TAG, "$$$$$$ LoadManager.initLoader called");
-         getLoaderManager().initLoader(0, null, this);
+         Log.i(TAG, "$$$$$$ LoadManager.initLoader called");
+         if (getLoaderManager().getLoader(123) == null) {
+            getLoaderManager().initLoader(123, null, this);
+         } else {
+            getLoaderManager().restartLoader(123, null, this).forceLoad();
+         }
          showProgressDialog();
       }
    }
 
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
-      Log.d(TAG, "$$$$$$ LoginActivity.onCreateLoader called");
+      Log.i(TAG, "$$$$$$ LoginActivity.onCreateLoader called");
       return new LoginAsyncTaskLoader(this, usernameEditText);
    }
 
    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
          AsyncLoaderStatus loaderStatus) {
       hideProgressDialog();
-      Log.d(TAG, "$$$$$$ LoginActivity.onLoadFinished called");
+      Log.i(TAG, "$$$$$$ LoginActivity.onLoadFinished called");
       if (loaderStatus.hasException()) {
          Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
                Toast.LENGTH_LONG).show();
       } else {
-         String username = loaderStatus.getResult() != null ?
-               ((User) loaderStatus.getResult()).getName() : null;
-         Toast.makeText(this, "Logged in user is " + username,
-               Toast.LENGTH_LONG).show();
-         startLocationService(loaderStatus);
+         User user = (User) loaderStatus.getResult();
+         String password = passwordEditText.getText().toString();
+         String username = (user != null) ? user.getName() : null;
+         String encryptedPassword = (user != null) ? user.getPassword() : null;
+         Log.i(TAG, "$$$ encryptedPassword from DB = " + encryptedPassword);
+         Log.i(TAG, "$$$ password from login = " + password);
+         Log.i(TAG, "$$$ encryptedPassword from login = " +
+               AppUtil.encryptPassword(password));
+         if (user != null && encryptedPassword != null &&
+               encryptedPassword.equals(AppUtil.encryptPassword(password))) {
+            Toast.makeText(this, "Logged in user is " + username,
+                  Toast.LENGTH_LONG).show();
+            startLocationService(loaderStatus);
+            showLandingPageForuser(user);
+         } else {
+            Toast.makeText(this, "Invalid username/password. Try again!",
+                  Toast.LENGTH_LONG).show();
+         }
          //new LocationServiceAsyncTask().execute(
          //      "893b671d-d09e-428f-a251-8b21887d76a4");
       }
    }
 
+   private void showLandingPageForuser(User user) {
+      if (user != null) {
+         if (user.getRole() == UserRole.STUDENT) {
+            Intent studentLandingPageIntent = new Intent(this,
+                  StudentsActivity.class);
+            startActivity(studentLandingPageIntent);
+         } else if (user.getRole() == UserRole.PROFESSOR) {
+            Intent professorLandingPageIntent = new Intent(this,
+                  ProfessorActivity.class);
+            startActivity(professorLandingPageIntent);
+         }
+      }
+   }
+
    private void startLocationService(AsyncLoaderStatus loaderStatus) {
       User user = (User) loaderStatus.getResult();
-      Intent locationServiceIntent = new Intent(this, LocationUpdateService.class);
+      Intent locationServiceIntent = new Intent(this,
+            LocationUpdateService.class);
       locationServiceIntent.putExtra("userId", user.getId());
       startService(locationServiceIntent);
    }

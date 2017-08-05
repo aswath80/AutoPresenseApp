@@ -15,7 +15,7 @@ import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.location.AppLocationListener;
 import com.m2e.cs5540.autopresence.util.AppUtil;
 import com.m2e.cs5540.autopresence.vao.Course;
-import com.m2e.cs5540.autopresence.vao.CourseRegistration;
+import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
@@ -62,7 +62,7 @@ public class LocationUpdateService extends IntentService {
       this.userId = intent.getStringExtra("userId");
       while (run) {
          try {
-            Thread.sleep(1000);
+            Thread.sleep(10 * 1000);
          } catch (InterruptedException e) {
             e.printStackTrace();
          }
@@ -86,29 +86,28 @@ public class LocationUpdateService extends IntentService {
 
    private void updateUserAttendance(Location location) {
       DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
-      List<CourseRegistration> courseRegistrationList =
-            databaseUtil.getUserCourseRegistrations(userId);
-      for (CourseRegistration courseReg : courseRegistrationList) {
+      List<CourseEnrollment> courseRegistrationList =
+            databaseUtil.getCourseEnrollmentsByUserId(userId);
+      for (CourseEnrollment courseReg : courseRegistrationList) {
          Course course = DatabaseUtil.getInstance().getCourse(
                courseReg.getCourseId());
          if (course != null) {
-            if (course.getMeetingDates() != null) {
-               for (MeetingDate meetingDate : course.getMeetingDates()) {
-                  if (AppUtil.isCurrentTimeInMeetingTime(meetingDate)) {
-                     List<Float> professorDistanceList = getProfessorDistances(
-                           location, course);
-                     for (float dist : professorDistanceList) {
-                        if (dist <= 50) {
-                           UserAttendance userAttendance = new UserAttendance();
-                           userAttendance.setUserId(userId);
-                           userAttendance.setCourseId(course.getId());
-                           userAttendance.setAttendanceDate(
-                                 dateOnlySdf.format(new Date()));
-                           userAttendance.setAttendanceTime(
-                                 timeOnlySdf.format(new Date()));
-                           DatabaseUtil.getInstance().registerAttendance(
-                                 userAttendance);
-                        }
+            if (course.getMeetingDate() != null) {
+               MeetingDate meetingDate = course.getMeetingDate();
+               if (AppUtil.isCurrentTimeInMeetingTime(meetingDate)) {
+                  List<Float> professorDistanceList = getProfessorDistances(
+                        location, course);
+                  for (float dist : professorDistanceList) {
+                     if (dist <= 50) {
+                        UserAttendance userAttendance = new UserAttendance();
+                        userAttendance.setUserId(userId);
+                        userAttendance.setCourseId(course.getId());
+                        userAttendance.setAttendanceDate(
+                              dateOnlySdf.format(new Date()));
+                        userAttendance.setAttendanceTime(
+                              timeOnlySdf.format(new Date()));
+                        DatabaseUtil.getInstance().createUserAttendance(
+                              userAttendance);
                      }
                   }
                }
@@ -120,10 +119,11 @@ public class LocationUpdateService extends IntentService {
    private List<Float> getProfessorDistances(Location currLocation,
          Course course) {
       List<Float> distanceList = new ArrayList<>();
-      List<CourseRegistration> courseRegistrationList =
-            DatabaseUtil.getInstance().getCourseRegistrations(course.getId());
-      for (CourseRegistration courseReg : courseRegistrationList) {
-         if (courseReg.getRole() == UserRole.PROFESSOR_ROLE) {
+      List<CourseEnrollment> courseRegistrationList =
+            DatabaseUtil.getInstance().getCourseEnrollmentsByCourseId(
+                  course.getId());
+      for (CourseEnrollment courseReg : courseRegistrationList) {
+         if (courseReg.getRole() == UserRole.PROFESSOR) {
             User user = DatabaseUtil.getInstance().getUserById(
                   courseReg.getUserId());
             UserCoordinate profCoordinate =
@@ -135,7 +135,7 @@ public class LocationUpdateService extends IntentService {
                      profCoordinate.getCurrentLatitude(),
                      profCoordinate.getCurrentLongitude(), results);
                distanceList.add(results[0]);
-               Log.d(TAG, "Current distance from professor " + user.getName() +
+               Log.i(TAG, "Current distance from professor " + user.getName() +
                      ": " + results[0]);
             }
          }

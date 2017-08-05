@@ -1,7 +1,5 @@
 package com.m2e.cs5540.autopresence.vao;
 
-import java.util.List;
-
 /**
  * Created by maeswara on 7/15/2017.
  */
@@ -11,8 +9,10 @@ public class Course {
    private String location;
    private String weekdays;
    private MeetingDate meetingDates;
+   private String term;
+   private String year;
 
-   public MeetingDate getMeetingDates() {
+   public MeetingDate getMeetingDate() {
       return meetingDates;
    }
 
@@ -52,4 +52,19 @@ public class Course {
       this.location = location;
    }
 
+   public String getTerm() {
+      return term;
+   }
+
+   public void setTerm(String term) {
+      this.term = term;
+   }
+
+   public String getYear() {
+      return year;
+   }
+
+   public void setYear(String year) {
+      this.year = year;
+   }
 }

@@ -4,8 +4,8 @@
     <string name="password">Password</string>
     <string name="course">Courses</string>
     <string-array name="userType_array">
-        <item>student</item>
-        <item>professor</item>
+        <item>STUDENT</item>
+        <item>PROFESSOR</item>
     </string-array>
 
     <string-array name="semester">

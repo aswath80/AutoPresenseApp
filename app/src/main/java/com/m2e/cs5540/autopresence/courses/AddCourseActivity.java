@@ -47,7 +47,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.d(TAG, "$$$$$$ onCreate() Invoked... ");
+        Log.i(TAG, "$$$$$$ onCreate() Invoked... ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
@@ -78,7 +78,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     days[j] = (isChecked == true) ? '1' : '0';
-                    Log.d(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called, days value is: " + String.valueOf(days));
+                    Log.i(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called, days value is: " + String.valueOf(days));
                 }
             });
         }
@@ -89,7 +89,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called");
+        Log.i(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called");
 
         Course course = new Course();
         course.setId(courseId.getText().toString());
@@ -112,7 +112,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onLoadFinished(Loader<AsyncLoaderStatus> loader, AsyncLoaderStatus loaderStatus) {
 
-        Log.d(TAG, "$$$$$$ RegisterActivity.onLoadFinished called");
+        Log.i(TAG, "$$$$$$ RegisterActivity.onLoadFinished called");
         if (loaderStatus.hasException()) {
             Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
                     Toast.LENGTH_LONG).show();
@@ -134,7 +134,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void addCourse(){
-        Log.d(TAG, "Adding Course");
+        Log.i(TAG, "Adding Course");
         submitButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(AddCourseActivity.this,

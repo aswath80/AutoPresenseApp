@@ -22,12 +22,12 @@ public class PermitAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
         super(context);
         this.permit = permit;
         onContentChanged();
-        Log.d(TAG, "$$$$ PermitAsyncTaskLoader created");
+        Log.i(TAG, "$$$$ PermitAsyncTaskLoader created");
     }
 
     @Override
     protected void onStartLoading() {
-        Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader onStartLoading");
+        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader onStartLoading");
         if (takeContentChanged()) {
             forceLoad();
         }
@@ -37,7 +37,7 @@ public class PermitAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
     public AsyncLoaderStatus loadInBackground() {
 
         AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
-        Log.d(TAG, "$$$$ PermitAsyncTaskLoader loadInBackground");
+        Log.i(TAG, "$$$$ PermitAsyncTaskLoader loadInBackground");
 
         try {
             databaseUtil.createPermit(permit);
@@ -50,6 +50,6 @@ public class PermitAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
     @Override
     public void deliverResult(AsyncLoaderStatus data) {
         super.deliverResult(data);
-        Log.d(TAG, "$$$$ AddCourseAsyncTaskLoader deliverResult " + data);
+        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader deliverResult " + data);
     }
 }

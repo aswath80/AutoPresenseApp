@@ -6,18 +6,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
-import com.m2e.cs5540.autopresence.vao.CourseRegistration;
 import com.m2e.cs5540.autopresence.vao.Permit;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
-import com.m2e.cs5540.autopresence.vao.UserRegistration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +46,7 @@ public class DatabaseUtil {
       }
       try {
          DatabaseReference usersRef = database.child("users");
-         Log.d(TAG, "$$$ usersRef: " + usersRef);
+         Log.i(TAG, "$$$ usersRef: " + usersRef);
          if (usersRef != null) {
             usersRef.push().setValue(user);
          }
@@ -63,66 +60,40 @@ public class DatabaseUtil {
    }
 
    public void createCourse(Course course) {
-      try {
-         DatabaseReference coursesRef = database.child("courses");
-         Log.d(TAG, "$$$ coursesRef: " + coursesRef);
-         if (coursesRef != null) {
-            coursesRef.push().setValue(course);
+      if (course != null) {
+         try {
+            Course existingCourse = getCourse(course.getId());
+            if (existingCourse != null) {
+               throw new AppException("Course with id " + course.getId() +
+                     " already exists in the system!");
+            }
+            DatabaseReference coursesRef = database.child("courses");
+            Log.i(TAG, "$$$ coursesRef: " + coursesRef);
+            if (coursesRef != null) {
+               coursesRef.push().setValue(course);
+            }
+         } catch (Exception e) {
+            Log.e(TAG, "getUser failed", e);
+            throw new AppException(
+                  "Error saving user info for user " + course.getId() +
+                        " into firebase. Cause: " + e.getClass().getName() +
+                        ": " + e.getMessage(), e);
          }
-      } catch (Exception e) {
-         Log.e(TAG, "getUser failed", e);
-         throw new AppException(
-               "Error saving user info for user " + course.getId() +
-                     " into firebase. Cause: " + e.getClass().getName() + ": " +
-                     e.getMessage(), e);
       }
    }
 
-   public void createCourseRegistration(CourseRegistration courseRegistration) {
+   public void createPermit(Permit permit) {
       try {
-         DatabaseReference courseRegsRef = database.child(
-               "courseRegistrations");
-         Log.d(TAG, "$$$ courseRegsRef: " + courseRegsRef);
-         if (courseRegsRef != null) {
-            courseRegsRef.push().setValue(courseRegistration);
-         }
-      } catch (Exception e) {
-         Log.e(TAG, "getUser failed", e);
-         throw new AppException("Error saving user info for user " +
-               courseRegistration.getUserId() + " - " +
-               courseRegistration.getCourseId() + " into firebase. Cause: " +
-               e.getClass().getName() + ": " + e.getMessage(), e);
-      }
-   }
-
-   public void createPermit(Permit permit){
-      try {
-         DatabaseReference permitRegsRef = database.child(
-                 "Permits");
-         Log.d(TAG, "$$$ permitRegsRef: " + permitRegsRef);
+         DatabaseReference permitRegsRef = database.child("permits");
+         Log.i(TAG, "$$$ permitRegsRef: " + permitRegsRef);
          if (permitRegsRef != null) {
             permitRegsRef.push().setValue(permit);
          }
       } catch (Exception e) {
-         Log.e(TAG, "getUser failed", e);
-         throw new AppException("Error saving user info for Course Pemit " +
-                 permit.getCourseId() + " - " +
-                 permit.getCin() + " into firebase. Cause: " +
-                 e.getClass().getName() + ": " + e.getMessage(), e);
-      }
-   }
-
-   public void updateUserRegistration(UserRegistration reg) {
-      try {
-         DatabaseReference userRegsRef = database.child("userRegistrations");
-         Log.d(TAG, "$$$ userRegsRef: " + userRegsRef);
-         if (userRegsRef != null) {
-            userRegsRef.push().setValue(reg);
-         }
-      } catch (Exception e) {
-         Log.e(TAG, "User Registration failed", e);
+         Log.e(TAG, "createPermit failed", e);
          throw new AppException(
-               "Error saving user info for user " + " into firebase. Cause: " +
+               "Error creating permit " + permit.getCourseId() + " - " +
+                     permit.getCin() + " into firebase. Cause: " +
                      e.getClass().getName() + ": " + e.getMessage(), e);
       }
    }
@@ -130,13 +101,13 @@ public class DatabaseUtil {
    public UserCoordinate getUserCoordinate(String userId) {
       try {
          DatabaseReference userCoordsRef = database.child("userCoordinates");
-         Log.d(TAG, "$$$ userCoordsRef: " + userCoordsRef);
-         Log.d(TAG, "$$$ userId: " + userId);
+         Log.i(TAG, "$$$ userCoordsRef: " + userCoordsRef);
+         Log.i(TAG, "$$$ userId: " + userId);
          if (userCoordsRef != null) {
             UserCoordinate userCoordinate = getChildOnce(
                   userCoordsRef.orderByChild("userId").equalTo(userId),
                   UserCoordinate.class);
-            Log.d(TAG, "$$$ userCoordinate: " + userCoordinate);
+            Log.i(TAG, "$$$ userCoordinate: " + userCoordinate);
             return userCoordinate;
          }
       } catch (Exception e) {
@@ -149,36 +120,54 @@ public class DatabaseUtil {
       return null;
    }
 
-   public void studentCourseEnrollment(CourseEnrollment enroll) {
-      try{
-         DatabaseReference courseEnrollRef = database.child("studentCourseEnroll");
-         Log.d(TAG, "$$$ courseEnrollRef: " + courseEnrollRef);
-         if (courseEnrollRef != null) {
-            courseEnrollRef.push().setValue(enroll);
+   public void createCourseEnrollment(CourseEnrollment courseEnrollment) {
+      if (courseEnrollment != null) {
+         try {
+            List<CourseEnrollment> existingUserCourseEnrollments =
+                  getCourseEnrollmentsByUserId(courseEnrollment.getUserId());
+            if (existingUserCourseEnrollments != null) {
+               for (CourseEnrollment existingCourseRegistration : existingUserCourseEnrollments) {
+                  if (existingCourseRegistration.getUserId().equals(
+                        courseEnrollment.getUserId())) {
+                     throw new AppException(
+                           "User " + courseEnrollment.getUserId() +
+                                 " is already registered in course " +
+                                 courseEnrollment.getCourseId());
+                  }
+               }
+            }
+            DatabaseReference courseEnrollRef = database.child(
+                  "courseEnrollments");
+            Log.i(TAG, "$$$ courseEnrollRef: " + courseEnrollRef);
+            if (courseEnrollRef != null) {
+               courseEnrollRef.push().setValue(courseEnrollment);
+            }
+         } catch (Exception e) {
+            Log.e(TAG, "Student Course Enrollment failed", e);
+            throw new AppException(
+                  "Error saving course enroll info for student " +
+                        " into firebase. Cause: " + e.getClass().getName() +
+                        ": " + e.getMessage(), e);
          }
-      } catch (Exception e) {
-         Log.e(TAG, "Student Course Enrollment failed", e);
-         throw new AppException("Error saving course enroll info for student " +
-                 " into firebase. Cause: " + e.getClass().getName() + ": " + e.getMessage(), e);
       }
    }
 
    public void updateUserCoordinate(UserCoordinate userCoordinate) {
       try {
          DatabaseReference userCoordsRef = database.child("userCoordinates");
-         Log.d(TAG, "$$$ userCoordsRef: " + userCoordsRef);
-         Log.d(TAG, "$$$ userId: " + userCoordinate.getUserId());
+         Log.i(TAG, "$$$ userCoordsRef: " + userCoordsRef);
+         Log.i(TAG, "$$$ userId: " + userCoordinate.getUserId());
          if (userCoordsRef != null) {
             DatabaseReference currUserCoordinateRef = getChildReference(
                   userCoordsRef.orderByChild("userId")
                         .equalTo(userCoordinate.getUserId()));
-            Log.d(TAG, "$$$ currUserCoordinateRef: " + currUserCoordinateRef);
+            Log.i(TAG, "$$$ currUserCoordinateRef: " + currUserCoordinateRef);
             if (currUserCoordinateRef == null) {
                userCoordsRef.push().setValue(userCoordinate);
             } else {
                Map<String, Object> updateMap = getUserCoordinateUpdateMap(
                      userCoordinate);
-               Log.d(TAG, "$$$ location coord updateMap = " + updateMap);
+               Log.i(TAG, "$$$ location coord updateMap = " + updateMap);
                currUserCoordinateRef.updateChildren(updateMap);
             }
          }
@@ -190,17 +179,17 @@ public class DatabaseUtil {
       }
    }
 
-   public void registerAttendance(UserAttendance userAttendance) {
+   public void createUserAttendance(UserAttendance userAttendance) {
       try {
          DatabaseReference userAttendancesRef = database.child(
                "userAttendances");
-         Log.d(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
-         Log.d(TAG, "$$$ userId: " + userAttendance.getUserId());
+         Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
+         Log.i(TAG, "$$$ userId: " + userAttendance.getUserId());
          if (userAttendancesRef != null) {
             DatabaseReference currUserAttendanceRef = getChildReference(
                   userAttendancesRef.orderByChild("attendanceDate")
                         .equalTo(userAttendance.getAttendanceDate()));
-            Log.d(TAG, "$$$ currUserCoordinateRef: " + currUserAttendanceRef);
+            Log.i(TAG, "$$$ currUserCoordinateRef: " + currUserAttendanceRef);
             if (currUserAttendanceRef == null) {
                currUserAttendanceRef.push().setValue(userAttendance);
             }
@@ -234,10 +223,10 @@ public class DatabaseUtil {
    public User getUserByLogin(String login) {
       try {
          DatabaseReference usersRef = database.child("users");
-         Log.d(TAG, "$$$ usersRef: " + usersRef);
+         Log.i(TAG, "$$$ usersRef: " + usersRef);
          if (usersRef != null) {
             Query userQuery = usersRef.orderByChild("login").equalTo(login);
-            //Log.d(TAG, "$$$ userQuery: " + userQuery.getRef());
+            Log.i(TAG, "$$$ userQuery: " + userQuery.getRef());
             User user = getChildOnce(userQuery, User.class);
             return user;
          }
@@ -253,10 +242,10 @@ public class DatabaseUtil {
    public User getUserById(String userId) {
       try {
          DatabaseReference usersRef = database.child("users");
-         Log.d(TAG, "$$$ usersRef: " + usersRef);
+         Log.i(TAG, "$$$ usersRef: " + usersRef);
          if (usersRef != null) {
             Query userQuery = usersRef.orderByChild("id").equalTo(userId);
-            //Log.d(TAG, "$$$ userQuery: " + userQuery.getRef());
+            Log.i(TAG, "$$$ userQuery: " + userQuery.getRef());
             User user = getChildOnce(userQuery, User.class);
             return user;
          }
@@ -270,18 +259,18 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<CourseRegistration> getUserCourseRegistrations(String userId) {
+   public List<CourseEnrollment> getCourseEnrollmentsByUserId(String userId) {
       try {
          DatabaseReference courseRegsRef = database.child(
                "courseRegistrations");
-         Log.d(TAG, "$$$ courseRegsRef: " + courseRegsRef);
+         Log.i(TAG, "$$$ courseRegsRef: " + courseRegsRef);
          if (courseRegsRef != null) {
             Query courseRegistrationQuery = courseRegsRef.orderByChild("userId")
                   .equalTo(userId);
-            Log.d(TAG,
+            Log.i(TAG,
                   "$$$ courseRegistrationQuery: " + courseRegistrationQuery);
-            List<CourseRegistration> courseRegistrationList = getChildrenOnce(
-                  courseRegistrationQuery, CourseRegistration.class);
+            List<CourseEnrollment> courseRegistrationList = getChildrenOnce(
+                  courseRegistrationQuery, CourseEnrollment.class);
             return courseRegistrationList;
          }
       } catch (Exception e) {
@@ -294,18 +283,19 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<CourseRegistration> getCourseRegistrations(String courseId) {
+   public List<CourseEnrollment> getCourseEnrollmentsByCourseId(
+         String courseId) {
       try {
          DatabaseReference courseRegsRef = database.child(
                "courseRegistrations");
-         Log.d(TAG, "$$$ courseRegsRef: " + courseRegsRef);
+         Log.i(TAG, "$$$ courseRegsRef: " + courseRegsRef);
          if (courseRegsRef != null) {
             Query courseRegistrationQuery = courseRegsRef.orderByChild(
                   "courseId").equalTo(courseId);
-            Log.d(TAG,
+            Log.i(TAG,
                   "$$$ courseRegistrationQuery: " + courseRegistrationQuery);
-            List<CourseRegistration> courseRegistrationList = getChildrenOnce(
-                  courseRegistrationQuery, CourseRegistration.class);
+            List<CourseEnrollment> courseRegistrationList = getChildrenOnce(
+                  courseRegistrationQuery, CourseEnrollment.class);
             return courseRegistrationList;
          }
       } catch (Exception e) {
@@ -321,10 +311,10 @@ public class DatabaseUtil {
    public Course getCourse(String courseId) {
       try {
          DatabaseReference coursesRef = database.child("courses");
-         Log.d(TAG, "$$$ coursesRef: " + coursesRef);
+         Log.i(TAG, "$$$ coursesRef: " + coursesRef);
          if (coursesRef != null) {
             Query courseQuery = coursesRef.orderByChild("id").equalTo(courseId);
-            Log.d(TAG, "$$$ courseQuery: " + courseQuery);
+            Log.i(TAG, "$$$ courseQuery: " + courseQuery);
             Course course = getChildOnce(courseQuery, Course.class);
             return course;
          }
@@ -338,113 +328,42 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<String> getAllCourse() {
-
-      final List<String> allCourses = new ArrayList<>();
+   public List<Course> getAllCourses() {
       try {
          DatabaseReference coursesRef = database.child("courses");
-         Log.d(TAG, "$$$ coursesRef: " + coursesRef);
-
-         coursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               Map<String,Object> cources = (Map<String,Object>)dataSnapshot.getValue();
-
-               //iterate through each courses
-               for (Map.Entry<String, Object> entry : cources.entrySet()){
-                  Map singlecourse = (Map) entry.getValue();
-                  allCourses.add((String) singlecourse.get("id"));
-               }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-               Log.e(TAG, "getAllCourse failed", databaseError.toException());
-               databaseError.toException().printStackTrace();
-                          }
-         });
+         Log.i(TAG, "$$$ coursesRef: " + coursesRef);
+         if (coursesRef != null) {
+            Query allCoursesQuery = coursesRef.orderByChild("courseId");
+            Log.i(TAG, "$$$ allCoursesQuery: " + allCoursesQuery);
+            List<Course> allCoursesList = getChildrenOnce(allCoursesQuery,
+                  Course.class);
+            return allCoursesList;
+         }
       } catch (Exception e) {
          Log.e(TAG, "getCourse failed", e);
-         throw new AppException(                 "Error querying course info for courseId " + e.getMessage(), e);
+         throw new AppException(
+               "Error querying all courses from firebase. Cause: " +
+                     e.getClass().getName() + ": " + e.getMessage(), e);
       }
-      return allCourses;
+      return null;
    }
-
-   public List<String> courseEnroll(String cin) {
-      final List<String> enrolls = new ArrayList<>();
-      final Exception[] exceptions = {null};
-      final boolean[] wait = {true};
-      try {
-         DatabaseReference ref = database.child("studentCourseEnroll");
-         Log.e(TAG, "db ref" + ref);
-         try{
-            Thread.sleep(20);
-         }catch (Exception e){
-            e.printStackTrace();
-         }
-         ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               try{
-                  Thread.sleep(10);
-               }catch (Exception e){
-                  e.printStackTrace();
-               }
-               Log.e(TAG, "datasnapshot "+ dataSnapshot.getValue());
-               Map<String, Object> allEnrolls = (Map<String, Object>) dataSnapshot.getValue();
-
-               for (Map.Entry<String, Object> enroll : allEnrolls.entrySet()){
-                  Map entry = (Map) enroll.getValue();
-                  enrolls.add((String) entry.get("cin"));
-               }
-               wait[0] = false;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-               Log.e(TAG, "getValueOnce failed", databaseError.toException());
-               databaseError.toException().printStackTrace();
-               exceptions[0] = databaseError.toException();
-               wait[0] = false;
-
-
-                 "Error querying course info for CIN " + cin +
-                         " from firebase. Cause: " + e.getClass().getName() + ": " +
-                         e.getMessage(), e);
-      }
-     /* while (wait[0] == true && enrolls.size() == 0) {
-         try {
-            Thread.sleep(10);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
-      }
-      if (exceptions[0] != null) {
-         throw new AppException("getValueOnce failed. Cause: " +
-                 exceptions[0].getClass().getName() + ": " +
-                 exceptions[0].getMessage(), exceptions[0]);
-      }*/
-      return enrolls;
-   }
-
-
 
    private <T extends Object> T getChildOnce(Query dbQuery,
          final Class<T> valueType) {
       final Exception[] exceptions = {null};
       final boolean[] wait = {true};
       final List<T> objList = new ArrayList<>();
-      Log.d(TAG, "$$$ Waiting for DB results for : " + dbQuery);
+      Log.i(TAG, "$$$ Waiting for DB results for : " + dbQuery);
       dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
 
          @Override public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(TAG, "$$$ debug: " + dataSnapshot.getValue());
+            Log.i(TAG, "$$$ debug: " + dataSnapshot.getValue());
             if (dataSnapshot.exists()) {
                objList.add(dataSnapshot.getChildren().iterator().next()
                      .getValue(valueType));
             }
             wait[0] = false;
-            Log.d(TAG, "$$$ " + valueType.getSimpleName() + " received from " +
+            Log.i(TAG, "$$$ " + valueType.getSimpleName() + " received from " +
                   "database = " + objList);
          }
 
@@ -467,7 +386,7 @@ public class DatabaseUtil {
                exceptions[0].getClass().getName() + ": " +
                exceptions[0].getMessage(), exceptions[0]);
       }
-      Log.d(TAG,
+      Log.i(TAG,
             "$$$ Returning " + objList + " for " + valueType.getSimpleName());
       return objList.size() > 0 ? objList.get(0) : null;
    }
@@ -477,17 +396,17 @@ public class DatabaseUtil {
       final Exception[] exceptions = {null};
       final boolean[] wait = {true};
       final List<T> objList = new ArrayList<>();
-      Log.d(TAG, "$$$ Waiting for DB results for : " + dbQuery);
+      Log.i(TAG, "$$$ Waiting for DB results for : " + dbQuery);
       dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
          @Override public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(TAG, "$$$ debug: " + dataSnapshot.getValue());
+            Log.i(TAG, "$$$ debug: " + dataSnapshot.getValue());
             if (dataSnapshot.exists()) {
                for (DataSnapshot dbSnapshot : dataSnapshot.getChildren()) {
                   objList.add(dbSnapshot.getValue(valueType));
                }
             }
             wait[0] = false;
-            Log.d(TAG, "$$$ " + valueType.getSimpleName() + " received from " +
+            Log.i(TAG, "$$$ " + valueType.getSimpleName() + " received from " +
                   "database = " + objList);
          }
 
@@ -510,7 +429,7 @@ public class DatabaseUtil {
                exceptions[0].getClass().getName() + ": " +
                exceptions[0].getMessage(), exceptions[0]);
       }
-      Log.d(TAG,
+      Log.i(TAG,
             "$$$ Returning " + objList + " for " + valueType.getSimpleName());
       return objList;
    }
@@ -519,16 +438,16 @@ public class DatabaseUtil {
       final Exception[] exceptions = {null};
       final boolean[] wait = {true};
       final List<DatabaseReference> objList = new ArrayList<>();
-      Log.d(TAG, "$$$ Waiting for DB results for : " + dbQuery);
+      Log.i(TAG, "$$$ Waiting for DB results for : " + dbQuery);
       dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
          @Override public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.d(TAG, "$$$ debug: " + dataSnapshot.getValue());
+            Log.i(TAG, "$$$ debug: " + dataSnapshot.getValue());
             if (dataSnapshot.exists()) {
                objList.add(
                      dataSnapshot.getChildren().iterator().next().getRef());
             }
             wait[0] = false;
-            Log.d(TAG, "$$$ DatabaseReference received from " + "database = " +
+            Log.i(TAG, "$$$ DatabaseReference received from " + "database = " +
                   objList);
          }
 
@@ -551,7 +470,7 @@ public class DatabaseUtil {
                exceptions[0].getClass().getName() + ": " +
                exceptions[0].getMessage(), exceptions[0]);
       }
-      Log.d(TAG, "$$$ Returning " + objList + " for DatabaseReference");
+      Log.i(TAG, "$$$ Returning " + objList + " for DatabaseReference");
       return objList.size() > 0 ? objList.get(0) : null;
    }
 }

@@ -1,44 +1,34 @@
 package com.m2e.cs5540.autopresence.vao;
 
 /**
- * Created by Ekta on 04-08-2017.
+ * Created by maeswara on 7/15/2017.
  */
-
 public class CourseEnrollment {
-    private String cin;
-    private String courseId;
-    private String term;
-    private String year;
+   private String userId;
+   private String courseId;
+   private UserRole role;
 
-    public String getCin() {
-        return cin;
-    }
+   public String getUserId() {
+      return userId;
+   }
 
-    public void setCin(String cin) {
-        this.cin = cin;
-    }
+   public void setUserId(String userId) {
+      this.userId = userId;
+   }
 
-    public String getCourseId() {
-        return courseId;
-    }
+   public String getCourseId() {
+      return courseId;
+   }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
+   public void setCourseId(String courseId) {
+      this.courseId = courseId;
+   }
 
-    public String getTerm() {
-        return term;
-    }
+   public UserRole getRole() {
+      return role;
+   }
 
-    public void setTerm(String term) {
-        this.term = term;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
+   public void setRole(UserRole userRole) {
+      this.role = userRole;
+   }
 }

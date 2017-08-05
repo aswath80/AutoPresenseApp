@@ -21,7 +21,7 @@ public class AppTest {
       user.setLogin("mani");
       user.setName("Manikandan Eswaran");
       String encryptedPass = AppUtil.encryptPassword("password");
-      Log.d(TAG, "$$$ encryptedPass = " + encryptedPass);
+      Log.i(TAG, "$$$ encryptedPass = " + encryptedPass);
       user.setPassword(encryptedPass);
       dbUtil.createUser(user);
    }
@@ -33,7 +33,7 @@ public class AppTest {
       user.setLogin("manish");
       user.setName("Manish Kumar");
       String encryptedPass = AppUtil.encryptPassword("password");
-      Log.d(TAG, "$$$ encryptedPass = " + encryptedPass);
+      Log.i(TAG, "$$$ encryptedPass = " + encryptedPass);
       user.setPassword(encryptedPass);
       dbUtil.createUser(user);
    }
@@ -45,7 +45,7 @@ public class AppTest {
       user.setLogin("ekta");
       user.setName("Ekta Kumari");
       String encryptedPass = AppUtil.encryptPassword("password");
-      Log.d(TAG, "$$$ encryptedPass = " + encryptedPass);
+      Log.i(TAG, "$$$ encryptedPass = " + encryptedPass);
       user.setPassword(encryptedPass);
       dbUtil.createUser(user);
    }
