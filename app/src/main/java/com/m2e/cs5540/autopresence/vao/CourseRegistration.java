@@ -4,6 +4,7 @@ package com.m2e.cs5540.autopresence.vao;
  * Created by maeswara on 7/15/2017.
  */
 public class CourseRegistration {
+
    private String userId;
    private String courseId;
    private String role;

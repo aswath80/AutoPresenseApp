@@ -125,6 +125,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             Toast.makeText(this, "You have been registered successfully, need to show on landing for professor/Student.",
                     Toast.LENGTH_LONG).show();
         }
+
     }
 
     @Override

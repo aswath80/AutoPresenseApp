@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
+import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
 import com.m2e.cs5540.autopresence.register.RegisterActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
 import com.m2e.cs5540.autopresence.vao.User;
@@ -27,6 +28,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
    private EditText usernameEditText;
    private Button loginButton;
    private Button register;
+   private Button professorsHome;
 
 
    @Override protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             startActivityForResult(intent, 0);
          }
       });
+
+      this.professorsHome = (Button) findViewById(R.id.btn_Professor);
+      this.professorsHome.setOnClickListener(new View.OnClickListener() {
+
+         @Override
+         public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), ProfessorActivity.class);
+            startActivityForResult(intent, 0);
+         }
+      });
+
       addButtonClickListener();
    }
 
