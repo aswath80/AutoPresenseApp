@@ -11,7 +11,6 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
@@ -21,14 +20,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.LoginActivity" />
+        <activity android:name=".login.LoginActivity"
+            android:label="@string/title_activity_login"/>
 
         <service android:name=".service.LocationUpdateService" />
 
-        <activity android:name=".register.RegisterActivity" />
-        <activity android:name=".courses.AddCourseActivity" />
-        <activity android:name=".professors.ProfessorActivity" />
-        <activity android:name=".permit.PermitActivity"></activity>
+        <activity android:name=".register.RegisterActivity"
+            android:label="@string/title_activity_register"/>
+
+        <activity android:name=".courses.AddCourseActivity"
+            android:label="@string/title_activity_add_course"/>
+
+        <activity android:name=".professors.ProfessorActivity"
+            android:label="@string/title_activity_prof" />
+
+        <activity android:name=".permit.PermitActivity"
+            android:label="@string/title_activity_permit"/>
+
+        <activity
+            android:name=".students.StudentsActivity"
+            android:label="@string/title_activity_students"
+            />
+        <activity
+            android:name=".student_enrollment.StudentEnrollment"
+            android:label="@string/title_activity_student_enrollment"
+             />
     </application>
 
 </manifest>

@@ -6,10 +6,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.vao.Course;
+import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
 import com.m2e.cs5540.autopresence.vao.CourseRegistration;
 import com.m2e.cs5540.autopresence.vao.Permit;
 import com.m2e.cs5540.autopresence.vao.User;
@@ -145,6 +147,20 @@ public class DatabaseUtil {
                      e.getMessage(), e);
       }
       return null;
+   }
+
+   public void studentCourseEnrollment(CourseEnrollment enroll) {
+      try{
+         DatabaseReference courseEnrollRef = database.child("studentCourseEnroll");
+         Log.d(TAG, "$$$ courseEnrollRef: " + courseEnrollRef);
+         if (courseEnrollRef != null) {
+            courseEnrollRef.push().setValue(enroll);
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "Student Course Enrollment failed", e);
+         throw new AppException("Error saving course enroll info for student " +
+                 " into firebase. Cause: " + e.getClass().getName() + ": " + e.getMessage(), e);
+      }
    }
 
    public void updateUserCoordinate(UserCoordinate userCoordinate) {
@@ -345,15 +361,73 @@ public class DatabaseUtil {
             public void onCancelled(DatabaseError databaseError) {
                Log.e(TAG, "getAllCourse failed", databaseError.toException());
                databaseError.toException().printStackTrace();
-            }
+                          }
          });
       } catch (Exception e) {
          Log.e(TAG, "getCourse failed", e);
-         throw new AppException(
-                 "Error querying course info for courseId " + e.getMessage(), e);
+         throw new AppException(                 "Error querying course info for courseId " + e.getMessage(), e);
       }
       return allCourses;
    }
+
+   public List<String> courseEnroll(String cin) {
+      final List<String> enrolls = new ArrayList<>();
+      final Exception[] exceptions = {null};
+      final boolean[] wait = {true};
+      try {
+         DatabaseReference ref = database.child("studentCourseEnroll");
+         Log.e(TAG, "db ref" + ref);
+         try{
+            Thread.sleep(20);
+         }catch (Exception e){
+            e.printStackTrace();
+         }
+         ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               try{
+                  Thread.sleep(10);
+               }catch (Exception e){
+                  e.printStackTrace();
+               }
+               Log.e(TAG, "datasnapshot "+ dataSnapshot.getValue());
+               Map<String, Object> allEnrolls = (Map<String, Object>) dataSnapshot.getValue();
+
+               for (Map.Entry<String, Object> enroll : allEnrolls.entrySet()){
+                  Map entry = (Map) enroll.getValue();
+                  enrolls.add((String) entry.get("cin"));
+               }
+               wait[0] = false;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+               Log.e(TAG, "getValueOnce failed", databaseError.toException());
+               databaseError.toException().printStackTrace();
+               exceptions[0] = databaseError.toException();
+               wait[0] = false;
+
+
+                 "Error querying course info for CIN " + cin +
+                         " from firebase. Cause: " + e.getClass().getName() + ": " +
+                         e.getMessage(), e);
+      }
+     /* while (wait[0] == true && enrolls.size() == 0) {
+         try {
+            Thread.sleep(10);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+      if (exceptions[0] != null) {
+         throw new AppException("getValueOnce failed. Cause: " +
+                 exceptions[0].getClass().getName() + ": " +
+                 exceptions[0].getMessage(), exceptions[0]);
+      }*/
+      return enrolls;
+   }
+
+
 
    private <T extends Object> T getChildOnce(Query dbQuery,
          final Class<T> valueType) {

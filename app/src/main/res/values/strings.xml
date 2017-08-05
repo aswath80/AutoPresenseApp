@@ -2,10 +2,12 @@
     <string name="app_name">AutoPresenceApp</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
+    <string name="course">Courses</string>
     <string-array name="userType_array">
         <item>student</item>
         <item>professor</item>
     </string-array>
+
     <string-array name="semester">
         <item>Fall</item>
         <item>Spring</item>
@@ -16,4 +18,21 @@
         <item>2017</item>
         <item>2018</item>
     </string-array>
+
+    <string-array name="term_array">
+        <item>Fall</item>
+        <item>Summer</item>
+    </string-array>
+    <string-array name="year_array">
+        <item>2017</item>
+        <item>2018</item>
+    </string-array>
+    <string name="title_activity_students">Student Courses</string>
+    <string name="title_activity_prof">Professor Courses</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_add_course">Add Course</string>
+    <string name="title_activity_permit">Course Permit</string>
+    <string name="title_activity_student_enrollment">Student Course Enrollment</string>
+
 </resources>
