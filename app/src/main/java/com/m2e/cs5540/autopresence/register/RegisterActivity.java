@@ -19,6 +19,7 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.login.LoginActivity;
+import com.m2e.cs5540.autopresence.students.StudentsActivity;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<AsyncLoaderStatus>{
@@ -35,6 +36,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private Button   submitButton;
     private TextView alreadyMemberLogin;
+
+    //DELETE IT AFTERWARDS
+    private TextView stud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeText.setAdapter(spinnerAdapter);
 
+
         this.submitButton = (Button)findViewById(R.id.btn_signup);
         submitButton.setOnClickListener(this);
 
@@ -61,6 +66,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        //DELETE
+        this.stud = (TextView) findViewById(R.id.scheck);
+        stud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), StudentsActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
