@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
+
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 
@@ -81,7 +82,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
                 }
             });
         }
-        
+
         this.submitButton = (Button)findViewById(R.id.btn_Add_Course);
         submitButton.setOnClickListener(this);
     }

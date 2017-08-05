@@ -2,14 +2,10 @@ package com.m2e.cs5540.autopresence.permit;
 
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,14 +15,9 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
-import com.m2e.cs5540.autopresence.courses.AddCourseActivity;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
-import com.m2e.cs5540.autopresence.register.RegisterActivity;
-import com.m2e.cs5540.autopresence.register.RegisterAsyncTaskLoader;
 import com.m2e.cs5540.autopresence.vao.Permit;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 
 public class PermitActivity extends AppCompatActivity implements View.OnClickListener,

@@ -9,10 +9,6 @@ import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.register.RegisterAsyncTaskLoader;
 import com.m2e.cs5540.autopresence.vao.Course;
-import com.m2e.cs5540.autopresence.vao.MeetingDate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Kumar on 8/3/2017.
