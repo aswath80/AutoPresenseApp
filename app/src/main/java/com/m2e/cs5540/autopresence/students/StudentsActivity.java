@@ -3,6 +3,7 @@ package com.m2e.cs5540.autopresence.students;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ public class StudentsActivity extends AppCompatActivity
       implements View.OnClickListener,
       LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
    private static final String TAG = "StudentsActivity";
+   private TextInputLayout noDataTextLayout;
    private RecyclerView studentCoursesRecyclerView;
    private StudentCoursesAdapter studentCoursesAdapter;
 
@@ -39,11 +41,14 @@ public class StudentsActivity extends AppCompatActivity
             LinearLayoutManager.VERTICAL, false);
       studentCoursesRecyclerView.setLayoutManager(linearLayoutManager);
 
+      noDataTextLayout = (TextInputLayout) findViewById(
+            R.id.noStudentCourseDataTextLayout);
+
       getLoaderManager().initLoader(106, null, this).forceLoad();
    }
 
    @Override public void onBackPressed() {
-      if(!AppContext.isUserLoggedIn()) {
+      if (!AppContext.isUserLoggedIn()) {
          super.onBackPressed();
       }
    }
@@ -80,9 +85,15 @@ public class StudentsActivity extends AppCompatActivity
       if (data.getResult() != null) {
          List<Course> courseList = (List<Course>) data.getResult();
          Log.i(TAG, "$$$ StudentsActivity.courseList: " + courseList);
-         studentCoursesAdapter.setCourseList(courseList);
-         Log.i(TAG, "$$$ courseList set on adapter and notifyDataSetChanged " +
-               "called");
+         if (courseList != null && courseList.size() > 0) {
+            noDataTextLayout.setVisibility(View.GONE);
+            studentCoursesAdapter.setCourseList(courseList);
+            Log.i(TAG,
+                  "$$$ courseList set on adapter and notifyDataSetChanged " +
+                        "called");
+         } else {
+            noDataTextLayout.setVisibility(View.VISIBLE);
+         }
       } else if (data.getException() != null) {
          Toast.makeText(this, "Could not read student course enrollments from" +
                " database. Cause: " + data.getException().getClass() + ": " +
