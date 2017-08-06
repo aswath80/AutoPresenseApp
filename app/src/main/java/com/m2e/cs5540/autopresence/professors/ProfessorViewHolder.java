@@ -10,29 +10,28 @@ import com.m2e.cs5540.autopresence.R;
  * Created by Kumar on 8/5/2017.
  */
 
-public class ProfessorViewHolder  extends RecyclerView.ViewHolder
-        implements View.OnClickListener {
+public class ProfessorViewHolder extends RecyclerView.ViewHolder
+      implements View.OnClickListener {
 
-    private TextView courseIdText;
-    private TextView courseNameText;
+   private TextView courseIdText;
+   private TextView courseNameText;
 
-    public void setCourseIdText(String courseIdText) {
+   public ProfessorViewHolder(View itemView) {
+      super(itemView);
+      courseIdText = (TextView) itemView.findViewById(R.id.CourseId);
+      courseNameText = (TextView) itemView.findViewById(R.id.CourseName);
+   }
 
-        this.courseIdText.setText(courseIdText);
-    }
+   public void setCourseIdText(String courseIdText) {
 
-    public void setCourseNameText(String courseNameText) {
-        this.courseNameText.setText(courseNameText);
-    }
+      this.courseIdText.setText(courseIdText);
+   }
 
-    public ProfessorViewHolder(View itemView) {
-        super(itemView);
-        courseIdText    = (TextView) itemView.findViewById(R.id.CourseId);
-        courseNameText  = (TextView) itemView.findViewById(R.id.CourseName);
-    }
+   public void setCourseNameText(String courseNameText) {
+      this.courseNameText.setText(courseNameText);
+   }
 
-    @Override
-    public void onClick(View v) {
+   @Override public void onClick(View v) {
 
-    }
+   }
 }

@@ -1,11 +1,8 @@
 package com.m2e.cs5540.autopresence.database;
 
-import android.test.AndroidTestCase;
-
 import com.m2e.cs5540.autopresence.vao.User;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

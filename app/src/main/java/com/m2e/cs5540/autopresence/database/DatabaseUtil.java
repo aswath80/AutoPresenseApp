@@ -17,6 +17,7 @@ import com.m2e.cs5540.autopresence.vao.UserAttendance;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,9 @@ import java.util.Map;
 public class DatabaseUtil {
 
    private static final String TAG = DatabaseUtil.class.getName();
+   private static DatabaseUtil databaseUtil = new DatabaseUtil();
    private DatabaseReference database =
          FirebaseDatabase.getInstance().getReference();
-   private static DatabaseUtil databaseUtil = new DatabaseUtil();
 
    private DatabaseUtil() {
    }
@@ -310,6 +311,84 @@ public class DatabaseUtil {
       return null;
    }
 
+   public synchronized List<UserAttendance> getCourseAttendances(
+         String courseId) {
+      try {
+         DatabaseReference userAttendancesRef = database.child(
+               "userAttendances");
+         Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
+         if (userAttendancesRef != null) {
+            Query courseRegistrationQuery = userAttendancesRef.orderByChild(
+                  "courseId").equalTo(courseId);
+            Log.i(TAG, "$$$ userAttendances Query: " + courseRegistrationQuery);
+            List<UserAttendance> courseAttendanceList = getChildrenOnce(
+                  courseRegistrationQuery, UserAttendance.class);
+            return courseAttendanceList;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getStudentAttendancesByCourseId failed", e);
+         throw new AppException(
+               "Error querying user attendance info for courseId " + courseId +
+                     " from firebase. Cause: " + e.getClass().getName() + ": " +
+                     e.getMessage(), e);
+      }
+      return null;
+   }
+
+   public synchronized List<UserAttendance> getUserAttendances(String courseId,
+         String userId) {
+      try {
+         DatabaseReference userAttendancesRef = database.child(
+               "userAttendances");
+         Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
+         if (userAttendancesRef != null) {
+            Query courseRegistrationQuery = userAttendancesRef.orderByChild(
+                  "courseId").equalTo(courseId);
+            Log.i(TAG, "$$$ userAttendances Query: " + courseRegistrationQuery);
+            List<UserAttendance> finalList = new ArrayList<>();
+            List<UserAttendance> userAttendanceList = getChildrenOnce(
+                  courseRegistrationQuery, UserAttendance.class);
+            for (int i = 0; i < userAttendanceList.size(); i++) {
+               UserAttendance userAttendance = userAttendanceList.get(i);
+               if (userAttendance.getUserId().equals(userId)) {
+                  finalList.add(userAttendance);
+               }
+            }
+            return finalList;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getUserAttendances failed", e);
+         throw new AppException(
+               "Error querying user attendance info for courseId " + courseId +
+                     " and userId " + userId + " from firebase. Cause: " +
+                     e.getClass().getName() + ": " + e.getMessage(), e);
+      }
+      return null;
+   }
+
+   public synchronized List<UserAttendance> getUserAttendances(String userId) {
+      try {
+         DatabaseReference userAttendancesRef = database.child(
+               "userAttendances");
+         Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
+         if (userAttendancesRef != null) {
+            Query courseRegistrationQuery = userAttendancesRef.orderByChild(
+                  "userId").equalTo(userId);
+            Log.i(TAG, "$$$ userAttendances Query: " + courseRegistrationQuery);
+            List<UserAttendance> userAttendanceList = getChildrenOnce(
+                  courseRegistrationQuery, UserAttendance.class);
+            return userAttendanceList;
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "getUserAttendances failed", e);
+         throw new AppException(
+               "Error querying user attendance info for userId " + userId +
+                     " from firebase. Cause: " + e.getClass().getName() + ": " +
+                     e.getMessage(), e);
+      }
+      return null;
+   }
+
    public synchronized List<CourseEnrollment> getCourseEnrollmentsByCourseId(
          String courseId) {
       try {
@@ -458,7 +537,8 @@ public class DatabaseUtil {
                exceptions[0].getMessage(), exceptions[0]);
       }
       Log.i(TAG,
-            "$$$ Returning " + objList + " for " + valueType.getSimpleName());
+            "$$$ Returning " + Collections.unmodifiableCollection(objList) +
+                  " for " + valueType.getSimpleName());
       return objList;
    }
 

@@ -15,30 +15,32 @@ import java.util.List;
  * Created by Kumar on 8/5/2017.
  */
 
-public class ProfessorActivityAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
+public class ProfessorActivityAsyncTaskLoader
+      extends AsyncTaskLoader<AsyncLoaderStatus> {
 
-    private DatabaseUtil db =  DatabaseUtil.getInstance();
-    public ProfessorActivityAsyncTaskLoader(Context context) {
-        super(context);
-    }
+   private DatabaseUtil db = DatabaseUtil.getInstance();
 
-    @Override
-    public AsyncLoaderStatus loadInBackground() {
-        AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
-        try {
-            List<Course> courses = db.getCoursesByProfId(AppContext.getCurrentAppContext().getUser().getId());
-            if (courses != null) {
-                List<Course> courseList = new ArrayList<>();
-                for (Course co : courses) {
-                    Course course = DatabaseUtil.getInstance().getCourse(co.getId());
-                    courseList.add(course);
-                }
-                loaderStatus.setResult(courseList);
+   public ProfessorActivityAsyncTaskLoader(Context context) {
+      super(context);
+   }
+
+   @Override public AsyncLoaderStatus loadInBackground() {
+      AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
+      try {
+         List<Course> courses = db.getCoursesByProfId(
+               AppContext.getCurrentAppContext().getUser().getId());
+         if (courses != null) {
+            List<Course> courseList = new ArrayList<>();
+            for (Course co : courses) {
+               Course course = DatabaseUtil.getInstance().getCourse(co.getId());
+               courseList.add(course);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            loaderStatus.setException(e);
-        }
-        return loaderStatus;
-    }
+            loaderStatus.setResult(courseList);
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+         loaderStatus.setException(e);
+      }
+      return loaderStatus;
+   }
 }

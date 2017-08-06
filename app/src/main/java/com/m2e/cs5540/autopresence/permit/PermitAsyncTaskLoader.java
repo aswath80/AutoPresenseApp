@@ -14,42 +14,39 @@ import com.m2e.cs5540.autopresence.vao.Permit;
 
 public class PermitAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
 
-    private static final String TAG = PermitAsyncTaskLoader.class.getName();
-    private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
-    private Permit permit;
+   private static final String TAG = PermitAsyncTaskLoader.class.getName();
+   private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
+   private Permit permit;
 
-    public PermitAsyncTaskLoader(Context context, Permit permit){
-        super(context);
-        this.permit = permit;
-        onContentChanged();
-        Log.i(TAG, "$$$$ PermitAsyncTaskLoader created");
-    }
+   public PermitAsyncTaskLoader(Context context, Permit permit) {
+      super(context);
+      this.permit = permit;
+      onContentChanged();
+      Log.i(TAG, "$$$$ PermitAsyncTaskLoader created");
+   }
 
-    @Override
-    protected void onStartLoading() {
-        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader onStartLoading");
-        if (takeContentChanged()) {
-            forceLoad();
-        }
-    }
+   @Override protected void onStartLoading() {
+      Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader onStartLoading");
+      if (takeContentChanged()) {
+         forceLoad();
+      }
+   }
 
-    @Override
-    public AsyncLoaderStatus loadInBackground() {
+   @Override public AsyncLoaderStatus loadInBackground() {
 
-        AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
-        Log.i(TAG, "$$$$ PermitAsyncTaskLoader loadInBackground");
+      AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
+      Log.i(TAG, "$$$$ PermitAsyncTaskLoader loadInBackground");
 
-        try {
-            databaseUtil.createPermit(permit);
-        } catch (Exception e) {
-            loaderStatus.setException(e);
-        }
-        return loaderStatus;
-    }
+      try {
+         databaseUtil.createPermit(permit);
+      } catch (Exception e) {
+         loaderStatus.setException(e);
+      }
+      return loaderStatus;
+   }
 
-    @Override
-    public void deliverResult(AsyncLoaderStatus data) {
-        super.deliverResult(data);
-        Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader deliverResult " + data);
-    }
+   @Override public void deliverResult(AsyncLoaderStatus data) {
+      super.deliverResult(data);
+      Log.i(TAG, "$$$$ AddCourseAsyncTaskLoader deliverResult " + data);
+   }
 }

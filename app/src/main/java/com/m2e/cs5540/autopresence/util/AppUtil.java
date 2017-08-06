@@ -36,13 +36,6 @@ public class AppUtil {
       }
    }
 
-   public String convertToMeetingDateString(Date date) {
-      if (date != null) {
-         return meetingDateFormat.format(date);
-      }
-      return null;
-   }
-
    public static boolean isCurrentTimeInMeetingTime(MeetingDate meetingDate) {
       if (meetingDate != null) {
          try {
@@ -87,5 +80,12 @@ public class AppUtil {
          }
       }
       return false;
+   }
+
+   public String convertToMeetingDateString(Date date) {
+      if (date != null) {
+         return meetingDateFormat.format(date);
+      }
+      return null;
    }
 }

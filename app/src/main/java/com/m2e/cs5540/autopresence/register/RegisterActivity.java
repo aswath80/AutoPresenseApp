@@ -18,7 +18,6 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.login.LoginActivity;
-import com.m2e.cs5540.autopresence.students.StudentsActivity;
 
 public class RegisterActivity extends BaseActivity
       implements View.OnClickListener,

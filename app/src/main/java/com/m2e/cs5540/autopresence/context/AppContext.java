@@ -1,8 +1,5 @@
 package com.m2e.cs5540.autopresence.context;
 
-import android.content.Context;
-import android.view.ViewGroup;
-
 import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.vao.User;
 
@@ -18,13 +15,13 @@ public class AppContext {
    }
 
    public static void initContext(User user) {
-      if(appContext == null) {
+      if (appContext == null) {
          appContext = new AppContext(user);
       }
    }
 
    public static AppContext getCurrentAppContext() {
-      if(appContext == null) {
+      if (appContext == null) {
          throw new AppException("AppContext not initialized!");
       }
       return appContext;
