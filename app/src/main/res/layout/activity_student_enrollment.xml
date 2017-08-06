@@ -14,6 +14,14 @@
         android:paddingRight="24dp"
         android:paddingTop="24dp">
 
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_rectangle"
+            android:text="Select Course to Enroll"
+            android:padding="10dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+
         <!-- Term Selection -->
         <Spinner
             android:id="@+id/courseSpinner"

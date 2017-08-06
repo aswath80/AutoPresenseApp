@@ -148,7 +148,7 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
         progressDialog.setMessage("Adding Course...");
         progressDialog.show();
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(101, null, this);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

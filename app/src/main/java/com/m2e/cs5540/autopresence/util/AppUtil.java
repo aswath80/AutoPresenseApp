@@ -18,8 +18,10 @@ import java.util.Date;
  */
 public class AppUtil {
    private static final String TAG = "AppUtil";
+   //private static final SimpleDateFormat meetingDateFormat =
+   //      new SimpleDateFormat("dd-MMM-yyyy");
    private static final SimpleDateFormat meetingDateFormat =
-         new SimpleDateFormat("dd-MMM-yyyy");
+         new SimpleDateFormat("MM/dd/yyyy");
    private static final SimpleDateFormat meetingTimeFormat =
          new SimpleDateFormat("HH:mm");
 

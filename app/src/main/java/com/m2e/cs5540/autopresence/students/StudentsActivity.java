@@ -1,9 +1,9 @@
 package com.m2e.cs5540.autopresence.students;
 
 import android.app.LoaderManager;
-import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
-import com.m2e.cs5540.autopresence.student_enrollment.StudentEnrollment;
+import com.m2e.cs5540.autopresence.student_enrollment.StudentEnrollmentDialogFragment;
 import com.m2e.cs5540.autopresence.vao.Course;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class StudentsActivity extends AppCompatActivity
             LinearLayoutManager.VERTICAL, false);
       studentCoursesRecyclerView.setLayoutManager(linearLayoutManager);
 
-      getLoaderManager().initLoader(222, null, this).forceLoad();
+      getLoaderManager().initLoader(106, null, this).forceLoad();
    }
 
    @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,7 +52,11 @@ public class StudentsActivity extends AppCompatActivity
       //handle press on the action bar
       switch (item.getItemId()) {
          case R.id.add_course:
-            startActivity(new Intent(this, StudentEnrollment.class));
+            FragmentManager fm = getSupportFragmentManager();
+            StudentEnrollmentDialogFragment frag =
+                  new StudentEnrollmentDialogFragment();
+            frag.setParentLoader(getLoaderManager().getLoader(106));
+            frag.show(fm, "StudentEnrollmentFragment");
             return true;
       }
       return super.onOptionsItemSelected(item);
@@ -68,9 +72,8 @@ public class StudentsActivity extends AppCompatActivity
       Log.i(TAG, "$$$ StudentsActivity.onLoadFinished");
       if (data.getResult() != null) {
          List<Course> courseList = (List<Course>) data.getResult();
+         Log.i(TAG, "$$$ StudentsActivity.courseList: " + courseList);
          studentCoursesAdapter.setCourseList(courseList);
-         studentCoursesRecyclerView.setAdapter(studentCoursesAdapter);
-         studentCoursesAdapter.notifyDataSetChanged();
          Log.i(TAG, "$$$ courseList set on adapter and notifyDataSetChanged " +
                "called");
       } else if (data.getException() != null) {

@@ -127,8 +127,8 @@ public class DatabaseUtil {
                   getCourseEnrollmentsByUserId(courseEnrollment.getUserId());
             if (existingUserCourseEnrollments != null) {
                for (CourseEnrollment existingCourseRegistration : existingUserCourseEnrollments) {
-                  if (existingCourseRegistration.getUserId().equals(
-                        courseEnrollment.getUserId())) {
+                  if (existingCourseRegistration.getCourseId().equals(
+                        courseEnrollment.getCourseId())) {
                      throw new AppException(
                            "User " + courseEnrollment.getUserId() +
                                  " is already registered in course " +

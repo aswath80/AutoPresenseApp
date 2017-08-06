@@ -30,7 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:hint="Email"
+                android:text="mani@mail.com"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -43,7 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Password"
+                android:text="test"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Login-in Button -->

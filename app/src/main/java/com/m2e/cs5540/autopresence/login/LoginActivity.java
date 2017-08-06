@@ -70,10 +70,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                Toast.LENGTH_SHORT).show();
       } else {
          Log.i(TAG, "$$$$$$ LoadManager.initLoader called");
-         if (getLoaderManager().getLoader(111) == null) {
-            getLoaderManager().initLoader(111, null, this);
+         if (getLoaderManager().getLoader(102) == null) {
+            getLoaderManager().initLoader(102, null, this);
          } else {
-            getLoaderManager().restartLoader(111, null, this).forceLoad();
+            getLoaderManager().restartLoader(102, null, this).forceLoad();
          }
          showProgressDialog();
       }

@@ -40,7 +40,7 @@ public class ProfessorActivity extends AppCompatActivity implements View.OnClick
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         professorCoursesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        getLoaderManager().initLoader(222, null, this).forceLoad();
+        getLoaderManager().initLoader(104, null, this).forceLoad();
     }
 
     @Override

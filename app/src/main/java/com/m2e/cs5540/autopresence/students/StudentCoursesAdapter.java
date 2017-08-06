@@ -25,6 +25,7 @@ public class StudentCoursesAdapter
 
    public void setCourseList(List<Course> courseList) {
       this.courseList = courseList;
+      this.notifyDataSetChanged();
    }
 
    @Override
@@ -38,9 +39,11 @@ public class StudentCoursesAdapter
 
    @Override
    public void onBindViewHolder(StudentCoursesViewHolder holder, int position) {
+      Log.i(TAG, "$$$ Get student course at position " + position + " for " +
+            "holder " + holder);
       Course course = courseList.get(position);
       if (course != null) {
-         Log.i(TAG, "$$$ Got student course " + course.getName());
+         Log.i(TAG, "$$$ Got student course " + course);
          holder.setCourseIdText(course.getId());
          holder.setCourseNameText(course.getName());
          holder.setCourseLocationText(course.getLocation());
@@ -79,6 +82,8 @@ public class StudentCoursesAdapter
    }
 
    @Override public int getItemCount() {
-      return courseList != null ? courseList.size() : 0;
+      int itemCount = courseList != null ? courseList.size() : 0;
+      Log.i(TAG, "$$$ Student courseList getItemCount: " + itemCount);
+      return itemCount;
    }
 }

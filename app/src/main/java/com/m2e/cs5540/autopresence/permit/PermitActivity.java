@@ -129,7 +129,7 @@ public class PermitActivity extends AppCompatActivity
       progressDialog.show();
 
       // TODO: Implementing your own signup logic here.
-      getLoaderManager().initLoader(0, null, this);
+      getLoaderManager().initLoader(103, null, this);
 
       new android.os.Handler().postDelayed(new Runnable() {
          public void run() {
