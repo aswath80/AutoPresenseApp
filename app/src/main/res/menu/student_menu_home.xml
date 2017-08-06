@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add_course"
-        android:icon="@mipmap/plus_circle"
+        android:icon="@mipmap/plus_circle_outline"
         android:title="Add Course"
-        app:showAsAction="always">
-    </item>
+        app:showAsAction="always"/>
+
 </menu>
