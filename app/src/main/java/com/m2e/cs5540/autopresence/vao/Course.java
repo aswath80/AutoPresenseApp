@@ -67,4 +67,8 @@ public class Course {
    public void setYear(String year) {
       this.year = year;
    }
+
+   @Override public String toString() {
+      return id + " - " + name;
+   }
 }
