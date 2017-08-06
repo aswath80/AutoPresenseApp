@@ -30,4 +30,12 @@ public class AppContext {
    public User getUser() {
       return user;
    }
+
+   public static boolean isInitialized() {
+      return appContext != null;
+   }
+
+   public static boolean isUserLoggedIn() {
+      return isInitialized() && (appContext.getUser() != null);
+   }
 }

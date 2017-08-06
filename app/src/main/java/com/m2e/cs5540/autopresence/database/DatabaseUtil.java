@@ -524,7 +524,7 @@ public class DatabaseUtil {
             wait[0] = false;
          }
       });
-      while (wait[0] == true && objList.size() == 0) {
+      while (wait[0] == true) {
          try {
             Thread.sleep(10);
          } catch (InterruptedException e) {
