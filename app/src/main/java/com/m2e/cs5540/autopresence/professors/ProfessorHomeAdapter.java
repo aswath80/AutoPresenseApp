@@ -15,40 +15,45 @@ import java.util.List;
  * Created by Kumar on 8/5/2017.
  */
 
-public class ProfessorHomeAdapter extends RecyclerView.Adapter<ProfessorViewHolder>{
+public class ProfessorHomeAdapter
+      extends RecyclerView.Adapter<ProfessorViewHolder> {
 
-    private static final String TAG = "ProfessorHomeAdapter";
-    private ProfessorViewHolder professorViewHolder;
+   private static final String TAG = "ProfessorHomeAdapter";
 
-    private List<Course> courseList;
-    public List<Course> getCourseList() {
-        return courseList;
-    }
-    public void setCourseList(List<Course> courseList) {this.courseList = courseList; }
+   private List<Course> courseList;
 
-    public ProfessorHomeAdapter() {
-    }
+   public ProfessorHomeAdapter() {
+   }
 
-    @Override
-    public ProfessorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View courseView = layoutInflater.inflate(R.layout.professor_course_view, parent, false);
-        professorViewHolder = new ProfessorViewHolder(courseView);
-        return professorViewHolder;
-    }
+   public List<Course> getCourseList() {
+      return courseList;
+   }
 
-    @Override
-    public void onBindViewHolder(ProfessorViewHolder holder, int position) {
+   public void setCourseList(List<Course> courseList) {
+      this.courseList = courseList;
+   }
 
-        Course course = courseList.get(position);
-        Log.i(TAG, "$$$ Got student course " + course.getName());
+   @Override public ProfessorViewHolder onCreateViewHolder(ViewGroup parent,
+         int viewType) {
+      LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+      View courseView = layoutInflater.inflate(R.layout.professor_course_view,
+            parent, false);
+      return new ProfessorViewHolder(courseView);
+   }
 
-        professorViewHolder.setCourseIdText(course.getId());
-        professorViewHolder.setCourseNameText(course.getName());
+   @Override
+   public void onBindViewHolder(ProfessorViewHolder holder, int position) {
 
-    }
+      Course course = courseList.get(position);
+      Log.i(TAG, "$$$ Professor course holder " + holder);
+      Log.i(TAG, "$$$ Got student course " + course.getName() + " for " +
+            "position " + position);
 
-    @Override public int getItemCount() {
-        return courseList != null ? courseList.size() : 0;
-    }
+      holder.setCourseIdText(course.getId());
+      holder.setCourseNameText(course.getName());
+   }
+
+   @Override public int getItemCount() {
+      return courseList != null ? courseList.size() : 0;
+   }
 }

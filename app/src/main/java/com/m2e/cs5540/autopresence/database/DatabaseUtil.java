@@ -267,7 +267,8 @@ public class DatabaseUtil {
          if (courseEnrollmentsRef != null) {
             Query courseRegistrationQuery = courseEnrollmentsRef.orderByChild(
                   "userId").equalTo(userId);
-            Log.i(TAG,"$$$ courseEnrollments Query: " + courseRegistrationQuery);
+            Log.i(TAG,
+                  "$$$ courseEnrollments Query: " + courseRegistrationQuery);
             List<CourseEnrollment> courseRegistrationList = getChildrenOnce(
                   courseRegistrationQuery, CourseEnrollment.class);
             return courseRegistrationList;
@@ -287,17 +288,20 @@ public class DatabaseUtil {
          DatabaseReference courseRef = database.child("courses");
          Log.i(TAG, "$$$ courses: " + courseRef);
          if (courseRef != null) {
-            Query courseQuery = courseRef.orderByChild("professorId").equalTo(userId);
+            Query courseQuery = courseRef.orderByChild("professorId").equalTo(
+                  userId);
             Log.i(TAG, "$$$ ProfessorsCourse Query: " + courseQuery);
             List<Course> course = getChildrenOnce(courseQuery, Course.class);
-            Log.i(TAG, "$$$ ProfessorsCourse Query, Total returned size is: " + course.size());
+            Log.i(TAG, "$$$ ProfessorsCourse Query, Total returned size is: " +
+                  course.size());
             return course;
          }
       } catch (Exception e) {
          Log.e(TAG, "getCoursesByProfId failed", e);
-         throw new AppException("Error querying course enrollments info for userId " + userId +
-                         " from firebase. Cause: " + e.getClass().getName() + ": " +
-                         e.getMessage(), e);
+         throw new AppException(
+               "Error querying course prof courses info for " + "userId " +
+                     userId + " from firebase. Cause: " +
+                     e.getClass().getName() + ": " + e.getMessage(), e);
       }
       return null;
    }
@@ -410,7 +414,8 @@ public class DatabaseUtil {
       return objList.size() > 0 ? objList.get(0) : null;
    }
 
-   private <T extends Object> List<T> getChildrenOnce(Query dbQuery, final Class<T> valueType) {
+   private <T extends Object> List<T> getChildrenOnce(Query dbQuery,
+         final Class<T> valueType) {
 
       final Exception[] exceptions = {null};
       final boolean[] wait = {true};

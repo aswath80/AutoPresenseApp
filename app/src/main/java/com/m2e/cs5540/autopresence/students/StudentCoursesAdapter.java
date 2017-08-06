@@ -18,7 +18,6 @@ public class StudentCoursesAdapter
       extends RecyclerView.Adapter<StudentCoursesViewHolder> {
    private static final String TAG = "StudentCoursesAdapter";
    private List<Course> courseList;
-   private StudentCoursesViewHolder studentCourseViewHolder;
    private String[] daysInWeek = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
 
    public StudentCoursesAdapter() {
@@ -34,26 +33,32 @@ public class StudentCoursesAdapter
       LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
       View studentCourseView = layoutInflater.inflate(
             R.layout.student_course_view, parent, false);
-      studentCourseViewHolder = new StudentCoursesViewHolder(studentCourseView);
-      return studentCourseViewHolder;
+      return new StudentCoursesViewHolder(studentCourseView);
    }
 
    @Override
    public void onBindViewHolder(StudentCoursesViewHolder holder, int position) {
       Course course = courseList.get(position);
-      Log.i(TAG, "$$$ Got student course " + course.getName());
-      studentCourseViewHolder.setCourseIdText(course.getId());
-      studentCourseViewHolder.setCourseNameText(course.getName());
-      studentCourseViewHolder.setCourseLocationText(course.getLocation());
-      studentCourseViewHolder.setCourseDateText(
-            course.getMeetingDate().getStartDate() + " - " +
-                  course.getMeetingDate().getEndDate());
-      studentCourseViewHolder.setCourseTimeText(
-            course.getMeetingDate().getStartTime() + " - " +
-                  course.getMeetingDate().getEndTime());
-      studentCourseViewHolder.setCourseDayText(
-            decodeMeetingDays(course.getMeetingDate().getMeetingDays()));
-      Log.i(TAG, "$$$ Done setting student course details " + course.getName());
+      if (course != null) {
+         Log.i(TAG, "$$$ Got student course " + course.getName());
+         holder.setCourseIdText(course.getId());
+         holder.setCourseNameText(course.getName());
+         holder.setCourseLocationText(course.getLocation());
+         holder.setCourseDateText(
+               course.getMeetingDate().getStartDate() + " - " +
+                     course.getMeetingDate().getEndDate());
+         holder.setCourseTimeText(
+               course.getMeetingDate().getStartTime() + " - " +
+                     course.getMeetingDate().getEndTime());
+         holder.setCourseDayText(
+               decodeMeetingDays(course.getMeetingDate().getMeetingDays()));
+         Log.i(TAG,
+               "$$$ Done setting student course details " + course.getName());
+      } else {
+         Log.w(TAG,
+               "$$$ No course found for course position " + position + " in " +
+                     "adapter ");
+      }
    }
 
    private String decodeMeetingDays(String meetingDays) {
