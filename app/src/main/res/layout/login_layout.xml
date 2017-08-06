@@ -1,82 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="24dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+         <ImageView android:src="@drawable/round_rectangle"
              android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerHorizontal="true"
-             android:layout_centerInParent="true"
-             android:layout_centerVertical="true"
-             android:layout_gravity="center"
-             android:gravity="center"
-             android:stretchColumns="2"
-             tools:context=".login.LoginActivity">
+             android:layout_height="72dp"
+             android:layout_marginBottom="24dp"
+             android:layout_gravity="center_horizontal" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <TextView
-            android:padding="5dp"
-            android:text="@string/login"/>
+        <!-- Email Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/usernameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="Email" />
+        </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/usernameText"
-            android:background="@drawable/round_rectangle"
-            android:gravity="right"
-            android:hint="Enter username"
-            android:padding="5dp"
-            android:text="mani@mail.com"/>
-    </TableRow>
+        <!-- Password Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/passwordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="Password"/>
+        </android.support.design.widget.TextInputLayout>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:padding="5dp"
-            android:text="@string/password"/>
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/passwordText"
-            android:background="@drawable/round_rectangle"
-            android:gravity="right"
-            android:hint="Enter password"
-            android:inputType="textPassword"
-            android:padding="5dp"
-            android:text="test"/>
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:padding="5dp"
-            android:text=""/>
-
+        <!-- Login-in Button -->
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/loginButton"
-            android:layout_gravity="left"
-            android:gravity="center"
-            android:text="@string/login"/>
-    </TableRow>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            android:text="Log Me In !"/>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_signup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:padding="12dp"
-        android:text="Create Account"/>
+        <!-- SignUp-in Button -->
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_signup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            android:text="Create Account"/>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_Professor"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:padding="12dp"
-        android:text="Professors Home"/>
-
-</TableLayout>
+    </LinearLayout>
+</ScrollView>

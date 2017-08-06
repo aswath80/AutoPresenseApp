@@ -10,6 +10,15 @@ public class Course {
    private MeetingDate meetingDate;
    private String term;
    private String year;
+   private String professorId;
+
+   public String getProfessorId() {
+      return professorId;
+   }
+
+   public void setProfessorId(String professorId) {
+      this.professorId = professorId;
+   }
 
    public MeetingDate getMeetingDate() {
       return meetingDate;

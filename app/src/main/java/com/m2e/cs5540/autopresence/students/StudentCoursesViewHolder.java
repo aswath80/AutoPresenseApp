@@ -13,6 +13,7 @@ import com.m2e.cs5540.autopresence.R;
  */
 public class StudentCoursesViewHolder extends RecyclerView.ViewHolder
       implements OnClickListener {
+
    private TextView courseIdText;
    private TextView courseNameText;
    private TextView courseLocationText;
