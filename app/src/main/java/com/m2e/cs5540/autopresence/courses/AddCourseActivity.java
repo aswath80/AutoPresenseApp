@@ -102,8 +102,8 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
         md.setStartTime(csTime.getText().toString());
         md.setEndTime(ceTime.getText().toString());
 
-        course.setMeetingDates(md);
-        course.setWeekdays(String.valueOf(days));
+        course.setMeetingDate(md);
+        md.setMeetingDays(String.valueOf(days));
 
 
         return new AddCourseAsyncTaskLoader(this, course);

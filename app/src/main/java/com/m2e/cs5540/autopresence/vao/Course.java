@@ -7,25 +7,16 @@ public class Course {
    private String id;
    private String name;
    private String location;
-   private String weekdays;
-   private MeetingDate meetingDates;
+   private MeetingDate meetingDate;
    private String term;
    private String year;
 
    public MeetingDate getMeetingDate() {
-      return meetingDates;
+      return meetingDate;
    }
 
-   public void setMeetingDates(MeetingDate meetingDates) {
-      this.meetingDates = meetingDates;
-   }
-
-   public String getWeekdays() {
-      return weekdays;
-   }
-
-   public void setWeekdays(String weekdays) {
-      this.weekdays = weekdays;
+   public void setMeetingDate(MeetingDate meetingDates) {
+      this.meetingDate = meetingDates;
    }
 
    public String getId() {

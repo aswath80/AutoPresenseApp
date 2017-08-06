@@ -6,16 +6,12 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 
 import com.m2e.cs5540.autopresence.R;
-import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
-
-import java.util.List;
 
 /**
  * Created by maeswara on 8/5/2017.
  */
 public class StudentCoursesViewHolder extends RecyclerView.ViewHolder
       implements OnClickListener {
-   private List<CourseEnrollment> courseEnrollmentList;
    private EditText courseIdText;
    private EditText courseNameText;
    private EditText courseLocationText;
@@ -23,10 +19,8 @@ public class StudentCoursesViewHolder extends RecyclerView.ViewHolder
    private EditText courseTimeText;
    private EditText courseDayText;
 
-   public StudentCoursesViewHolder(View itemView,
-         List<CourseEnrollment> courseEnrollmentList) {
+   public StudentCoursesViewHolder(View itemView) {
       super(itemView);
-      this.courseEnrollmentList = courseEnrollmentList;
       courseIdText = (EditText) itemView.findViewById(R.id.studentCourseId);
       courseNameText = (EditText) itemView.findViewById(R.id.studentCourseName);
       courseLocationText = (EditText) itemView.findViewById(

@@ -265,8 +265,8 @@ public class DatabaseUtil {
                "courseEnrollments");
          Log.i(TAG, "$$$ courseEnrollments: " + courseEnrollmentsRef);
          if (courseEnrollmentsRef != null) {
-            Query courseRegistrationQuery = courseEnrollmentsRef.orderByChild("userId")
-                  .equalTo(userId);
+            Query courseRegistrationQuery = courseEnrollmentsRef.orderByChild(
+                  "userId").equalTo(userId);
             Log.i(TAG,
                   "$$$ courseEnrollments Query: " + courseRegistrationQuery);
             List<CourseEnrollment> courseRegistrationList = getChildrenOnce(
@@ -286,20 +286,20 @@ public class DatabaseUtil {
    public List<CourseEnrollment> getCourseEnrollmentsByCourseId(
          String courseId) {
       try {
-         DatabaseReference courseRegsRef = database.child(
-               "courseRegistrations");
-         Log.i(TAG, "$$$ courseRegsRef: " + courseRegsRef);
-         if (courseRegsRef != null) {
-            Query courseRegistrationQuery = courseRegsRef.orderByChild(
+         DatabaseReference courseEnrollmentsRef = database.child(
+               "courseEnrollments");
+         Log.i(TAG, "$$$ courseEnrollmentsRef: " + courseEnrollmentsRef);
+         if (courseEnrollmentsRef != null) {
+            Query courseRegistrationQuery = courseEnrollmentsRef.orderByChild(
                   "courseId").equalTo(courseId);
             Log.i(TAG,
-                  "$$$ courseRegistrationQuery: " + courseRegistrationQuery);
+                  "$$$ courseEnrollments Query: " + courseRegistrationQuery);
             List<CourseEnrollment> courseRegistrationList = getChildrenOnce(
                   courseRegistrationQuery, CourseEnrollment.class);
             return courseRegistrationList;
          }
       } catch (Exception e) {
-         Log.e(TAG, "getCourse failed", e);
+         Log.e(TAG, "getCourseEnrollmentsByCourseId failed", e);
          throw new AppException(
                "Error querying course registration info for courseId " +
                      courseId + " from firebase. Cause: " +

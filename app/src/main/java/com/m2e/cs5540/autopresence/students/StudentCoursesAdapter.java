@@ -1,14 +1,13 @@
 package com.m2e.cs5540.autopresence.students;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.m2e.cs5540.autopresence.R;
-import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.vao.Course;
-import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
 
 import java.util.List;
 
@@ -17,12 +16,16 @@ import java.util.List;
  */
 public class StudentCoursesAdapter
       extends RecyclerView.Adapter<StudentCoursesViewHolder> {
-   private List<CourseEnrollment> courseEnrollmentList;
+   private static final String TAG = "StudentCoursesAdapter";
+   private List<Course> courseList;
    private StudentCoursesViewHolder studentCourseViewHolder;
    private String[] daysInWeek = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
 
-   public StudentCoursesAdapter(List<CourseEnrollment> courseEnrollmentList) {
-      this.courseEnrollmentList = courseEnrollmentList;
+   public StudentCoursesAdapter() {
+   }
+
+   public void setCourseList(List<Course> courseList) {
+      this.courseList = courseList;
    }
 
    @Override
@@ -31,16 +34,14 @@ public class StudentCoursesAdapter
       LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
       View studentCourseView = layoutInflater.inflate(
             R.layout.student_course_view, parent, false);
-      studentCourseViewHolder = new StudentCoursesViewHolder(studentCourseView,
-            courseEnrollmentList);
+      studentCourseViewHolder = new StudentCoursesViewHolder(studentCourseView);
       return studentCourseViewHolder;
    }
 
    @Override
    public void onBindViewHolder(StudentCoursesViewHolder holder, int position) {
-      CourseEnrollment courseEnrollment = courseEnrollmentList.get(position);
-      Course course = DatabaseUtil.getInstance().getCourse(
-            courseEnrollment.getCourseId());
+      Course course = courseList.get(position);
+      Log.i(TAG, "$$$ Got student course " + course.getName());
       studentCourseViewHolder.setCourseIdText(course.getId());
       studentCourseViewHolder.setCourseNameText(course.getName());
       studentCourseViewHolder.setCourseLocationText(course.getLocation());
@@ -52,6 +53,7 @@ public class StudentCoursesAdapter
                   course.getMeetingDate().getEndTime());
       studentCourseViewHolder.setCourseDayText(
             decodeMeetingDays(course.getMeetingDate().getMeetingDays()));
+      Log.i(TAG, "$$$ Done setting student course details " + course.getName());
    }
 
    private String decodeMeetingDays(String meetingDays) {
@@ -72,6 +74,6 @@ public class StudentCoursesAdapter
    }
 
    @Override public int getItemCount() {
-      return courseEnrollmentList != null ? courseEnrollmentList.size() : 0;
+      return courseList != null ? courseList.size() : 0;
    }
 }

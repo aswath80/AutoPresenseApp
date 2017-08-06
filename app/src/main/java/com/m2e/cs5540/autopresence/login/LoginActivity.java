@@ -109,7 +109,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
          String username = (user != null) ? user.getName() : null;
          String encryptedPassword = (user != null) ? user.getPassword() : null;
          Log.i(TAG, "$$$ encryptedPassword from DB = " + encryptedPassword);
-         Log.i(TAG, "$$$ password from login = " + password);
          Log.i(TAG, "$$$ encryptedPassword from login = " +
                AppUtil.encryptPassword(password));
          if (user != null && encryptedPassword != null &&
@@ -117,7 +116,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             Toast.makeText(this, "Logged in user is " + username,
                   Toast.LENGTH_LONG).show();
             startLocationService(loaderStatus);
-            showLandingPageForuser(user);
+            showLandingPageForUser(user);
          } else {
             Toast.makeText(this, "Invalid username/password. Try again!",
                   Toast.LENGTH_LONG).show();
@@ -127,7 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
       }
    }
 
-   private void showLandingPageForuser(User user) {
+   private void showLandingPageForUser(User user) {
       if (user != null) {
          if (user.getRole() == UserRole.STUDENT) {
             Intent studentLandingPageIntent = new Intent(this,
