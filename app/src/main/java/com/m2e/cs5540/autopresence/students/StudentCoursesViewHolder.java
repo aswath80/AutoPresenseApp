@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.m2e.cs5540.autopresence.R;
 
@@ -12,22 +13,22 @@ import com.m2e.cs5540.autopresence.R;
  */
 public class StudentCoursesViewHolder extends RecyclerView.ViewHolder
       implements OnClickListener {
-   private EditText courseIdText;
-   private EditText courseNameText;
-   private EditText courseLocationText;
-   private EditText courseDateText;
-   private EditText courseTimeText;
-   private EditText courseDayText;
+   private TextView courseIdText;
+   private TextView courseNameText;
+   private TextView courseLocationText;
+   private TextView courseDateText;
+   private TextView courseTimeText;
+   private TextView courseDayText;
 
    public StudentCoursesViewHolder(View itemView) {
       super(itemView);
-      courseIdText = (EditText) itemView.findViewById(R.id.studentCourseId);
-      courseNameText = (EditText) itemView.findViewById(R.id.studentCourseName);
-      courseLocationText = (EditText) itemView.findViewById(
+      courseIdText = (TextView) itemView.findViewById(R.id.studentCourseId);
+      courseNameText = (TextView) itemView.findViewById(R.id.studentCourseName);
+      courseLocationText = (TextView) itemView.findViewById(
             R.id.studentCourseLocation);
-      courseDateText = (EditText) itemView.findViewById(R.id.studentCourseDate);
-      courseTimeText = (EditText) itemView.findViewById(R.id.studentCourseTime);
-      courseDayText = (EditText) itemView.findViewById(R.id.studentCourseDay);
+      courseDateText = (TextView) itemView.findViewById(R.id.studentCourseDate);
+      courseTimeText = (TextView) itemView.findViewById(R.id.studentCourseTime);
+      courseDayText = (TextView) itemView.findViewById(R.id.studentCourseDay);
    }
 
    @Override public void onClick(View view) {
