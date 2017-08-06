@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                      Toast.LENGTH_LONG).show();
             }
          }
+      } catch (AppException e) {
+         Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG)
+               .show();
       } catch (Exception e) {
          Toast.makeText(MainActivity.this,
                "User session restore failed! " + "Cause: " + e.getMessage(),

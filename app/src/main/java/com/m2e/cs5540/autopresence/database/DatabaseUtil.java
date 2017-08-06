@@ -51,6 +51,8 @@ public class DatabaseUtil {
          if (usersRef != null) {
             usersRef.push().setValue(user);
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "createUser failed", e);
          throw new AppException(
@@ -73,6 +75,8 @@ public class DatabaseUtil {
             if (coursesRef != null) {
                coursesRef.push().setValue(course);
             }
+         } catch (AppException e) {
+            throw e;
          } catch (Exception e) {
             Log.e(TAG, "getUser failed", e);
             throw new AppException(
@@ -90,6 +94,8 @@ public class DatabaseUtil {
          if (permitRegsRef != null) {
             permitRegsRef.push().setValue(permit);
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "createPermit failed", e);
          throw new AppException(
@@ -111,6 +117,8 @@ public class DatabaseUtil {
             Log.i(TAG, "$$$ userCoordinate: " + userCoordinate);
             return userCoordinate;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "updateUserCoordinate failed", e);
          throw new AppException(
@@ -144,6 +152,8 @@ public class DatabaseUtil {
             if (courseEnrollRef != null) {
                courseEnrollRef.push().setValue(courseEnrollment);
             }
+         } catch (AppException e) {
+            throw e;
          } catch (Exception e) {
             Log.e(TAG, "Student Course Enrollment failed", e);
             throw new AppException(
@@ -174,6 +184,8 @@ public class DatabaseUtil {
                currUserCoordinateRef.updateChildren(updateMap);
             }
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "updateUserCoordinate failed", e);
          throw new AppException("Error updating userCoordinate info for user " +
@@ -198,6 +210,8 @@ public class DatabaseUtil {
                userAttendancesRef.push().setValue(userAttendance);
             }
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "updateUserCoordinate failed", e);
          throw new AppException("Error updating userAttendance info for user " +
@@ -215,6 +229,8 @@ public class DatabaseUtil {
                userCoordinate.getCurrentLongitude());
          updateMap.put("lastUpdateTime", userCoordinate.getLastUpdateTime());
          return updateMap;
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getUpdateMap failed", e);
          throw new AppException(
@@ -234,6 +250,8 @@ public class DatabaseUtil {
             User user = getChildOnce(userQuery, User.class);
             return user;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getUser failed", e);
          throw new AppException("Error querying user info for login " + login +
@@ -253,6 +271,8 @@ public class DatabaseUtil {
             User user = getChildOnce(userQuery, User.class);
             return user;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getUser failed", e);
          throw new AppException(
@@ -278,6 +298,8 @@ public class DatabaseUtil {
                   courseRegistrationQuery, CourseEnrollment.class);
             return courseRegistrationList;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getCourseEnrollmentsByUserId failed", e);
          throw new AppException(
@@ -301,6 +323,8 @@ public class DatabaseUtil {
                   course.size());
             return course;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getCoursesByProfId failed", e);
          throw new AppException(
@@ -325,6 +349,8 @@ public class DatabaseUtil {
                   courseRegistrationQuery, UserAttendance.class);
             return courseAttendanceList;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getStudentAttendancesByCourseId failed", e);
          throw new AppException(
@@ -356,6 +382,8 @@ public class DatabaseUtil {
             }
             return finalList;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getUserAttendances failed", e);
          throw new AppException(
@@ -379,6 +407,8 @@ public class DatabaseUtil {
                   courseRegistrationQuery, UserAttendance.class);
             return userAttendanceList;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getUserAttendances failed", e);
          throw new AppException(
@@ -404,6 +434,8 @@ public class DatabaseUtil {
                   courseRegistrationQuery, CourseEnrollment.class);
             return courseRegistrationList;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getCourseEnrollmentsByCourseId failed", e);
          throw new AppException(
@@ -424,6 +456,8 @@ public class DatabaseUtil {
             Course course = getChildOnce(courseQuery, Course.class);
             return course;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getCourse failed", e);
          throw new AppException(
@@ -445,6 +479,8 @@ public class DatabaseUtil {
                   Course.class);
             return allCoursesList;
          }
+      } catch (AppException e) {
+         throw e;
       } catch (Exception e) {
          Log.e(TAG, "getCourse failed", e);
          throw new AppException(
