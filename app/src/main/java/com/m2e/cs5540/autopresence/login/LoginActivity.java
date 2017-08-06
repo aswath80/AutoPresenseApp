@@ -32,7 +32,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
    private EditText passwordEditText;
    private Button loginButton;
    private Button register;
-   private Button professorsHome;
 
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -47,16 +46,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             // Start the Signup activity
             Intent intent = new Intent(getApplicationContext(),
                   RegisterActivity.class);
-            startActivityForResult(intent, 0);
-         }
-      });
-
-      this.professorsHome = (Button) findViewById(R.id.btn_Professor);
-      this.professorsHome.setOnClickListener(new View.OnClickListener() {
-
-         @Override public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(),
-                  ProfessorActivity.class);
             startActivityForResult(intent, 0);
          }
       });

@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.m2e.cs5540.autopresence.professors.ProfessorActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/professorCourseRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.constraint.ConstraintLayout>

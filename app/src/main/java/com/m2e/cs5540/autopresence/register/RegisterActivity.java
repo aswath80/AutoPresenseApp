@@ -37,9 +37,6 @@ public class RegisterActivity extends BaseActivity
    private Button submitButton;
    private TextView alreadyMemberLogin;
 
-   //DELETE IT AFTERWARDS
-   private TextView stud;
-
    @Override protected void onCreate(Bundle savedInstanceState) {
 
       Log.i(TAG, "$$$$$$ onCreate() Invoked... ");
@@ -66,16 +63,6 @@ public class RegisterActivity extends BaseActivity
          @Override public void onClick(View v) {
             Intent intent = new Intent(getApplicationContext(),
                   LoginActivity.class);
-            startActivityForResult(intent, 0);
-         }
-      });
-
-      //DELETE
-      this.stud = (TextView) findViewById(R.id.scheck);
-      stud.setOnClickListener(new View.OnClickListener() {
-         @Override public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(),
-                  StudentsActivity.class);
             startActivityForResult(intent, 0);
          }
       });

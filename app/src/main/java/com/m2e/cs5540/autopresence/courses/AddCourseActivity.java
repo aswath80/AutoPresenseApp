@@ -16,8 +16,10 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 
+import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
+import com.m2e.cs5540.autopresence.vao.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,9 @@ public class AddCourseActivity extends BaseActivity implements View.OnClickListe
         course.setId(courseId.getText().toString());
         course.setName(courseName.getText().toString());
         course.setLocation(classLocation.getText().toString());
+
+        User user = AppContext.getCurrentAppContext().getUser();
+        course.setProfessorId(user.getId());
 
         MeetingDate md = new MeetingDate();
         md.setStartDate(csDate.getText().toString());
