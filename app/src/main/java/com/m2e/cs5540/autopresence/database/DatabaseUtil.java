@@ -38,7 +38,7 @@ public class DatabaseUtil {
       return databaseUtil;
    }
 
-   public void createUser(User user) {
+   public synchronized void createUser(User user) {
       User existingUser = getUserByLogin(user.getLogin());
       if (existingUser != null) {
          throw new AppException("User with login " + user.getLogin() + " " +
@@ -59,7 +59,7 @@ public class DatabaseUtil {
       }
    }
 
-   public void createCourse(Course course) {
+   public synchronized void createCourse(Course course) {
       if (course != null) {
          try {
             Course existingCourse = getCourse(course.getId());
@@ -82,7 +82,7 @@ public class DatabaseUtil {
       }
    }
 
-   public void createPermit(Permit permit) {
+   public synchronized void createPermit(Permit permit) {
       try {
          DatabaseReference permitRegsRef = database.child("permits");
          Log.i(TAG, "$$$ permitRegsRef: " + permitRegsRef);
@@ -98,7 +98,7 @@ public class DatabaseUtil {
       }
    }
 
-   public UserCoordinate getUserCoordinate(String userId) {
+   public synchronized UserCoordinate getUserCoordinate(String userId) {
       try {
          DatabaseReference userCoordsRef = database.child("userCoordinates");
          Log.i(TAG, "$$$ userCoordsRef: " + userCoordsRef);
@@ -120,7 +120,8 @@ public class DatabaseUtil {
       return null;
    }
 
-   public void createCourseEnrollment(CourseEnrollment courseEnrollment) {
+   public synchronized void createCourseEnrollment(
+         CourseEnrollment courseEnrollment) {
       if (courseEnrollment != null) {
          try {
             List<CourseEnrollment> existingUserCourseEnrollments =
@@ -152,7 +153,8 @@ public class DatabaseUtil {
       }
    }
 
-   public void updateUserCoordinate(UserCoordinate userCoordinate) {
+   public synchronized void updateUserCoordinate(
+         UserCoordinate userCoordinate) {
       try {
          DatabaseReference userCoordsRef = database.child("userCoordinates");
          Log.i(TAG, "$$$ userCoordsRef: " + userCoordsRef);
@@ -179,7 +181,8 @@ public class DatabaseUtil {
       }
    }
 
-   public void createUserAttendance(UserAttendance userAttendance) {
+   public synchronized void createUserAttendance(
+         UserAttendance userAttendance) {
       try {
          DatabaseReference userAttendancesRef = database.child(
                "userAttendances");
@@ -191,7 +194,7 @@ public class DatabaseUtil {
                         .equalTo(userAttendance.getAttendanceDate()));
             Log.i(TAG, "$$$ currUserCoordinateRef: " + currUserAttendanceRef);
             if (currUserAttendanceRef == null) {
-               currUserAttendanceRef.push().setValue(userAttendance);
+               userAttendancesRef.push().setValue(userAttendance);
             }
          }
       } catch (Exception e) {
@@ -202,7 +205,7 @@ public class DatabaseUtil {
       }
    }
 
-   private Map<String, Object> getUserCoordinateUpdateMap(
+   private synchronized Map<String, Object> getUserCoordinateUpdateMap(
          UserCoordinate userCoordinate) {
       try {
          Map<String, Object> updateMap = new HashMap<>();
@@ -220,7 +223,7 @@ public class DatabaseUtil {
       }
    }
 
-   public User getUserByLogin(String login) {
+   public synchronized User getUserByLogin(String login) {
       try {
          DatabaseReference usersRef = database.child("users");
          Log.i(TAG, "$$$ usersRef: " + usersRef);
@@ -239,7 +242,7 @@ public class DatabaseUtil {
       return null;
    }
 
-   public User getUserById(String userId) {
+   public synchronized User getUserById(String userId) {
       try {
          DatabaseReference usersRef = database.child("users");
          Log.i(TAG, "$$$ usersRef: " + usersRef);
@@ -259,7 +262,8 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<CourseEnrollment> getCourseEnrollmentsByUserId(String userId) {
+   public synchronized List<CourseEnrollment> getCourseEnrollmentsByUserId(
+         String userId) {
       try {
          DatabaseReference courseEnrollmentsRef = database.child(
                "courseEnrollments");
@@ -283,7 +287,7 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<Course> getCoursesByProfId(String userId) {
+   public synchronized List<Course> getCoursesByProfId(String userId) {
       try {
          DatabaseReference courseRef = database.child("courses");
          Log.i(TAG, "$$$ courses: " + courseRef);
@@ -306,7 +310,7 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<CourseEnrollment> getCourseEnrollmentsByCourseId(
+   public synchronized List<CourseEnrollment> getCourseEnrollmentsByCourseId(
          String courseId) {
       try {
          DatabaseReference courseEnrollmentsRef = database.child(
@@ -331,7 +335,7 @@ public class DatabaseUtil {
       return null;
    }
 
-   public Course getCourse(String courseId) {
+   public synchronized Course getCourse(String courseId) {
       try {
          DatabaseReference coursesRef = database.child("courses");
          Log.i(TAG, "$$$ coursesRef: " + coursesRef);
@@ -351,7 +355,7 @@ public class DatabaseUtil {
       return null;
    }
 
-   public List<Course> getAllCourses() {
+   public synchronized List<Course> getAllCourses() {
       try {
          DatabaseReference coursesRef = database.child("courses");
          Log.i(TAG, "$$$ coursesRef: " + coursesRef);

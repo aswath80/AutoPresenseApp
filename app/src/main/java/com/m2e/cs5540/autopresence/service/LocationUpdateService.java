@@ -17,13 +17,10 @@ import com.m2e.cs5540.autopresence.util.AppUtil;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
-import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
-import com.m2e.cs5540.autopresence.vao.UserRole;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -88,27 +85,32 @@ public class LocationUpdateService extends IntentService {
       DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
       List<CourseEnrollment> courseRegistrationList =
             databaseUtil.getCourseEnrollmentsByUserId(userId);
-      for (CourseEnrollment courseReg : courseRegistrationList) {
+      for (int i = 0; i < courseRegistrationList.size(); i++) {
+         CourseEnrollment courseEnrollment = courseRegistrationList.get(i);
          Course course = DatabaseUtil.getInstance().getCourse(
-               courseReg.getCourseId());
+               courseEnrollment.getCourseId());
          if (course != null) {
+            Log.i(TAG, "$$$ Attendance checking course " + course);
             if (course.getMeetingDate() != null) {
+               Log.i(TAG, "$$$ Attendance checking meeting date " +
+                     course.getMeetingDate());
                MeetingDate meetingDate = course.getMeetingDate();
                if (AppUtil.isCurrentTimeInMeetingTime(meetingDate)) {
-                  List<Float> professorDistanceList = getProfessorDistances(
-                        location, course);
-                  for (float dist : professorDistanceList) {
-                     if (dist <= 50) {
-                        UserAttendance userAttendance = new UserAttendance();
-                        userAttendance.setUserId(userId);
-                        userAttendance.setCourseId(course.getId());
-                        userAttendance.setAttendanceDate(
-                              dateOnlySdf.format(new Date()));
-                        userAttendance.setAttendanceTime(
-                              timeOnlySdf.format(new Date()));
-                        DatabaseUtil.getInstance().createUserAttendance(
-                              userAttendance);
-                     }
+                  Log.i(TAG, "$$$ Attendance: It is meeting time");
+                  float professorDistance = getProfessorDistance(location,
+                        course);
+                  Log.i(TAG, "$$$ Attendance: professorDistance = " +
+                        professorDistance);
+                  if (professorDistance <= 50) {
+                     UserAttendance userAttendance = new UserAttendance();
+                     userAttendance.setUserId(userId);
+                     userAttendance.setCourseId(course.getId());
+                     userAttendance.setAttendanceDate(
+                           dateOnlySdf.format(new Date()));
+                     userAttendance.setAttendanceTime(
+                           timeOnlySdf.format(new Date()));
+                     DatabaseUtil.getInstance().createUserAttendance(
+                           userAttendance);
                   }
                }
             }
@@ -116,32 +118,45 @@ public class LocationUpdateService extends IntentService {
       }
    }
 
-   private List<Float> getProfessorDistances(Location currLocation,
-         Course course) {
-      List<Float> distanceList = new ArrayList<>();
-      List<CourseEnrollment> courseRegistrationList =
-            DatabaseUtil.getInstance().getCourseEnrollmentsByCourseId(
-                  course.getId());
-      for (CourseEnrollment courseReg : courseRegistrationList) {
-         if (courseReg.getRole() == UserRole.PROFESSOR) {
-            User user = DatabaseUtil.getInstance().getUserById(
-                  courseReg.getUserId());
-            UserCoordinate profCoordinate =
-                  DatabaseUtil.getInstance().getUserCoordinate(user.getId());
-            if (profCoordinate != null) {
-               float[] results = new float[3];
-               Location.distanceBetween(currLocation.getLatitude(),
-                     currLocation.getLongitude(),
-                     profCoordinate.getCurrentLatitude(),
-                     profCoordinate.getCurrentLongitude(), results);
-               distanceList.add(results[0]);
-               Log.i(TAG, "Current distance from professor " + user.getName() +
-                     ": " + results[0]);
-            }
-         }
-      }
-      return distanceList;
+   private float getProfessorDistance(Location currLocation, Course course) {
+      String professorId = course.getProfessorId();
+      UserCoordinate profCoordinate =
+            DatabaseUtil.getInstance().getUserCoordinate(professorId);
+      float[] results = new float[3];
+      Location.distanceBetween(currLocation.getLatitude(),
+            currLocation.getLongitude(), profCoordinate.getCurrentLatitude(),
+            profCoordinate.getCurrentLongitude(), results);
+      Log.i(TAG, "Current distance from professor " + professorId + ": " +
+            results[0]);
+      return results[0];
    }
+
+   //   private List<Float> getProfessorDistances(Location currLocation,
+   //         Course course) {
+   //      List<Float> distanceList = new ArrayList<>();
+   //      List<CourseEnrollment> courseRegistrationList =
+   //            DatabaseUtil.getInstance().getCourseEnrollmentsByCourseId(
+   //                  course.getId());
+   //      for (CourseEnrollment courseReg : courseRegistrationList) {
+   //         if (courseReg.getRole() == UserRole.PROFESSOR) {
+   //            User user = DatabaseUtil.getInstance().getUserById(
+   //                  courseReg.getUserId());
+   //            UserCoordinate profCoordinate =
+   //                  DatabaseUtil.getInstance().getUserCoordinate(user.getId());
+   //            if (profCoordinate != null) {
+   //               float[] results = new float[3];
+   //               Location.distanceBetween(currLocation.getLatitude(),
+   //                     currLocation.getLongitude(),
+   //                     profCoordinate.getCurrentLatitude(),
+   //                     profCoordinate.getCurrentLongitude(), results);
+   //               distanceList.add(results[0]);
+   //               Log.i(TAG, "Current distance from professor " + user.getName() +
+   //                     ": " + results[0]);
+   //            }
+   //         }
+   //      }
+   //      return distanceList;
+   //   }
 
    private void registerLocationListener() {
       if (ActivityCompat.checkSelfPermission(this,

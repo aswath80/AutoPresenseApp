@@ -30,7 +30,8 @@ public class StudentActivityAsyncTaskLoader
                      AppContext.getCurrentAppContext().getUser().getId());
          if (courseEnrollmentList != null) {
             List<Course> courseList = new ArrayList<>();
-            for (CourseEnrollment courseEnrollment : courseEnrollmentList) {
+            for (int i = 0; i < courseEnrollmentList.size(); i++) {
+               CourseEnrollment courseEnrollment = courseEnrollmentList.get(i);
                Course course = DatabaseUtil.getInstance().getCourse(
                      courseEnrollment.getCourseId());
                courseList.add(course);

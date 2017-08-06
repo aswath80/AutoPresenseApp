@@ -60,15 +60,22 @@ public class AppUtil {
                Calendar toTimeCal = Calendar.getInstance();
                toTimeCal.setTime(toTime);
 
+               Calendar todayDayCal = Calendar.getInstance();
+               todayDayCal.setTime(today);
+
                Date todayTime = meetingTimeFormat.parse(
                      meetingTimeFormat.format(today));
-               Calendar todayCal = Calendar.getInstance();
-               todayCal.setTime(todayTime);
+               Calendar todayTimeCal = Calendar.getInstance();
+               todayTimeCal.setTime(todayTime);
 
-               if (todayCal.getTime().after(fromTimeCal.getTime()) &&
-                     todayCal.getTime().before(toTimeCal.getTime())) {
+               if (todayTimeCal.getTime().after(fromTimeCal.getTime()) &&
+                     todayTimeCal.getTime().before(toTimeCal.getTime())) {
                   Log.i(TAG, "Time matched!");
-                  int todayDayOfWeek = todayCal.get(Calendar.DAY_OF_WEEK);
+                  int todayDayOfWeek = todayDayCal.get(Calendar.DAY_OF_WEEK);
+                  Log.i(TAG, "todayDayOfWeek = " + todayDayOfWeek);
+                  Log.i(TAG, "meetingDay flag on todayDayOfWeek = " +
+                        meetingDate.getMeetingDays()
+                              .substring(todayDayOfWeek - 1, todayDayOfWeek));
                   return meetingDate.getMeetingDays().substring(
                         todayDayOfWeek - 1, todayDayOfWeek).equals("1");
                }

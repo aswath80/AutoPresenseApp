@@ -49,4 +49,10 @@ public class MeetingDate {
    public void setMeetingDays(String meetingDays) {
       this.meetingDays = meetingDays;
    }
+
+   @Override public String toString() {
+      return "\n\t[StartDate: " + startDate + "\n\tEndDate: " + endDate +
+            "\n\tStartTime: " + startTime + "\n\tEndTime: " + endTime +
+            "\n\tMeetingDays: " + meetingDays + "\n]";
+   }
 }
