@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.location.AppLocationListener;
+import com.m2e.cs5540.autopresence.notification.AttendanceNotification;
 import com.m2e.cs5540.autopresence.util.AppUtil;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
@@ -66,7 +67,11 @@ public class LocationUpdateService extends IntentService {
          Location location = locationListener.getLocation();
          if (location != null) {
             sendLocationUpdateToDatabase(location);
-            updateUserAttendance(location);
+            String courseId = updateUserAttendance(location);
+            if(courseId != null && !courseId.trim().isEmpty()) {
+               AttendanceNotification.showAttendanceRegisteredNotification(
+                     getBaseContext(), courseId);
+            }
          }
       }
    }
@@ -81,7 +86,8 @@ public class LocationUpdateService extends IntentService {
       databaseUtil.updateUserCoordinate(userCoordinate);
    }
 
-   private void updateUserAttendance(Location location) {
+   private String updateUserAttendance(Location location) {
+      String courseId = "";
       DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
       List<CourseEnrollment> courseRegistrationList =
             databaseUtil.getCourseEnrollmentsByUserId(userId);
@@ -101,7 +107,7 @@ public class LocationUpdateService extends IntentService {
                         course);
                   Log.i(TAG, "$$$ Attendance: professorDistance = " +
                         professorDistance);
-                  if (professorDistance <= 50) {
+                  if (professorDistance <= 5000) {
                      UserAttendance userAttendance = new UserAttendance();
                      userAttendance.setUserId(userId);
                      userAttendance.setCourseId(course.getId());
@@ -111,11 +117,13 @@ public class LocationUpdateService extends IntentService {
                            timeOnlySdf.format(new Date()));
                      DatabaseUtil.getInstance().createUserAttendance(
                            userAttendance);
+                     courseId = courseId + course.getId() + " ";
                   }
                }
             }
          }
       }
+      return courseId;
    }
 
    private float getProfessorDistance(Location currLocation, Course course) {
