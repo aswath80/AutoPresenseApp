@@ -196,7 +196,7 @@ public class DatabaseUtil {
       }
    }
 
-   public synchronized void createUserAttendance(
+   public synchronized boolean createUserAttendance(
          UserAttendance userAttendance) {
       try {
          DatabaseReference userAttendancesRef = database.child(
@@ -210,6 +210,7 @@ public class DatabaseUtil {
             Log.i(TAG, "$$$ currUserCoordinateRef: " + currUserAttendanceRef);
             if (currUserAttendanceRef == null) {
                userAttendancesRef.push().setValue(userAttendance);
+               return true;
             }
          }
       } catch (AppException e) {
@@ -220,6 +221,7 @@ public class DatabaseUtil {
                userAttendance.getUserId() + " into firebase. Cause: " +
                e.getClass().getName() + ": " + e.getMessage(), e);
       }
+      return false;
    }
 
    private synchronized Map<String, Object> getUserCoordinateUpdateMap(
@@ -650,8 +652,7 @@ public class DatabaseUtil {
    }
 
    private <T extends Object> void listenForChildren(Query dbQuery,
-         final DatabaseActivityListener listener,
-         final Class<T> valueType) {
+         final DatabaseActivityListener listener, final Class<T> valueType) {
       Log.i(TAG, "$$$ listenForChildren dbQuery  : " + dbQuery);
       dbQuery.addChildEventListener(new ChildEventListener() {
 

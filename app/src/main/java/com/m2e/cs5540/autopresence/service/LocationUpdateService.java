@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
+import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.location.AppLocationListener;
 import com.m2e.cs5540.autopresence.notification.AttendanceNotification;
 import com.m2e.cs5540.autopresence.util.AppUtil;
@@ -60,18 +61,29 @@ public class LocationUpdateService extends IntentService {
       this.userId = intent.getStringExtra("userId");
       while (run) {
          try {
-            Thread.sleep(60 * 1000);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
-         Location location = locationListener.getLocation();
-         if (location != null) {
-            sendLocationUpdateToDatabase(location);
-            String courseId = updateUserAttendance(location);
-            if(courseId != null && !courseId.trim().isEmpty()) {
-               AttendanceNotification.showAttendanceRegisteredNotification(
-                     getBaseContext(), courseId);
+            try {
+               Thread.sleep(60 * 1000);
+            } catch (InterruptedException e) {
+               e.printStackTrace();
             }
+            Location location = locationListener.getLocation();
+            if (location != null) {
+               sendLocationUpdateToDatabase(location);
+               String courseId = updateUserAttendance(location);
+               if (courseId != null && !courseId.trim().isEmpty()) {
+                  AttendanceNotification.showAttendanceRegisteredNotification(
+                        getBaseContext(), courseId);
+               }
+            } else {
+               throw new AppException("Location information not available!");
+            }
+         } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Attendance registration failed in background " +
+                  "service due to " + e.getClass().getName() + ": " +
+                  e.getMessage(), e);
+            AttendanceNotification.showAttendanceRegistrationFailedNotification(
+                  getBaseContext(), e);
          }
       }
    }
@@ -107,7 +119,7 @@ public class LocationUpdateService extends IntentService {
                         course);
                   Log.i(TAG, "$$$ Attendance: professorDistance = " +
                         professorDistance);
-                  if (professorDistance <= 5000) {
+                  if (professorDistance <= 100) {
                      UserAttendance userAttendance = new UserAttendance();
                      userAttendance.setUserId(userId);
                      userAttendance.setCourseId(course.getId());
@@ -115,9 +127,10 @@ public class LocationUpdateService extends IntentService {
                            dateOnlySdf.format(new Date()));
                      userAttendance.setAttendanceTime(
                            timeOnlySdf.format(new Date()));
-                     DatabaseUtil.getInstance().createUserAttendance(
-                           userAttendance);
-                     courseId = courseId + course.getId() + " ";
+                     if (DatabaseUtil.getInstance().createUserAttendance(
+                           userAttendance)) {
+                        courseId = courseId + course.getId() + " ";
+                     }
                   }
                }
             }
