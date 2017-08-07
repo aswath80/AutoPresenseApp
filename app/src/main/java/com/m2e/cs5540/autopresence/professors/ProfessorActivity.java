@@ -38,8 +38,7 @@ public class ProfessorActivity extends AppCompatActivity
 
       professorAdapter = new ProfessorHomeAdapter();
       professorCoursesRecyclerView.setAdapter(professorAdapter);
-      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
-            LinearLayoutManager.VERTICAL, false);
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
       professorCoursesRecyclerView.setLayoutManager(linearLayoutManager);
 
       getLoaderManager().initLoader(104, null, this).forceLoad();
@@ -55,8 +54,7 @@ public class ProfessorActivity extends AppCompatActivity
 
       int id = item.getItemId();
       if (id == R.id.addCourse) {
-         Intent intent = new Intent(getApplicationContext(),
-               AddCourseActivity.class);
+         Intent intent = new Intent(getApplicationContext(), AddCourseActivity.class);
          startActivityForResult(intent, 0);
          finish();
          return true;
@@ -98,7 +96,6 @@ public class ProfessorActivity extends AppCompatActivity
    }
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {
-
    }
 
    @Override public void onClick(View v) {

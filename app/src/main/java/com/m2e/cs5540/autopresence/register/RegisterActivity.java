@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -121,5 +122,12 @@ public class RegisterActivity extends BaseActivity
 
    @Override public void onClick(View v) {
       signup();
+   }
+
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item){
+      Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+      startActivityForResult(myIntent, 0);
+      return true;
    }
 }
