@@ -2,6 +2,7 @@ package com.m2e.cs5540.autopresence.database;
 
 import android.util.Log;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.m2e.cs5540.autopresence.exception.AppException;
+import com.m2e.cs5540.autopresence.professors.StudentArrivalListener;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseEnrollment;
 import com.m2e.cs5540.autopresence.vao.Permit;
@@ -361,6 +363,35 @@ public class DatabaseUtil {
       return null;
    }
 
+   public synchronized void registerForCourseAttendances(String courseId,
+         final StudentArrivalListener listener) {
+      try {
+         DatabaseReference userAttendancesRef = database.child(
+               "userAttendances");
+         Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
+         if (userAttendancesRef != null) {
+            Query courseRegistrationQuery = userAttendancesRef.orderByChild(
+                  "courseId").equalTo(courseId);
+            Log.i(TAG, "$$$ userAttendances Query: " + courseRegistrationQuery);
+            listenForChildren(courseRegistrationQuery,
+                  new DatabaseActivityListener<UserAttendance>() {
+                     @Override public void onRecordCreated(
+                           UserAttendance userAttendance) {
+                        listener.onStudentArrival(userAttendance);
+                     }
+                  }, UserAttendance.class);
+         }
+      } catch (AppException e) {
+         throw e;
+      } catch (Exception e) {
+         Log.e(TAG, "getStudentAttendancesByCourseId failed", e);
+         throw new AppException(
+               "Error querying user attendance info for courseId " + courseId +
+                     " from firebase. Cause: " + e.getClass().getName() + ": " +
+                     e.getMessage(), e);
+      }
+   }
+
    public synchronized List<UserAttendance> getUserAttendances(String courseId,
          String userId) {
       try {
@@ -616,5 +647,38 @@ public class DatabaseUtil {
       }
       Log.i(TAG, "$$$ Returning " + objList + " for DatabaseReference");
       return objList.size() > 0 ? objList.get(0) : null;
+   }
+
+   private <T extends Object> void listenForChildren(Query dbQuery,
+         final DatabaseActivityListener listener,
+         final Class<T> valueType) {
+      Log.i(TAG, "$$$ listenForChildren dbQuery  : " + dbQuery);
+      dbQuery.addChildEventListener(new ChildEventListener() {
+
+         @Override
+         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            T child = dataSnapshot.getValue(valueType);
+            Log.i(TAG, "$$$ listenForChildren child added  : " + child);
+            listener.onRecordCreated(child);
+         }
+
+         @Override
+         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+         }
+
+         @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+         }
+
+         @Override
+         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+         }
+
+         @Override public void onCancelled(DatabaseError databaseError) {
+
+         }
+      });
    }
 }
