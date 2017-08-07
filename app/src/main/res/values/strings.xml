@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AutoPresenceApp</string>
+    <string name="app_name">Auto Presence</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="course">Courses</string>
