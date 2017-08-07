@@ -21,12 +21,14 @@ import java.util.List;
  */
 public class StudentAttendanceActivity extends BaseActivity
       implements LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
+
    private static final String TAG = "StudentAttendActivity";
    private TextInputLayout noDataTextLayout;
    private RecyclerView studentAttendanceRecyclerView;
    private StudentAttendanceAdapter studentAttendanceAdapter;
 
    @Override protected void onCreate(Bundle savedInstanceState) {
+
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_students_attendance);
       studentAttendanceRecyclerView = (RecyclerView) findViewById(

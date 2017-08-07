@@ -28,18 +28,15 @@ public class StudentAttendanceAdapter
    }
 
    @Override
-   public StudentAttendanceViewHolder onCreateViewHolder(ViewGroup parent,
-         int viewType) {
+   public StudentAttendanceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
       View studentCourseView = layoutInflater.inflate(
             R.layout.student_attendance_view, parent, false);
       return new StudentAttendanceViewHolder(studentCourseView);
    }
 
-   @Override public void onBindViewHolder(StudentAttendanceViewHolder holder,
-         int position) {
-      Log.i(TAG, "$$$ Get student course at position " + position + " for " +
-            "holder " + holder);
+   @Override public void onBindViewHolder(StudentAttendanceViewHolder holder, int position) {
+      Log.i(TAG, "$$$ Get student course at position " + position + " for " + "holder " + holder);
       UserAttendance userAttendance = attendanceList.get(position);
       if (userAttendance != null) {
          Log.i(TAG, "$$$ Got student attendance " +

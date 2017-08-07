@@ -1,5 +1,6 @@
 package com.m2e.cs5540.autopresence.professors;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,6 @@ public class ProfessorHomeAdapter
       extends RecyclerView.Adapter<ProfessorViewHolder> {
 
    private static final String TAG = "ProfessorHomeAdapter";
-
    private List<Course> courseList;
 
    public ProfessorHomeAdapter() {
@@ -33,11 +33,10 @@ public class ProfessorHomeAdapter
       this.courseList = courseList;
    }
 
-   @Override public ProfessorViewHolder onCreateViewHolder(ViewGroup parent,
-         int viewType) {
+   @Override public ProfessorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
       LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-      View courseView = layoutInflater.inflate(R.layout.professor_course_view,
-            parent, false);
+      View courseView = layoutInflater.inflate(R.layout.professor_course_view,  parent, false);
       return new ProfessorViewHolder(courseView);
    }
 
