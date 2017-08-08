@@ -47,7 +47,8 @@
                 android:layout_gravity="top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                card_view:cardCornerRadius="4dp">
+                card_view:cardCornerRadius="4dp"
+                card_view:cardUseCompatPadding="true">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/professorCourseRecyclerView"
