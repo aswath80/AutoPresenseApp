@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
 
+import com.m2e.cs5540.autopresence.login.LoginActivity;
+import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
@@ -69,14 +72,14 @@ public class AddCourseActivity extends BaseActivity
 
       this.csTime = (EditText) findViewById(R.id.sTime);
       this.ceTime = (EditText) findViewById(R.id.eTime);
-       csTime.setOnClickListener(new View.OnClickListener(){
+        csTime.setOnClickListener(new View.OnClickListener(){
 
            @Override
            public void onClick(View v) {
                pickTime(csTime);
            }
        });
-       ceTime.setOnClickListener(new View.OnClickListener(){
+        ceTime.setOnClickListener(new View.OnClickListener(){
 
            @Override
            public void onClick(View v) {
@@ -84,7 +87,7 @@ public class AddCourseActivity extends BaseActivity
            }
        });
 
-       this.csDate = (EditText) findViewById(R.id.sDate);
+        this.csDate = (EditText) findViewById(R.id.sDate);
       this.ceDate = (EditText) findViewById(R.id.eDate);
 
        csDate.setOnClickListener(new View.OnClickListener(){
@@ -258,11 +261,15 @@ public class AddCourseActivity extends BaseActivity
 
       getLoaderManager().initLoader(101, null, this);
 
-      new android.os.Handler().postDelayed(new Runnable() {
+      /*new android.os.Handler().postDelayed(new Runnable() {
          public void run() {
             progressDialog.dismiss();
          }
-      }, 3000);
+      }, 3000);*/
       progressDialog.hide();
+
+       Intent intent = new Intent(getApplicationContext(),ProfessorActivity.class);
+       startActivityForResult(intent, 0);
+       finish();
    }
 }
