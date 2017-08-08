@@ -1,13 +1,17 @@
 package com.m2e.cs5540.autopresence.login;
 
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
@@ -23,6 +27,12 @@ import com.m2e.cs5540.autopresence.util.AppUtil;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserRole;
 
+import org.w3c.dom.Text;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 /**
  * Created by maeswara on 7/8/2017.
  */
@@ -30,18 +40,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
       LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
 
    private static final String TAG = LoginActivity.class.getName();
+   private ProgressDialog progressDialog;
    private EditText usernameEditText;
    private EditText passwordEditText;
    private Button loginButton;
-   private Button register;
+   private TextView register;
 
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.login_layout);
       this.usernameEditText = (EditText) findViewById(R.id.usernameText);
       this.passwordEditText = (EditText) findViewById(R.id.passwordText);
+      progressDialog = new ProgressDialog(this);
 
-      this.register = (Button) findViewById(R.id.btn_signup);
+      this.register = (TextView) findViewById(R.id.btn_signup);
       this.register.setOnClickListener(new View.OnClickListener() {
 
          @Override public void onClick(View v) {
@@ -61,6 +73,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
    }
 
    @Override public void onClick(View v) {
+
       String username = usernameEditText.getText().toString();
       String password = passwordEditText.getText().toString();
 
@@ -75,9 +88,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
          if (getLoaderManager().getLoader(102) == null) {
             getLoaderManager().initLoader(102, null, this);
          } else {
+
             getLoaderManager().restartLoader(102, null, this).forceLoad();
          }
-         showProgressDialog();
+        // showProgressDialog();
+         progressDialog.setIndeterminate(true);
+         progressDialog.setMessage("Authenticating...");
+         progressDialog.show();
+
       }
    }
 
@@ -89,7 +107,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
          AsyncLoaderStatus loaderStatus) {
-      hideProgressDialog();
+     // hideProgressDialog();
+      if (progressDialog != null && progressDialog.isShowing()) {
+         progressDialog.dismiss();
+      }
+
       Log.i(TAG, "$$$$$$ LoginActivity.onLoadFinished called");
       if (loaderStatus.hasException()) {
          Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
