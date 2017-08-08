@@ -1,7 +1,9 @@
 package com.m2e.cs5540.autopresence.courses;
 
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
@@ -13,7 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
+
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
@@ -26,7 +31,9 @@ import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AddCourseActivity extends BaseActivity
@@ -41,9 +48,12 @@ public class AddCourseActivity extends BaseActivity
 
    private EditText csTime;
    private EditText ceTime;
+    private Calendar myTime;
 
-   private EditText csDate;
+  private EditText csDate;
    private EditText ceDate;
+   private Calendar myCalendar;
+
 
    private List<CheckBox> weekdays;
    private char[] days = {'0', '0', '0', '0', '0', '0', '0'};
@@ -64,9 +74,40 @@ public class AddCourseActivity extends BaseActivity
 
       this.csTime = (EditText) findViewById(R.id.sTime);
       this.ceTime = (EditText) findViewById(R.id.eTime);
+        csTime.setOnClickListener(new View.OnClickListener(){
 
-      this.csDate = (EditText) findViewById(R.id.sDate);
+           @Override
+           public void onClick(View v) {
+               pickTime(csTime);
+           }
+       });
+        ceTime.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+               pickTime(ceTime);
+           }
+       });
+
+        this.csDate = (EditText) findViewById(R.id.sDate);
       this.ceDate = (EditText) findViewById(R.id.eDate);
+
+       csDate.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+               pickDate(csDate);
+           }
+       });
+
+
+       ceDate.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+               pickDate(ceDate);
+           }
+       });
 
       weekdays = new ArrayList<>(6);
 
@@ -190,11 +231,15 @@ public class AddCourseActivity extends BaseActivity
 
       getLoaderManager().initLoader(101, null, this);
 
-      new android.os.Handler().postDelayed(new Runnable() {
+      /*new android.os.Handler().postDelayed(new Runnable() {
          public void run() {
             progressDialog.dismiss();
          }
-      }, 3000);
+      }, 3000);*/
       progressDialog.hide();
+
+       Intent intent = new Intent(getApplicationContext(),ProfessorActivity.class);
+       startActivityForResult(intent, 0);
+       finish();
    }
 }

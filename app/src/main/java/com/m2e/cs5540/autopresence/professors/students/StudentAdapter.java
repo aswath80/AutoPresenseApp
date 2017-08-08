@@ -42,6 +42,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentHolder> {
         UserAttendance userAttendance = attendanceList.get(position);
         if (userAttendance != null) {
             holder.setStudentName(userAttendance.getUserId());
+            holder.setLoggedTime(userAttendance.getAttendanceTime());
         } else {
             //Log.w(TAG, "$$$ No attendance found for position " + position + " " + "in " + "adapter ");
         }

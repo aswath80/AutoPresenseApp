@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class EnrollmentAsyncTaskLoader
       extends AsyncTaskLoader<AsyncLoaderStatus> {
+
    private static final String TAG = "EnrollAsyncTaskLoader";
    private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
 
