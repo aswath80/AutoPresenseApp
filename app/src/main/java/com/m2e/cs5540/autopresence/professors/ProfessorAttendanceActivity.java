@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.context.AppContext;
+import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 
 import java.text.SimpleDateFormat;
