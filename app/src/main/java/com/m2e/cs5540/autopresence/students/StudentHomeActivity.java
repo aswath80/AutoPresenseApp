@@ -12,12 +12,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.context.AppContext;
+import com.m2e.cs5540.autopresence.login.LoginActivity;
+import com.m2e.cs5540.autopresence.service.LocationUpdateService;
 import com.m2e.cs5540.autopresence.vao.CourseAttendancePercent;
 
 import java.util.List;
@@ -34,6 +37,7 @@ public class StudentHomeActivity extends AppCompatActivity
    private CardView studentCourseCountCardView;
    private TextView studentEnrolledCourseCountTextView;
    private TextInputLayout noDataLayout;
+   private Button studentLogoutButton;
 
    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -44,6 +48,7 @@ public class StudentHomeActivity extends AppCompatActivity
             R.id.studentHomeCourseCardView);
       studentEnrolledCourseCountTextView = (TextView) findViewById(
             R.id.studentHomeCourseCount);
+      studentLogoutButton = (Button) findViewById(R.id.studentLogoutButton);
       studentCoursePercentRecyclerView = (RecyclerView) findViewById(
             R.id.studentHomeAttendancePercentRecyclerView);
       LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
@@ -53,6 +58,7 @@ public class StudentHomeActivity extends AppCompatActivity
       studentCoursePercentRecyclerView.setAdapter(studentHomeAdapter);
 
       studentCourseCountCardView.setOnClickListener(this);
+      studentLogoutButton.setOnClickListener(this);
 
       getLoaderManager().initLoader(108, null, this).forceLoad();
    }
@@ -93,7 +99,17 @@ public class StudentHomeActivity extends AppCompatActivity
    }
 
    @Override public void onClick(View v) {
-      startActivity(new Intent(this, StudentCoursesActivity.class));
+      switch (v.getId()) {
+         case R.id.studentHomeCourseCardView:
+            startActivity(new Intent(this, StudentCoursesActivity.class));
+            break;
+         case R.id.studentLogoutButton:
+            AppContext.logout();
+            Intent locationServiceIntent = new Intent(this,
+                  LocationUpdateService.class);
+            stopService(locationServiceIntent);
+            startActivity(new Intent(this, LoginActivity.class));
+      }
    }
 
    @Override public void onBackPressed() {

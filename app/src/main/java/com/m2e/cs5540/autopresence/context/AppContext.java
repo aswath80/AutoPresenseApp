@@ -38,4 +38,8 @@ public class AppContext {
    public static boolean isUserLoggedIn() {
       return isInitialized() && (appContext.getUser() != null);
    }
+
+   public static void logout() {
+      appContext = null;
+   }
 }
