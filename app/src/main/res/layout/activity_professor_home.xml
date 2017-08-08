@@ -47,7 +47,7 @@ tools:context="com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Courses Enrolled"
+                        android:text="Courses Conducted"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         />
 
@@ -107,7 +107,7 @@ tools:context="com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Attendance Per Course"
+                        android:text="Student Attendance Per Course"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         />
 

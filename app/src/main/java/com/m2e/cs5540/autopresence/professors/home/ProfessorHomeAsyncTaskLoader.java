@@ -35,18 +35,18 @@ public class ProfessorHomeAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderSta
     public AsyncLoaderStatus loadInBackground() {
         AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
         try {
-            List<Course> courseEnrollmentList = DatabaseUtil.getInstance().getCoursesByProfId( AppContext.getCurrentAppContext().getUser().getId());
-            Log.i(TAG, "Professor course registered size is: " + courseEnrollmentList.size());
-            if (courseEnrollmentList != null) {
+            List<Course> coursesList = DatabaseUtil.getInstance().getCoursesByProfId( AppContext.getCurrentAppContext().getUser().getId());
+            Log.i(TAG, "Professor course registered size is: " + coursesList.size());
+            if (coursesList != null) {
                 List<CourseAttendancePercent> courseAttendancePercentList = new ArrayList<>();
-                for (int i = 0; i < courseEnrollmentList.size(); i++) {
+                for (int i = 0; i < coursesList.size(); i++) {
                     CourseAttendancePercent courseAttendancePercent =  new CourseAttendancePercent();
 
-                    Course courseEnrollment = courseEnrollmentList.get(i);
-                    //Course course = DatabaseUtil.getInstance().getCourse(courseEnrollment.getCourseId());
-                    courseAttendancePercent.setCourseCount(courseEnrollmentList.size());
-                    courseAttendancePercent.setCourseName(courseEnrollment.getName());
-                    courseAttendancePercent.setAttendancePercent(String.format("%.2f %%", calculateAttendancePercent(courseEnrollment)));
+                    Course course = coursesList.get(i);
+                    //Course course = DatabaseUtil.getInstance().getCourse(course.getCourseId());
+                    courseAttendancePercent.setCourseCount(coursesList.size());
+                    courseAttendancePercent.setCourseName(course.getName());
+                    courseAttendancePercent.setAttendancePercent(String.format("%.2f %%", calculateAttendancePercent(course)));
                     courseAttendancePercentList.add(courseAttendancePercent);
                 }
                 loaderStatus.setResult(courseAttendancePercentList);

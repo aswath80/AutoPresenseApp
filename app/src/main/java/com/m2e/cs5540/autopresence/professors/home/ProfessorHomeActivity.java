@@ -59,7 +59,7 @@ public class ProfessorHomeActivity extends AppCompatActivity
         professorCourseCountCardView.setOnClickListener(this);
         professorLogoutButton.setOnClickListener(this);
 
-        getLoaderManager().initLoader(108, null, this).forceLoad();
+        getLoaderManager().initLoader(109, null, this).forceLoad();
     }
 
     @Override
