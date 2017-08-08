@@ -14,6 +14,7 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
+import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.register.RegisterActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
 import com.m2e.cs5540.autopresence.students.StudentCoursesActivity;
@@ -124,7 +125,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             startActivity(studentLandingPageIntent);
          } else if (user.getRole() == UserRole.PROFESSOR) {
             Intent professorLandingPageIntent = new Intent(this,
-                  ProfessorActivity.class);
+                  ProfessorHomeActivity.class);
             startActivity(professorLandingPageIntent);
          }
       }

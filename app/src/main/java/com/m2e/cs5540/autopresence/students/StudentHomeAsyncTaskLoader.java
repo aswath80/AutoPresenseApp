@@ -45,6 +45,7 @@ public class StudentHomeAsyncTaskLoader
             for (int i = 0; i < courseEnrollmentList.size(); i++) {
                CourseAttendancePercent courseAttendancePercent =
                      new CourseAttendancePercent();
+
                CourseEnrollment courseEnrollment = courseEnrollmentList.get(i);
                Course course = DatabaseUtil.getInstance().getCourse(
                      courseEnrollment.getCourseId());
