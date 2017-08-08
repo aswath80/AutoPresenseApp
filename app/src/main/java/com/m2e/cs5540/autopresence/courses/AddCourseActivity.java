@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddCourseActivity extends BaseActivity
+
         implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
 
@@ -290,15 +291,11 @@ public class AddCourseActivity extends BaseActivity
 
         getLoaderManager().initLoader(101, null, this);
 
-      /*new android.os.Handler().postDelayed(new Runnable() {
-         public void run() {
-            progressDialog.dismiss();
-         }
-      }, 3000);*/
-        progressDialog.hide();
+      progressDialog.hide();
 
-        Intent intent = new Intent(getApplicationContext(),ProfessorActivity.class);
-        startActivityForResult(intent, 0);
-        finish();
-    }
+       Intent intent = new Intent(getApplicationContext(),ProfessorActivity.class);
+       startActivityForResult(intent, 0);
+       finish();
+   }
+
 }

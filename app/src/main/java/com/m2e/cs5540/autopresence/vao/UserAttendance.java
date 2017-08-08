@@ -8,6 +8,7 @@ public class UserAttendance {
    private String userId;
    private String attendanceDate;
    private String attendanceTime;
+   private String distance;
 
    public String getCourseId() {
       return courseId;
@@ -39,5 +40,13 @@ public class UserAttendance {
 
    public void setAttendanceTime(String attendanceTime) {
       this.attendanceTime = attendanceTime;
+   }
+
+   public String getDistance() {
+      return distance;
+   }
+
+   public void setDistance(String distance) {
+      this.distance = distance;
    }
 }

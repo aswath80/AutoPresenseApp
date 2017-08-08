@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"  >
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/addCourse"
-        android:icon="@mipmap/plus_circle_outline"
+        android:id="@+id/datePicker"
+        android:icon="@mipmap/plus_circle_outline2"
         android:orderInCategory="1"
         android:padding="16dp"
         android:scaleType="fitXY"
         android:title="Add New Course"
         app:showAsAction="ifRoom">
     </item>
+
 </menu>

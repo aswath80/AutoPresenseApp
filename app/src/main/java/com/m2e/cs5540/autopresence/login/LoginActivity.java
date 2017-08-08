@@ -58,8 +58,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
          @Override public void onClick(View v) {
             // Start the Signup activity
-            Intent intent = new Intent(getApplicationContext(),
-                  RegisterActivity.class);
+            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivityForResult(intent, 0);
          }
       });

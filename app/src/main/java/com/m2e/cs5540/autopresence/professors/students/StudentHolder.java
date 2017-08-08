@@ -14,13 +14,16 @@ public class StudentHolder extends RecyclerView.ViewHolder {
 
     private static final String TAG = "StudentHolder";
     private TextView studentName;
+    private TextView loggedTime;
 
     public StudentHolder(View itemView) {
         super(itemView);
         studentName = (TextView) itemView.findViewById(R.id.studentName);
+        loggedTime = (TextView) itemView.findViewById(R.id.loggedTime);
     }
 
     public void setStudentName(String studentName) {
         this.studentName.setText(studentName);
     }
+    public void setLoggedTime(String loggedTime) { this.loggedTime.setText(loggedTime);  }
 }
