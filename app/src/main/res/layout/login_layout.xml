@@ -30,6 +30,8 @@
             android:layout_marginTop="8dp">
 
             <EditText
+                android:drawableStart="@drawable/ic_person_black_24dp"
+                android:drawableLeft="@drawable/ic_person_black_24dp"
                 android:id="@+id/usernameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,6 +48,8 @@
             android:layout_marginTop="8dp">
 
             <EditText
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
                 android:id="@+id/passwordText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,6 +60,8 @@
 
         <!-- Login-in Button -->
         <android.support.v7.widget.AppCompatButton
+            android:background="@android:color/black"
+            android:textColor="@android:color/white"
             android:id="@+id/loginButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
