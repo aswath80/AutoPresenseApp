@@ -54,20 +54,20 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
+
                 pickDate();
+                initalizeLoader();
             }
         });
 
         datepicker.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                initalizeLoader();
                 List<UserAttendance>  result = new ArrayList<>(attendanceList.size());
                 for (UserAttendance attendance : attendanceList){
                     Log.i(TAG, "Date Picker, Date received is: " + datepicker.getText());
