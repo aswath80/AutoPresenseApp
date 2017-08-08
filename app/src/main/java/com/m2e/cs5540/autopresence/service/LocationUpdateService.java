@@ -127,6 +127,8 @@ public class LocationUpdateService extends IntentService {
                            dateOnlySdf.format(new Date()));
                      userAttendance.setAttendanceTime(
                            timeOnlySdf.format(new Date()));
+                     userAttendance.setDistance(
+                           String.valueOf(professorDistance));
                      if (DatabaseUtil.getInstance().createUserAttendance(
                            userAttendance)) {
                         courseId = courseId + course.getId() + " ";
