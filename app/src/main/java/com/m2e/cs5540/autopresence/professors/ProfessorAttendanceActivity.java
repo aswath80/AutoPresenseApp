@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
-import com.m2e.cs5540.autopresence.database.DatabaseUtil;
+import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 
 import java.text.SimpleDateFormat;
@@ -130,6 +130,12 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         String myFormat = "dd-MMM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         datepicker.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    @Override public void onBackPressed() {
+        if (!AppContext.isUserLoggedIn()) {
+            super.onBackPressed();
+        }
     }
 
     @Override

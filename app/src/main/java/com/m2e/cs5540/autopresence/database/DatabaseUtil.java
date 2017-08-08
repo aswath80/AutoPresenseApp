@@ -339,8 +339,7 @@ public class DatabaseUtil {
       return null;
    }
 
-   public synchronized List<UserAttendance> getCourseAttendances(
-         String courseId) {
+   public synchronized List<UserAttendance> getCourseAttendances(String courseId) {
       try {
          DatabaseReference userAttendancesRef = database.child("userAttendances");
          Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);

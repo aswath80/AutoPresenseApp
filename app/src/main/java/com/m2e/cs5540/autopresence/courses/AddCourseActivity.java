@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,9 +25,8 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
-
-import com.m2e.cs5540.autopresence.login.LoginActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
+import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
@@ -137,70 +139,38 @@ public class AddCourseActivity extends BaseActivity
       submitButton.setOnClickListener(this);
    }
 
-   @Override public void onBackPressed() {
+
+  @Override public void onBackPressed() {
       if (!AppContext.isUserLoggedIn()) {
          super.onBackPressed();
       }
    }
 
-   //Implementing date picker
-   public void pickDate(final EditText dateText){
-
-      myCalendar = Calendar.getInstance();
-      final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-         @Override
-         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel(dateText);
-         }
-
-      };
-
-      dateText.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            new DatePickerDialog(AddCourseActivity.this, date, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-         }
-      });
+  //Implemented for proper back button functioning
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.add_course_menu, menu);
+      return true;
    }
 
-   private void updateLabel(EditText updateDate) {
-      String myFormat = "dd-MMM-yyyy"; //In which you need put here
-      SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-      updateDate.setText(sdf.format(myCalendar.getTime()));
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+
+         case android.R.id.home:
+
+            Intent about = new Intent(this,ProfessorActivity.class);;
+            startActivity(about);
+            finish();
+
+            return true;
+
+         default:
+            return super.onOptionsItemSelected(item);
+      }
+
    }
-
-   //Implementing time picker
-    public void pickTime(final EditText timeText){
-        myTime = Calendar.getInstance();
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                myTime.set(Calendar.HOUR_OF_DAY, selectedHour);
-                myTime.set(Calendar.MINUTE, selectedMinute);
-                updateTime(timeText);
-            }
-        };
-
-        timeText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new  TimePickerDialog(AddCourseActivity.this, time, myTime.get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();
-            }
-        });
-    }
-
-    private void updateTime(EditText updateTime) {
-        String myFormat = "HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        updateTime.setText(sdf.format(myTime.getTimeInMillis()));
-    }
 
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {

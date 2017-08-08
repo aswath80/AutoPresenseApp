@@ -1,9 +1,12 @@
 package com.m2e.cs5540.autopresence.login;
 
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
+import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.register.RegisterActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
 import com.m2e.cs5540.autopresence.students.StudentCoursesActivity;
@@ -23,6 +27,12 @@ import com.m2e.cs5540.autopresence.util.AppUtil;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserRole;
 
+import org.w3c.dom.Text;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 /**
  * Created by maeswara on 7/8/2017.
  */
@@ -30,6 +40,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
       LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
 
    private static final String TAG = LoginActivity.class.getName();
+   private ProgressDialog progressDialog;
    private EditText usernameEditText;
    private EditText passwordEditText;
    private Button loginButton;
@@ -40,6 +51,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
       setContentView(R.layout.login_layout);
       this.usernameEditText = (EditText) findViewById(R.id.usernameText);
       this.passwordEditText = (EditText) findViewById(R.id.passwordText);
+      progressDialog = new ProgressDialog(this);
 
       this.register = (TextView) findViewById(R.id.btn_signup);
       this.register.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +72,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
    }
 
    @Override public void onClick(View v) {
+
       String username = usernameEditText.getText().toString();
       String password = passwordEditText.getText().toString();
 
@@ -74,9 +87,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
          if (getLoaderManager().getLoader(102) == null) {
             getLoaderManager().initLoader(102, null, this);
          } else {
+
             getLoaderManager().restartLoader(102, null, this).forceLoad();
          }
-         showProgressDialog();
+        // showProgressDialog();
+         progressDialog.setIndeterminate(true);
+         progressDialog.setMessage("Authenticating...");
+         progressDialog.show();
+
       }
    }
 
@@ -88,7 +106,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
          AsyncLoaderStatus loaderStatus) {
-      hideProgressDialog();
+     // hideProgressDialog();
+      if (progressDialog != null && progressDialog.isShowing()) {
+         progressDialog.dismiss();
+      }
+
       Log.i(TAG, "$$$$$$ LoginActivity.onLoadFinished called");
       if (loaderStatus.hasException()) {
          Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
@@ -124,7 +146,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             startActivity(studentLandingPageIntent);
          } else if (user.getRole() == UserRole.PROFESSOR) {
             Intent professorLandingPageIntent = new Intent(this,
-                  ProfessorActivity.class);
+                  ProfessorHomeActivity.class);
             startActivity(professorLandingPageIntent);
          }
       }

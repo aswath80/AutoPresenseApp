@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
+import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.student_enrollment.StudentEnrollmentDialogFragment;
 import com.m2e.cs5540.autopresence.vao.Course;
 
@@ -44,6 +45,12 @@ public class StudentCoursesActivity extends AppCompatActivity
             R.id.noStudentCourseDataTextLayout);
 
       getLoaderManager().initLoader(106, null, this).forceLoad();
+   }
+
+   @Override public void onBackPressed() {
+      if (!AppContext.isUserLoggedIn()) {
+         super.onBackPressed();
+      }
    }
 
    @Override public boolean onCreateOptionsMenu(Menu menu) {
