@@ -1,7 +1,9 @@
 package com.m2e.cs5540.autopresence.courses;
 
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,18 +11,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
+
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
+
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AddCourseActivity extends BaseActivity
@@ -35,9 +43,12 @@ public class AddCourseActivity extends BaseActivity
 
    private EditText csTime;
    private EditText ceTime;
+    private Calendar myTime;
 
-   private EditText csDate;
+  private EditText csDate;
    private EditText ceDate;
+   private Calendar myCalendar;
+
 
    private List<CheckBox> weekdays;
    private char[] days = {'0', '0', '0', '0', '0', '0', '0'};
@@ -58,9 +69,40 @@ public class AddCourseActivity extends BaseActivity
 
       this.csTime = (EditText) findViewById(R.id.sTime);
       this.ceTime = (EditText) findViewById(R.id.eTime);
+       csTime.setOnClickListener(new View.OnClickListener(){
 
-      this.csDate = (EditText) findViewById(R.id.sDate);
+           @Override
+           public void onClick(View v) {
+               pickTime(csTime);
+           }
+       });
+       ceTime.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+               pickTime(ceTime);
+           }
+       });
+
+       this.csDate = (EditText) findViewById(R.id.sDate);
       this.ceDate = (EditText) findViewById(R.id.eDate);
+
+       csDate.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+               pickDate(csDate);
+           }
+       });
+
+
+       ceDate.setOnClickListener(new View.OnClickListener(){
+
+           @Override
+           public void onClick(View v) {
+               pickDate(ceDate);
+           }
+       });
 
       weekdays = new ArrayList<>(6);
 
@@ -97,6 +139,65 @@ public class AddCourseActivity extends BaseActivity
          super.onBackPressed();
       }
    }
+
+   //Implementing date picker
+   public void pickDate(final EditText dateText){
+
+      myCalendar = Calendar.getInstance();
+      final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+         @Override
+         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel(dateText);
+         }
+
+      };
+
+      dateText.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            new DatePickerDialog(AddCourseActivity.this, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+         }
+      });
+   }
+
+   private void updateLabel(EditText updateDate) {
+      String myFormat = "dd-MMM-yyyy"; //In which you need put here
+      SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+      updateDate.setText(sdf.format(myCalendar.getTime()));
+   }
+
+   //Implementing time picker
+    public void pickTime(final EditText timeText){
+        myTime = Calendar.getInstance();
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                myTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                myTime.set(Calendar.MINUTE, selectedMinute);
+                updateTime(timeText);
+            }
+        };
+
+        timeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new  TimePickerDialog(AddCourseActivity.this, time, myTime.get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();
+            }
+        });
+    }
+
+    private void updateTime(EditText updateTime) {
+        String myFormat = "HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        updateTime.setText(sdf.format(myTime.getTimeInMillis()));
+    }
 
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {

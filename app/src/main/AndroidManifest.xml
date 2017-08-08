@@ -41,7 +41,8 @@
          android:label="@string/title_activity_permit"/>
       <activity
          android:name=".students.StudentCoursesActivity"
-         android:label="Student Course Enrollment"/>
+         android:label="Student Course Enrollment"
+          android:parentActivityName=".students.StudentHomeActivity"/>
       <activity
          android:name=".students.StudentAttendanceActivity"
          android:label="Student Attendance Records"/>

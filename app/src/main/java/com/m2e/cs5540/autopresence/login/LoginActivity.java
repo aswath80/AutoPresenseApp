@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
@@ -32,7 +33,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
    private EditText usernameEditText;
    private EditText passwordEditText;
    private Button loginButton;
-   private Button register;
+   private TextView register;
 
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -40,13 +41,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
       this.usernameEditText = (EditText) findViewById(R.id.usernameText);
       this.passwordEditText = (EditText) findViewById(R.id.passwordText);
 
-      this.register = (Button) findViewById(R.id.btn_signup);
+      this.register = (TextView) findViewById(R.id.btn_signup);
       this.register.setOnClickListener(new View.OnClickListener() {
 
          @Override public void onClick(View v) {
             // Start the Signup activity
-            Intent intent = new Intent(getApplicationContext(),
-                  RegisterActivity.class);
+            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivityForResult(intent, 0);
          }
       });
