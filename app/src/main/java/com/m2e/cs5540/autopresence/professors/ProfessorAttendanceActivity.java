@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +35,14 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
 
     private TextView datepicker;
     private Calendar myCalendar;
+    private List<UserAttendance> attendanceList;
+
+    public void setAttendanceList(List<UserAttendance> attendanceList) {
+        if(attendanceList == null){
+            attendanceList = new ArrayList<>();
+        }
+        this.attendanceList = attendanceList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,6 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         setContentView(R.layout.activity_professor_attendance);
 
         datepicker = (TextView) findViewById(R.id.datePicker);
-
         datepicker.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -53,16 +59,15 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         });
 
         datepicker.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<UserAttendance> attendanceList = professorMainAdaptor.getAttendanceList();
-                Log.i(TAG, "Date Picker, received data size is: " + attendanceList.size());
 
+                initalizeLoader();
                 List<UserAttendance>  result = new ArrayList<>(attendanceList.size());
                 for (UserAttendance attendance : attendanceList){
                     Log.i(TAG, "Date Picker, Date received is: " + datepicker.getText());
@@ -97,18 +102,17 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
                 professorMainAdaptor.setAttendanceList(attendanceList);
             }
         });
-
-        //getLoaderManager().initLoader(107, null, this).forceLoad();
     }
 
+    public void initalizeLoader(){
+        getLoaderManager().initLoader(107, null, this).forceLoad();
+    }
     public void pickDate(){
-
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -144,8 +148,6 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
 
         String courseId = getIntent().getStringExtra("courseId");
         if (courseId == null ) {
-            Toast.makeText(this, "StudentAttendanceActivity received null " +
-                    "courseId/userId from the intent!", Toast.LENGTH_LONG).show();
             return null;
         } else {
             return new ProfessorAttendanceAsyncTaskLoader(this, courseId);
@@ -158,7 +160,7 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
             if (data.getException() == null) {
                 List<UserAttendance> attendanceList = (List<UserAttendance>) data.getResult();
                 if (attendanceList != null && attendanceList.size() > 0) {
-                    professorMainAdaptor.setAttendanceList(attendanceList);
+                    setAttendanceList(attendanceList);
                 }
             } else {
                 Exception e = data.getException();

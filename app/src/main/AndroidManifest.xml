@@ -59,4 +59,5 @@
         <activity android:name=".professors.home.ProfessorHomeActivity"
             android:label="Professor Home"></activity>
     </application>
+
 </manifest>
