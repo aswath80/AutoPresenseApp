@@ -342,8 +342,7 @@ public class DatabaseUtil {
    public synchronized List<UserAttendance> getCourseAttendances(
          String courseId) {
       try {
-         DatabaseReference userAttendancesRef = database.child(
-               "userAttendances");
+         DatabaseReference userAttendancesRef = database.child("userAttendances");
          Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
          if (userAttendancesRef != null) {
             Query courseRegistrationQuery = userAttendancesRef.orderByChild(

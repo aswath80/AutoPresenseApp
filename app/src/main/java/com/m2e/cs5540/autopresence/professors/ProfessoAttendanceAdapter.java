@@ -3,6 +3,7 @@ package com.m2e.cs5540.autopresence.professors;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.professors.students.StudentAdapter;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +22,8 @@ import java.util.List;
 
 public class ProfessoAttendanceAdapter extends RecyclerView.Adapter<ProfessoAttendanceAdapter.AttendanceViewHolder>{
 
-    private static final String TAG = "ProfessoAttendanceAdapter";
-    private List<UserAttendance> attendanceList;
+    private static final String TAG = "ProfAttendanceAdapter";
+    private List<UserAttendance> attendanceList =  new ArrayList<>();
     private Context context;
 
     public ProfessoAttendanceAdapter() {
@@ -30,6 +32,10 @@ public class ProfessoAttendanceAdapter extends RecyclerView.Adapter<ProfessoAtte
     public void setAttendanceList(List<UserAttendance> attendanceList) {
         this.attendanceList = attendanceList;
         this.notifyDataSetChanged();
+    }
+
+    public List<UserAttendance> getAttendanceList() {
+        return attendanceList;
     }
 
     @Override
@@ -43,7 +49,7 @@ public class ProfessoAttendanceAdapter extends RecyclerView.Adapter<ProfessoAtte
     @Override
     public int getItemCount() {
         int itemCount = attendanceList != null ? attendanceList.size() : 0;
-        //Log.d(TAG, "$$$ Student attendanceList getItemCount: " + itemCount);
+        Log.d(TAG, "$$$ Student attendanceList getItemCount: " + itemCount);
         return itemCount;
     }
 
@@ -53,9 +59,9 @@ public class ProfessoAttendanceAdapter extends RecyclerView.Adapter<ProfessoAtte
         UserAttendance userAttendance = attendanceList.get(position);
         if (userAttendance != null) {
             holder.setStudentAttendanceDate(userAttendance.getAttendanceDate());
-            //Log.i(TAG, "$$$ Done setting student attendance for " +  userAttendance.getAttendanceDate());
+            Log.i(TAG, "$$$ Done setting student attendance for " +  userAttendance.getAttendanceDate());
         } else {
-            //Log.w(TAG, "$$$ No attendance found for position " + position + " " +  "in " + "adapter ");
+            Log.w(TAG, "$$$ No attendance found for position " + position + " " +  "in " + "adapter ");
         }
     }
 
