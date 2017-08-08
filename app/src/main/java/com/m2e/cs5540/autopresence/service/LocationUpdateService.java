@@ -146,9 +146,16 @@ public class LocationUpdateService extends IntentService {
       UserCoordinate profCoordinate =
             DatabaseUtil.getInstance().getUserCoordinate(professorId);
       float[] results = new float[3];
-      Location.distanceBetween(currLocation.getLatitude(),
-            currLocation.getLongitude(), profCoordinate.getCurrentLatitude(),
-            profCoordinate.getCurrentLongitude(), results);
+      if (profCoordinate != null) {
+         Location.distanceBetween(currLocation.getLatitude(),
+               currLocation.getLongitude(), profCoordinate.getCurrentLatitude(),
+               profCoordinate.getCurrentLongitude(), results);
+      } else {
+         throw new AppException(
+               "Processor coordinates not found for class " +
+                     course.getId());
+      }
+
       Log.i(TAG, "Current distance from professor " + professorId + ": " +
             results[0]);
       return results[0];
