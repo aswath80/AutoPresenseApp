@@ -78,8 +78,7 @@ public class StudentEnrollmentDialogFragment extends DialogFragment
 
       AsyncTask asyncTask =
             new AsyncTask<CourseEnrollment, Void, AsyncLoaderStatus>() {
-               @Override protected AsyncLoaderStatus doInBackground(
-                     CourseEnrollment... params) {
+               @Override protected AsyncLoaderStatus doInBackground(CourseEnrollment... params) {
                   AsyncLoaderStatus status = new AsyncLoaderStatus();
                   if (params != null && params.length > 0) {
                      try {

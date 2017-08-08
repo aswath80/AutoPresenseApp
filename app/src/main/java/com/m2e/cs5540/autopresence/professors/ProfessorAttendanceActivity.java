@@ -129,7 +129,6 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
     private void updateLabel() {
         String myFormat = "dd-MMM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-
         datepicker.setText(sdf.format(myCalendar.getTime()));
     }
 
