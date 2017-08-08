@@ -92,6 +92,12 @@ public class AddCourseActivity extends BaseActivity
       submitButton.setOnClickListener(this);
    }
 
+   @Override public void onBackPressed() {
+      if (!AppContext.isUserLoggedIn()) {
+         super.onBackPressed();
+      }
+   }
+
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
       Log.i(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called");
