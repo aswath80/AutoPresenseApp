@@ -32,26 +32,32 @@
             android:label="@string/title_activity_register" />
         <activity
             android:name=".courses.AddCourseActivity"
-            android:label="@string/title_activity_add_course" />
+            android:label="@string/title_activity_add_course"
+          android:parentActivityName=".professors.ProfessorActivity"/>
         <activity
             android:name=".professors.ProfessorActivity"
-            android:label="@string/title_activity_prof" />
+            android:label="@string/title_activity_prof"
+            android:parentActivityName=".professors.home.ProfessorHomeActivity"/>
         <activity
             android:name=".permit.PermitActivity"
             android:label="@string/title_activity_permit" />
         <activity
             android:name=".students.StudentCoursesActivity"
-            android:label="Student Course Enrollment" />
+            android:label="Student Course Enrollment"
+            android:parentActivityName=".students.StudentHomeActivity"/>
         <activity
             android:name=".students.StudentAttendanceActivity"
-            android:label="Student Attendance Records" />
+            android:label="Student Attendance Records"
+            android:parentActivityName=".students.StudentCoursesActivity"/>
         <activity
             android:name=".professors.ProfessorAttendanceActivity"
-            android:label="Attendance Records" />
+            android:label="Attendance Records"
+            android:parentActivityName=".professors.ProfessorActivity"/>
         <activity
             android:name=".students.StudentHomeActivity"
             android:label="Student Home"></activity>
-        <activity android:name=".professors.home.ProfessorHomeActivity"></activity>
+        <activity android:name=".professors.home.ProfessorHomeActivity"
+            android:label="Professor Home"></activity>
     </application>
 
 </manifest>
