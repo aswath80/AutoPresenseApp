@@ -11,7 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +35,16 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
     private RecyclerView studentAttendanceRecyclerView;
     private ProfessoAttendanceAdapter professorMainAdaptor;
 
-    private TextView datepicker;
+    private EditText datepicker;
+    private Button datepickerButton;
     private Calendar myCalendar;
     private List<UserAttendance> attendanceList;
 
-    public void setAttendanceList(List<UserAttendance> attendanceList) {
+    public void setAttendanceList(List<UserAttendance> list) {
         if(attendanceList == null){
             attendanceList = new ArrayList<>();
         }
-        this.attendanceList = attendanceList;
+        this.attendanceList = list;
     }
 
     @Override
@@ -49,13 +52,14 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_professor_attendance);
 
-        datepicker = (TextView) findViewById(R.id.datePicker);
-        datepicker.setOnClickListener(new View.OnClickListener(){
+        datepicker = (EditText) findViewById(R.id.datepicker);
+        datepickerButton = (Button) findViewById(R.id.datepickerButton);
+
+        datepickerButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-
-                pickDate();
+                pickDate(datepicker, datepickerButton);
                 initalizeLoader();
             }
         });
@@ -107,7 +111,7 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
     public void initalizeLoader(){
         getLoaderManager().initLoader(107, null, this).forceLoad();
     }
-    public void pickDate(){
+    public void pickDate(final EditText text, final Button button){
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -116,12 +120,12 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                updateLabel(text);
             }
 
         };
 
-        datepicker.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(ProfessorAttendanceActivity.this, date, myCalendar
@@ -131,10 +135,10 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         });
     }
 
-    private void updateLabel() {
+    private void updateLabel(EditText v) {
         String myFormat = "dd-MMM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        datepicker.setText(sdf.format(myCalendar.getTime()));
+        v.setText(sdf.format(myCalendar.getTime()));
     }
 
     @Override public void onBackPressed() {
