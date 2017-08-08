@@ -115,7 +115,7 @@ public class StudentEnrollmentDialogFragment extends DialogFragment
                }
             };
 
-      asyncTask.execute(new Object[]{courseEnrollment});
+      asyncTask.execute(new CourseEnrollment[]{courseEnrollment});
    }
 
    @Override
