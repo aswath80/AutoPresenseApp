@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context="com.m2e.cs5540.autopresence.students.StudentsActivity">
+    tools:context="com.m2e.cs5540.autopresence.students.StudentCoursesActivity">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/noStudentCourseDataTextLayout"

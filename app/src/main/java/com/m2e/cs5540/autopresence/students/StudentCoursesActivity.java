@@ -22,17 +22,17 @@ import com.m2e.cs5540.autopresence.vao.Course;
 
 import java.util.List;
 
-public class StudentsActivity extends AppCompatActivity
+public class StudentCoursesActivity extends AppCompatActivity
       implements View.OnClickListener,
       LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
-   private static final String TAG = "StudentsActivity";
+   private static final String TAG = "StudentCoursesActivity";
    private TextInputLayout noDataTextLayout;
    private RecyclerView studentCoursesRecyclerView;
    private StudentCoursesAdapter studentCoursesAdapter;
 
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_students_home);
+      setContentView(R.layout.activity_students_courses);
       studentCoursesRecyclerView = (RecyclerView) findViewById(
             R.id.studentCourseRecyclerView);
       studentCoursesAdapter = new StudentCoursesAdapter();
@@ -81,10 +81,10 @@ public class StudentsActivity extends AppCompatActivity
 
    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
          AsyncLoaderStatus data) {
-      Log.i(TAG, "$$$ StudentsActivity.onLoadFinished");
+      Log.i(TAG, "$$$ StudentCoursesActivity.onLoadFinished");
       if (data.getResult() != null) {
          List<Course> courseList = (List<Course>) data.getResult();
-         Log.i(TAG, "$$$ StudentsActivity.courseList: " + courseList);
+         Log.i(TAG, "$$$ StudentCoursesActivity.courseList: " + courseList);
          if (courseList != null && courseList.size() > 0) {
             noDataTextLayout.setVisibility(View.GONE);
             studentCoursesAdapter.setCourseList(courseList);

@@ -77,7 +77,7 @@ public class ProfessorActivity extends AppCompatActivity
    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
          AsyncLoaderStatus data) {
 
-      Log.i(TAG, "$$$ StudentsActivity.onLoadFinished");
+      Log.i(TAG, "$$$ StudentCoursesActivity.onLoadFinished");
       if (data.getResult() != null) {
          List<Course> courseList = (List<Course>) data.getResult();
          professorAdapter.setCourseList(courseList);

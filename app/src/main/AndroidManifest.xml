@@ -40,7 +40,7 @@
             android:name=".permit.PermitActivity"
             android:label="@string/title_activity_permit" />
         <activity
-            android:name=".students.StudentsActivity"
+            android:name=".students.StudentCoursesActivity"
             android:label="Student Course Enrollment" />
         <activity
             android:name=".students.StudentAttendanceActivity"
