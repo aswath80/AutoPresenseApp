@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
+import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 
 import java.util.List;
@@ -33,6 +34,12 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         studentAttendanceRecyclerView.setLayoutManager(linearLayoutManager);
 
         getLoaderManager().initLoader(107, null, this).forceLoad();
+    }
+
+    @Override public void onBackPressed() {
+        if (!AppContext.isUserLoggedIn()) {
+            super.onBackPressed();
+        }
     }
 
     @Override

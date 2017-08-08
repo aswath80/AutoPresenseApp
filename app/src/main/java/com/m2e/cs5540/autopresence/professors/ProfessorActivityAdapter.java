@@ -1,6 +1,5 @@
 package com.m2e.cs5540.autopresence.professors;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.m2e.cs5540.autopresence.R;
-import com.m2e.cs5540.autopresence.students.StudentCoursesViewHolder;
 import com.m2e.cs5540.autopresence.vao.Course;
 
 import java.util.List;
@@ -17,13 +15,13 @@ import java.util.List;
  * Created by Kumar on 8/5/2017.
  */
 
-public class ProfessorHomeAdapter
+public class ProfessorActivityAdapter
       extends RecyclerView.Adapter<ProfessorViewHolder> {
    private static final String TAG = "ProfessorHomeAdapter";
    private List<Course> courseList;
    private String[] daysInWeek = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
 
-   public ProfessorHomeAdapter() {
+   public ProfessorActivityAdapter() {
    }
 
    public void setCourseList(List<Course> courseList) {

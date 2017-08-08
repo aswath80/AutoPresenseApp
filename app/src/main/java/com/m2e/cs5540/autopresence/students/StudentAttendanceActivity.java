@@ -1,6 +1,7 @@
 package com.m2e.cs5540.autopresence.students;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
+import com.m2e.cs5540.autopresence.context.AppContext;
+import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 
 import java.util.List;
@@ -43,6 +46,12 @@ public class StudentAttendanceActivity extends BaseActivity
             R.id.noStudentAttendanceDataTextLayout);
 
       getLoaderManager().initLoader(107, null, this).forceLoad();
+   }
+
+   @Override public void onBackPressed() {
+      if (!AppContext.isUserLoggedIn()) {
+         super.onBackPressed();
+      }
    }
 
    @Override

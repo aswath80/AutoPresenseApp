@@ -2,9 +2,13 @@ package com.m2e.cs5540.autopresence.courses;
 
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +20,8 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
+import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
+import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
@@ -92,10 +98,37 @@ public class AddCourseActivity extends BaseActivity
       submitButton.setOnClickListener(this);
    }
 
-   @Override public void onBackPressed() {
+
+  @Override public void onBackPressed() {
       if (!AppContext.isUserLoggedIn()) {
          super.onBackPressed();
       }
+   }
+
+  //Implemented for proper back button functioning
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.add_course_menu, menu);
+      return true;
+   }
+
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+
+         case android.R.id.home:
+
+            Intent about = new Intent(this,ProfessorActivity.class);;
+            startActivity(about);
+            finish();
+
+            return true;
+
+         default:
+            return super.onOptionsItemSelected(item);
+      }
+
    }
 
    @Override

@@ -31,14 +31,14 @@ public class ProfessorActivity extends AppCompatActivity
    private static final String TAG = "ProfessorActivity";
    private TextInputLayout noDataTextLayout;
    private RecyclerView professorCoursesRecyclerView;
-   private ProfessorHomeAdapter professorAdapter;
+   private ProfessorActivityAdapter professorAdapter;
 
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_professors_home);
         professorCoursesRecyclerView = (RecyclerView) findViewById(R.id.professorCourseRecyclerView);
-        professorAdapter = new ProfessorHomeAdapter();
+        professorAdapter = new ProfessorActivityAdapter();
         professorCoursesRecyclerView.setAdapter(professorAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         professorCoursesRecyclerView.setLayoutManager(linearLayoutManager);
