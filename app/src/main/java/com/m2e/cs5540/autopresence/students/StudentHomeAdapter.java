@@ -22,7 +22,7 @@ public class StudentHomeAdapter
    public StudentHomeAdapter() {
    }
 
-   public void setCourseList(
+   public void setCourseAttendancePercentList(
          List<CourseAttendancePercent> courseAttendancePercentList) {
       this.courseAttendancePercentList = courseAttendancePercentList;
       this.notifyDataSetChanged();

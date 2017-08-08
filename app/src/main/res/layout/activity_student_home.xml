@@ -1,91 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
    xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:card_view="http://schemas.android.com/apk/res-auto"
    xmlns:tools="http://schemas.android.com/tools"
    android:id="@+id/mainLayout"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
-   android:gravity="center"
    tools:context="com.m2e.cs5540.autopresence.students.StudentHomeActivity">
 
-   <android.support.v7.widget.CardView
+   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:gravity="center">
 
-      <LinearLayout
+      <android.support.v7.widget.CardView
+         android:id="@+id/studentHomeCourseCardView"
          android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:orientation="vertical">
+         android:layout_height="150dp"
+         android:layout_gravity="center"
+         android:gravity="center"
+         card_view:cardCornerRadius="10dp"
+         card_view:cardElevation="5dp"
+         card_view:cardUseCompatPadding="true"
+         card_view:contentPadding="5dp"
+         >
 
-         <android.support.design.widget.TextInputLayout
+         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
 
-            <android.support.v7.widget.AppCompatTextView
-               android:id="@+id/studentHomeCourseTitle"
+            <android.support.design.widget.TextInputLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_gravity="center"
                android:gravity="center"
-               android:text="Courses Enrolled"
-               android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-               />
+               >
 
-         </android.support.design.widget.TextInputLayout>
+               <android.support.v7.widget.AppCompatTextView
+                  android:id="@+id/studentHomeCourseTitle"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:gravity="center"
+                  android:text="Courses Enrolled"
+                  android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                  />
 
-         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatTextView
-               android:id="@+id/studentHomeCourseCount"
+            <android.support.design.widget.TextInputLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_gravity="center"
                android:gravity="center"
-               android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-               />
+               >
 
-         </android.support.design.widget.TextInputLayout>
+               <android.support.v7.widget.AppCompatTextView
+                  android:id="@+id/studentHomeCourseCount"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:gravity="center"
+                  android:textSize="50sp"
+                  />
 
-      </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
-   </android.support.v7.widget.CardView>
+         </LinearLayout>
 
-   <android.support.v7.widget.CardView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      </android.support.v7.widget.CardView>
 
-      <LinearLayout
+      <android.support.v7.widget.CardView
          android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:orientation="vertical">
+         android:layout_height="250dp"
+         android:layout_below="@+id/studentHomeCourseCardView"
+         android:layout_gravity="center"
+         android:gravity="center"
+         card_view:cardCornerRadius="10dp"
+         card_view:cardElevation="5dp"
+         card_view:cardUseCompatPadding="true"
+         card_view:contentPadding="5dp">
 
-         <android.support.design.widget.TextInputLayout
+         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
 
-            <android.support.v7.widget.AppCompatTextView
-               android:id="@+id/studentHomeAttendancePercentTitle"
+            <android.support.design.widget.TextInputLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_gravity="center"
-               android:gravity="center"
-               android:text="Courses Enrolled"
-               android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-               />
+               android:gravity="center">
 
-         </android.support.design.widget.TextInputLayout>
+               <android.support.v7.widget.AppCompatTextView
+                  android:id="@+id/studentHomeAttendancePercentTitle"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:gravity="center"
+                  android:text="Attendance Per Course"
+                  android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                  />
 
-         <android.support.v7.widget.RecyclerView
-            android:id="@+id/studentHomeAttendancePercentRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </android.support.design.widget.TextInputLayout>
 
-         </android.support.v7.widget.RecyclerView>
+            <android.support.design.widget.TextInputLayout
+               android:id="@+id/noStudentAttendancePercentDataLayout"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:visibility="gone">
 
-      </LinearLayout>
+               <android.support.v7.widget.AppCompatTextView
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:gravity="center"
+                  android:text="No data available"
+                  android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+            </android.support.design.widget.TextInputLayout>
 
-   </android.support.v7.widget.CardView>
+            <android.support.v7.widget.RecyclerView
+               android:id="@+id/studentHomeAttendancePercentRecyclerView"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+         </LinearLayout>
+
+      </android.support.v7.widget.CardView>
+
+   </RelativeLayout>
 
 </FrameLayout>

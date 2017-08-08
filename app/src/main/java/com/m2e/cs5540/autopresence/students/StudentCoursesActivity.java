@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
-import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.student_enrollment.StudentEnrollmentDialogFragment;
 import com.m2e.cs5540.autopresence.vao.Course;
 
@@ -47,12 +46,6 @@ public class StudentCoursesActivity extends AppCompatActivity
       getLoaderManager().initLoader(106, null, this).forceLoad();
    }
 
-   @Override public void onBackPressed() {
-      if (!AppContext.isUserLoggedIn()) {
-         super.onBackPressed();
-      }
-   }
-
    @Override public boolean onCreateOptionsMenu(Menu menu) {
       //Inflate the menu; this adds the items to the action bar if present.
       getMenuInflater().inflate(R.menu.student_menu_home, menu);
@@ -76,7 +69,7 @@ public class StudentCoursesActivity extends AppCompatActivity
 
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
-      return new StudentActivityAsyncTaskLoader(this);
+      return new StudentCoursesAsyncTaskLoader(this);
    }
 
    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,

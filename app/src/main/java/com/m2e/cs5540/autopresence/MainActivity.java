@@ -13,6 +13,7 @@ import com.m2e.cs5540.autopresence.exception.AppException;
 import com.m2e.cs5540.autopresence.login.LoginActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
 import com.m2e.cs5540.autopresence.students.StudentCoursesActivity;
+import com.m2e.cs5540.autopresence.students.StudentHomeActivity;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserRole;
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
          User user = AppContext.getCurrentAppContext().getUser();
          if (user.getRole() == UserRole.STUDENT) {
             Intent studentLandingPageIntent = new Intent(this,
-                  StudentCoursesActivity.class);
+                  StudentHomeActivity.class);
             startActivity(studentLandingPageIntent);
          } else if (user.getRole() == UserRole.PROFESSOR) {
             Intent professorLandingPageIntent = new Intent(this,

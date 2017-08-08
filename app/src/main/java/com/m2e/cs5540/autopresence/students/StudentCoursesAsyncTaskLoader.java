@@ -15,10 +15,9 @@ import java.util.List;
 /**
  * Created by maeswara on 8/5/2017.
  */
-
-public class StudentActivityAsyncTaskLoader
+public class StudentCoursesAsyncTaskLoader
       extends AsyncTaskLoader<AsyncLoaderStatus> {
-   public StudentActivityAsyncTaskLoader(Context context) {
+   public StudentCoursesAsyncTaskLoader(Context context) {
       super(context);
    }
 
