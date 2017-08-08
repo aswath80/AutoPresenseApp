@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,11 +39,12 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
     private Calendar myCalendar;
     private List<UserAttendance> attendanceList;
 
-    public void setAttendanceList(List<UserAttendance> list) {
+    public void setAttendanceList(List<UserAttendance> attendanceList) {
         if(attendanceList == null){
             attendanceList = new ArrayList<>();
         }
-        this.attendanceList = list;
+        this.attendanceList = attendanceList;
+
     }
 
     @Override
@@ -60,6 +60,7 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 pickDate(datepicker, datepickerButton);
+
                 initalizeLoader();
             }
         });
@@ -111,6 +112,7 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
     public void initalizeLoader(){
         getLoaderManager().initLoader(107, null, this).forceLoad();
     }
+
     public void pickDate(final EditText text, final Button button){
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
