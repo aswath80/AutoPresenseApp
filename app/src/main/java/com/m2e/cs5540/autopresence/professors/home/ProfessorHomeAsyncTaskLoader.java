@@ -25,7 +25,8 @@ import java.util.List;
 public class ProfessorHomeAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
 
     private static final String TAG = "ProfHomeAsyncTaskLoader";
-    private static final SimpleDateFormat meetingDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    private static final SimpleDateFormat meetingDateFormat = new
+          SimpleDateFormat("dd-MMM-yyyy");
 
     public ProfessorHomeAsyncTaskLoader(Context context) {
         super(context);

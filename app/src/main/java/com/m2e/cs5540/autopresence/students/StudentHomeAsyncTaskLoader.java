@@ -26,7 +26,7 @@ public class StudentHomeAsyncTaskLoader
       extends AsyncTaskLoader<AsyncLoaderStatus> {
    private static final String TAG = "StudentHomeAsyncLoader";
    private static final SimpleDateFormat meetingDateFormat =
-         new SimpleDateFormat("MM/dd/yyyy");
+         new SimpleDateFormat("dd-MMM-yyyy");
 
    public StudentHomeAsyncTaskLoader(Context context) {
       super(context);
