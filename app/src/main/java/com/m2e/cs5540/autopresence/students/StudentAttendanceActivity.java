@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
@@ -25,6 +26,7 @@ public class StudentAttendanceActivity extends BaseActivity
 
    private static final String TAG = "StudentAttendActivity";
    private TextInputLayout noDataTextLayout;
+   private TextView studentAttendanceCourseDetailText;
    private RecyclerView studentAttendanceRecyclerView;
    private StudentAttendanceAdapter studentAttendanceAdapter;
 
@@ -32,6 +34,8 @@ public class StudentAttendanceActivity extends BaseActivity
 
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_students_attendance);
+      studentAttendanceCourseDetailText = (TextView) findViewById(
+            R.id.studentAttendanceCourseDetail);
       studentAttendanceRecyclerView = (RecyclerView) findViewById(
             R.id.studentAttendanceRecyclerView);
       studentAttendanceAdapter = new StudentAttendanceAdapter();
@@ -44,6 +48,11 @@ public class StudentAttendanceActivity extends BaseActivity
             R.id.noStudentAttendanceDataTextLayout);
 
       getLoaderManager().initLoader(107, null, this).forceLoad();
+
+      String courseId = getIntent().getStringExtra("courseId");
+      String courseName = getIntent().getStringExtra("courseName");
+      String courseDetail = courseId + " : " + courseName;
+      studentAttendanceCourseDetailText.setText(courseDetail);
 
       showProgressDialog("Loading data...");
    }

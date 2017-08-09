@@ -40,6 +40,7 @@ public class StudentCoursesViewHolder extends RecyclerView.ViewHolder
          Intent intent = new Intent(view.getContext(),
                StudentAttendanceActivity.class);
          intent.putExtra("courseId", courseIdText.getText());
+         intent.putExtra("courseName", courseNameText.getText());
          intent.putExtra("userId",
                AppContext.getCurrentAppContext().getUser().getId());
          view.getContext().startActivity(intent);

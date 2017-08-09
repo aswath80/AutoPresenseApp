@@ -1,34 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    tools:context="com.m2e.cs5540.autopresence.students.StudentAttendanceActivity">
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:layout_margin="10dp"
+   tools:context="com.m2e.cs5540.autopresence.students.StudentAttendanceActivity">
 
+   <android.support.design.widget.TextInputLayout
+      android:id="@+id/noStudentAttendanceDataTextLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:visibility="gone">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/noStudentAttendanceDataTextLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone">
+      <android.support.v7.widget.AppCompatTextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:gravity="center"
+         android:text="No data available"
+         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+   </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatTextView
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <android.support.design.widget.TextInputLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal"
+         android:padding="10dp">
+
+         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/studentAttendanceCourseDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:text="No data available"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
-    </android.support.design.widget.TextInputLayout>
+            android:background="@drawable/round_rectangle"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+      </android.support.design.widget.TextInputLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/studentAttendanceRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+      <android.support.v7.widget.RecyclerView
+         android:id="@+id/studentAttendanceRecyclerView"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+      </android.support.v7.widget.RecyclerView>
+
+   </LinearLayout>
 
 </FrameLayout>
