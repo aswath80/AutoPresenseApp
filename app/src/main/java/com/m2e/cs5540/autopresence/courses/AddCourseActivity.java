@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -49,15 +50,15 @@ public class AddCourseActivity extends BaseActivity
     private EditText classLocation;
 
     private EditText csTime;
-    private Button bsTime;
+    private ImageView bsTime;
     private EditText ceTime;
-    private Button beTime;
+    private ImageView beTime;
     private Calendar myTime;
 
     private EditText csDate;
-    private Button bsDate;
+    private ImageView bsDate;
     private EditText ceDate;
-    private Button beDate;
+    private ImageView beDate;
     private Calendar myCalendar;
 
     private List<CheckBox> weekdays;
@@ -78,7 +79,7 @@ public class AddCourseActivity extends BaseActivity
         this.classLocation = (EditText) findViewById(R.id.cLocation);
 
         this.csTime = (EditText) findViewById(R.id.sTime);
-        this.bsTime = (Button) findViewById(R.id.sTimeButton);
+        this.bsTime = (ImageView) findViewById(R.id.sTimeImage);
         bsTime.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -88,7 +89,7 @@ public class AddCourseActivity extends BaseActivity
         });
 
         this.ceTime = (EditText) findViewById(R.id.eTime);
-        this.beTime = (Button) findViewById(R.id.eTimeButton);
+        this.beTime = (ImageView) findViewById(R.id.eTimeImage);
         beTime.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -98,7 +99,7 @@ public class AddCourseActivity extends BaseActivity
         });
 
         this.csDate = (EditText) findViewById(R.id.sDate);
-        bsDate = (Button) findViewById(R.id.sDateButton);
+        bsDate = (ImageView) findViewById(R.id.sDateImage);
         bsDate.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -108,7 +109,7 @@ public class AddCourseActivity extends BaseActivity
         });
 
         this.ceDate = (EditText) findViewById(R.id.eDate);
-        this.beDate = (Button) findViewById(R.id.eDateButton);
+        this.beDate = (ImageView) findViewById(R.id.eDateImage);
         beDate.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -180,7 +181,7 @@ public class AddCourseActivity extends BaseActivity
                    }
 
     //Implementing date picker
-    public void pickDate(final EditText dateText, final Button button){
+    public void pickDate(final EditText dateText, final ImageView button){
 
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -213,7 +214,7 @@ public class AddCourseActivity extends BaseActivity
     }
 
     //Implementing time picker
-    public void pickTime(final EditText timeText, final Button button){
+    public void pickTime(final EditText timeText, final ImageView button){
         myTime = Calendar.getInstance();
         final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
             @Override
