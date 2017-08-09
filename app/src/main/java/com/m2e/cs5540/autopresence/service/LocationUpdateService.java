@@ -119,7 +119,7 @@ public class LocationUpdateService extends IntentService {
                         course);
                   Log.i(TAG, "$$$ Attendance: professorDistance = " +
                         professorDistance);
-                  if (professorDistance <= 10) {
+                  if (professorDistance <= 100) {
                      UserAttendance userAttendance = new UserAttendance();
                      userAttendance.setUserId(userId);
                      userAttendance.setCourseId(course.getId());

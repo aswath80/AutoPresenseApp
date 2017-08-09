@@ -65,8 +65,6 @@ public class ProfessorAttendanceActivity extends BaseActivity
 
          @Override public void onClick(View v) {
             pickDate(datepicker, datepickerButton);
-
-            initalizeLoader();
          }
       });
 
@@ -142,6 +140,8 @@ public class ProfessorAttendanceActivity extends BaseActivity
                   myCalendar.set(Calendar.MONTH, monthOfYear);
                   myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                   updateLabel(text);
+
+                  initalizeLoader();
                }
 
             };
@@ -193,6 +193,7 @@ public class ProfessorAttendanceActivity extends BaseActivity
                         Toast.LENGTH_LONG).show();
             }
         }
+        hideProgressDialog();
     }
 
     @Override

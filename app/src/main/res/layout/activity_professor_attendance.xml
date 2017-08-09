@@ -29,7 +29,6 @@
                     android:id="@+id/datepicker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
                     android:hint="Choose Date"/>
 
             </android.support.design.widget.TextInputLayout>
