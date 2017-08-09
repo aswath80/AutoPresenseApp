@@ -49,13 +49,16 @@ public class AddCourseActivity extends BaseActivity
     private EditText classLocation;
 
     private EditText csTime;
+    private Button bsTime;
     private EditText ceTime;
+    private Button beTime;
     private Calendar myTime;
 
     private EditText csDate;
+    private Button bsDate;
     private EditText ceDate;
+    private Button beDate;
     private Calendar myCalendar;
-
 
     private List<CheckBox> weekdays;
     private char[] days = {'0', '0', '0', '0', '0', '0', '0'};
@@ -75,39 +78,42 @@ public class AddCourseActivity extends BaseActivity
         this.classLocation = (EditText) findViewById(R.id.cLocation);
 
         this.csTime = (EditText) findViewById(R.id.sTime);
-        this.ceTime = (EditText) findViewById(R.id.eTime);
-        csTime.setOnClickListener(new View.OnClickListener(){
+        this.bsTime = (Button) findViewById(R.id.sTimeButton);
+        bsTime.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                pickTime(csTime);
+                pickTime(csTime, bsTime);
             }
         });
-        ceTime.setOnClickListener(new View.OnClickListener(){
+
+        this.ceTime = (EditText) findViewById(R.id.eTime);
+        this.beTime = (Button) findViewById(R.id.eTimeButton);
+        beTime.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                pickTime(ceTime);
+                pickTime(ceTime, beTime);
             }
         });
 
         this.csDate = (EditText) findViewById(R.id.sDate);
-        this.ceDate = (EditText) findViewById(R.id.eDate);
-
-        csDate.setOnClickListener(new View.OnClickListener(){
+        bsDate = (Button) findViewById(R.id.sDateButton);
+        bsDate.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                pickDate(csDate);
+                pickDate(csDate, bsDate);
             }
         });
 
-
-        ceDate.setOnClickListener(new View.OnClickListener(){
+        this.ceDate = (EditText) findViewById(R.id.eDate);
+        this.beDate = (Button) findViewById(R.id.eDateButton);
+        beDate.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                pickDate(ceDate);
+                pickDate(ceDate, beDate);
             }
         });
 
@@ -174,7 +180,7 @@ public class AddCourseActivity extends BaseActivity
                    }
 
     //Implementing date picker
-    public void pickDate(final EditText dateText){
+    public void pickDate(final EditText dateText, final Button button){
 
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -190,7 +196,7 @@ public class AddCourseActivity extends BaseActivity
 
         };
 
-        dateText.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(AddCourseActivity.this, date, myCalendar
@@ -207,7 +213,7 @@ public class AddCourseActivity extends BaseActivity
     }
 
     //Implementing time picker
-    public void pickTime(final EditText timeText){
+    public void pickTime(final EditText timeText, final Button button){
         myTime = Calendar.getInstance();
         final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -218,7 +224,7 @@ public class AddCourseActivity extends BaseActivity
             }
         };
 
-        timeText.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new  TimePickerDialog(AddCourseActivity.this, time, myTime.get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();

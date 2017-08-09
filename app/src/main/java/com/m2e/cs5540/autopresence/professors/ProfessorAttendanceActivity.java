@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,21 +35,34 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
     private RecyclerView studentAttendanceRecyclerView;
     private ProfessoAttendanceAdapter professorMainAdaptor;
 
-    private TextView datepicker;
+    private EditText datepicker;
+    private Button datepickerButton;
     private Calendar myCalendar;
+    private List<UserAttendance> attendanceList;
+
+    public void setAttendanceList(List<UserAttendance> attendanceList) {
+        if(attendanceList == null){
+            attendanceList = new ArrayList<>();
+        }
+        this.attendanceList = attendanceList;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_professor_attendance);
 
-        datepicker = (TextView) findViewById(R.id.datePicker);
+        datepicker = (EditText) findViewById(R.id.datepicker);
+        datepickerButton = (Button) findViewById(R.id.datepickerButton);
 
-        datepicker.setOnClickListener(new View.OnClickListener(){
+        datepickerButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                pickDate();
+                pickDate(datepicker, datepickerButton);
+
+                initalizeLoader();
             }
         });
 
@@ -60,9 +74,6 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<UserAttendance> attendanceList = professorMainAdaptor.getAttendanceList();
-                Log.i(TAG, "Date Picker, received data size is: " + attendanceList.size());
-
                 List<UserAttendance>  result = new ArrayList<>(attendanceList.size());
                 for (UserAttendance attendance : attendanceList){
                     Log.i(TAG, "Date Picker, Date received is: " + datepicker.getText());
@@ -97,27 +108,27 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
                 professorMainAdaptor.setAttendanceList(attendanceList);
             }
         });
-
-        //getLoaderManager().initLoader(107, null, this).forceLoad();
     }
 
-    public void pickDate(){
+    public void initalizeLoader(){
+        getLoaderManager().initLoader(107, null, this).forceLoad();
+    }
 
+    public void pickDate(final EditText text, final Button button){
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                updateLabel(text);
             }
 
         };
 
-        datepicker.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(ProfessorAttendanceActivity.this, date, myCalendar
@@ -127,10 +138,10 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
         });
     }
 
-    private void updateLabel() {
+    private void updateLabel(EditText v) {
         String myFormat = "dd-MMM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        datepicker.setText(sdf.format(myCalendar.getTime()));
+        v.setText(sdf.format(myCalendar.getTime()));
     }
 
     @Override public void onBackPressed() {
@@ -144,8 +155,6 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
 
         String courseId = getIntent().getStringExtra("courseId");
         if (courseId == null ) {
-            Toast.makeText(this, "StudentAttendanceActivity received null " +
-                    "courseId/userId from the intent!", Toast.LENGTH_LONG).show();
             return null;
         } else {
             return new ProfessorAttendanceAsyncTaskLoader(this, courseId);
@@ -158,7 +167,7 @@ public class ProfessorAttendanceActivity extends AppCompatActivity
             if (data.getException() == null) {
                 List<UserAttendance> attendanceList = (List<UserAttendance>) data.getResult();
                 if (attendanceList != null && attendanceList.size() > 0) {
-                    professorMainAdaptor.setAttendanceList(attendanceList);
+                    setAttendanceList(attendanceList);
                 }
             } else {
                 Exception e = data.getException();

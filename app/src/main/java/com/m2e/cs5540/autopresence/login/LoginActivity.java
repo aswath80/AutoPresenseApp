@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
+import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
 import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.register.RegisterActivity;
@@ -162,5 +163,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {
 
+   }
+
+   @Override public void onBackPressed() {
+      if (!AppContext.isUserLoggedIn()) {
+         super.onBackPressed();
+      }else{
+         Intent a = new Intent(Intent.ACTION_MAIN);
+         a.addCategory(Intent.CATEGORY_HOME);
+         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+         startActivity(a);
+      }
    }
 }
