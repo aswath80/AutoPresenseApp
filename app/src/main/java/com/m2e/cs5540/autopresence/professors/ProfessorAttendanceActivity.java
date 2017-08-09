@@ -80,18 +80,16 @@ public class ProfessorAttendanceActivity extends BaseActivity
          @Override
          public void onTextChanged(CharSequence s, int start, int before,
                int count) {
-            List<UserAttendance> result = new ArrayList<>(
-                  attendanceList.size());
-            for (UserAttendance attendance : attendanceList) {
-               Log.i(TAG,
-                     "Date Picker, Date received is: " + datepicker.getText());
-               Log.i(TAG, "Date Picker, DbDate received is: " +
-                     attendance.getAttendanceDate());
-               if (attendance.getAttendanceDate().equals(
-                     datepicker.getText().toString())) {
-                  Log.i(TAG, "Date Picker, Matched id is: " +
-                        attendance.getUserId());
-                  result.add(attendance);
+            List<UserAttendance> result = new ArrayList<>();
+            if(attendanceList != null) {
+               for (UserAttendance attendance : attendanceList) {
+                  Log.i(TAG, "Date Picker, Date received is: " + datepicker.getText());
+                  Log.i(TAG, "Date Picker, DbDate received is: " + attendance.getAttendanceDate());
+                  if (attendance.getAttendanceDate().equals(
+                        datepicker.getText().toString())) {
+                     Log.i(TAG, "Date Picker, Matched id is: " + attendance.getUserId());
+                     result.add(attendance);
+                  }
                }
             }
             Log.i(TAG, "Date Picker, Sending for update data size is: " +
