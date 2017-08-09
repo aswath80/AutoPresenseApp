@@ -204,11 +204,28 @@ public class DatabaseUtil {
          Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
          Log.i(TAG, "$$$ userId: " + userAttendance.getUserId());
          if (userAttendancesRef != null) {
-            DatabaseReference currUserAttendanceRef = getChildReference(
-                  userAttendancesRef.orderByChild("attendanceDate")
-                        .equalTo(userAttendance.getAttendanceDate()));
-            Log.i(TAG, "$$$ currUserCoordinateRef: " + currUserAttendanceRef);
-            if (currUserAttendanceRef == null) {
+            List<UserAttendance> userAttendanceList = getUserAttendances(
+                  userAttendance.getCourseId(), userAttendance.getUserId());
+            boolean found = false;
+            if (userAttendanceList != null) {
+               for (int i = 0; i < userAttendanceList.size(); i++) {
+                  if (userAttendanceList.get(i).getAttendanceDate().equals(
+                        userAttendance.getAttendanceDate())) {
+                     Log.i(TAG, "$$$ Attendance: User " +
+                           userAttendance.getUserId() +
+                           " already has attendance registered " +
+                           "for course " + userAttendance.getCourseId() +
+                           " at " + "time " +
+                           userAttendanceList.get(i).getAttendanceTime());
+                     found = true;
+                  }
+               }
+            }
+            if (!found) {
+               Log.i(TAG, "$$$ Attendance: New attendance record created for " +
+                     "user " + userAttendance.getUserId() + " for course " +
+                     userAttendance.getCourseId() + " at " + "time " +
+                     userAttendance.getAttendanceTime());
                userAttendancesRef.push().setValue(userAttendance);
                return true;
             }
@@ -339,9 +356,11 @@ public class DatabaseUtil {
       return null;
    }
 
-   public synchronized List<UserAttendance> getCourseAttendances(String courseId) {
+   public synchronized List<UserAttendance> getCourseAttendances(
+         String courseId) {
       try {
-         DatabaseReference userAttendancesRef = database.child("userAttendances");
+         DatabaseReference userAttendancesRef = database.child(
+               "userAttendances");
          Log.i(TAG, "$$$ userAttendancesRef: " + userAttendancesRef);
          if (userAttendancesRef != null) {
             Query courseRegistrationQuery = userAttendancesRef.orderByChild(
