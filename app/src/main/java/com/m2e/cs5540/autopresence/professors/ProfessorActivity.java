@@ -66,6 +66,7 @@ public class ProfessorActivity extends BaseActivity
          case R.id.addCourse:
             Intent intent = new Intent(getApplicationContext(),
                   AddCourseActivity.class);
+            intent.putExtra("back", "courses");
             startActivityForResult(intent, 0);
             finish();
             return true;
