@@ -10,6 +10,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
+import com.m2e.cs5540.autopresence.courses.AddCourseActivity;
 import com.m2e.cs5540.autopresence.login.LoginActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
@@ -64,6 +67,34 @@ public class ProfessorHomeActivity extends BaseActivity
       showProgressDialog("Loading data...");
    }
 
+   @Override public boolean onCreateOptionsMenu(Menu menu) {
+      //Inflate the menu; this adds the items to the action bar if present.
+      getMenuInflater().inflate(R.menu.professor_menu, menu);
+      return true;
+   }
+
+   //Determine f action bar item was selected. If true then do corresponding action.
+   @Override public boolean onOptionsItemSelected(MenuItem item) {
+      //handle press on the action bar
+      switch (item.getItemId()) {
+         case R.id.addCourse:
+            Intent intent = new Intent(getApplicationContext(),
+                  AddCourseActivity.class);
+            intent.putExtra("back", "home");
+            startActivityForResult(intent, 0);
+            finish();
+            return true;
+
+         //   FragmentManager fm = getSupportFragmentManager();
+         //   StudentEnrollmentDialogFragment frag =
+         //           new StudentEnrollmentDialogFragment();
+         //   frag.setParentLoader(getLoaderManager().getLoader(104));
+         //  frag.show(fm, "ProfessorEnrollmentFragment");
+         //  return true;
+      }
+      return super.onOptionsItemSelected(item);
+   }
+
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
       return new ProfessorHomeAsyncTaskLoader(this);
@@ -84,7 +115,7 @@ public class ProfessorHomeActivity extends BaseActivity
             professorEnrolledCourseCountTextView.setText(String.valueOf(
                   courseAttendancePercentList.get(0).getCourseCount()));
          } else {
-            professorEnrolledCourseCountTextView.setText("No data available");
+            professorEnrolledCourseCountTextView.setText("0");
             noDataLayout.setVisibility(View.VISIBLE);
          }
       } else {

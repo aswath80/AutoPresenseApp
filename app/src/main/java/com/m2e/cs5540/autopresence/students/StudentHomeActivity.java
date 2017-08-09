@@ -6,11 +6,13 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.login.LoginActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
+import com.m2e.cs5540.autopresence.student_enrollment.StudentEnrollmentDialogFragment;
 import com.m2e.cs5540.autopresence.vao.CourseAttendancePercent;
 
 import java.util.List;
@@ -66,6 +69,27 @@ public class StudentHomeActivity extends BaseActivity
       showProgressDialog("Loading data...");
    }
 
+   @Override public boolean onCreateOptionsMenu(Menu menu) {
+      //Inflate the menu; this adds the items to the action bar if present.
+      getMenuInflater().inflate(R.menu.student_menu_home, menu);
+      return true;
+   }
+
+   //Determine f action bar item was selected. If true then do corresponding action.
+   @Override public boolean onOptionsItemSelected(MenuItem item) {
+      //handle press on the action bar
+      switch (item.getItemId()) {
+         case R.id.add_course:
+            FragmentManager fm = getSupportFragmentManager();
+            StudentEnrollmentDialogFragment frag =
+                  new StudentEnrollmentDialogFragment();
+            frag.setParentLoader(getLoaderManager().getLoader(106));
+            frag.show(fm, "StudentEnrollmentFragment");
+            return true;
+      }
+      return super.onOptionsItemSelected(item);
+   }
+
    @Override
    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
       return new StudentHomeAsyncTaskLoader(this);
@@ -86,7 +110,7 @@ public class StudentHomeActivity extends BaseActivity
             studentEnrolledCourseCountTextView.setText(String.valueOf(
                   courseAttendancePercentList.get(0).getCourseCount()));
          } else {
-            studentEnrolledCourseCountTextView.setText("No data available");
+            studentEnrolledCourseCountTextView.setText("0");
             noDataLayout.setVisibility(View.VISIBLE);
          }
       } else {

@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -25,9 +24,8 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
-
-import com.m2e.cs5540.autopresence.login.LoginActivity;
 import com.m2e.cs5540.autopresence.professors.ProfessorActivity;
+import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.MeetingDate;
 import com.m2e.cs5540.autopresence.vao.User;
@@ -39,269 +37,276 @@ import java.util.List;
 
 public class AddCourseActivity extends BaseActivity
 
-        implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
+      implements View.OnClickListener,
+      LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
 
-    private static final String TAG = AddCourseActivity.class.getName();
+   private static final String TAG = AddCourseActivity.class.getName();
 
-    private EditText courseId;
-    private EditText courseName;
-    private EditText classLocation;
+   private EditText courseId;
+   private EditText courseName;
+   private EditText classLocation;
 
-    private EditText csTime;
-    private Button bsTime;
-    private EditText ceTime;
-    private Button beTime;
-    private Calendar myTime;
+   private EditText csTime;
+   private Button bsTime;
+   private EditText ceTime;
+   private Button beTime;
+   private Calendar myTime;
 
-    private EditText csDate;
-    private Button bsDate;
-    private EditText ceDate;
-    private Button beDate;
-    private Calendar myCalendar;
+   private EditText csDate;
+   private Button bsDate;
+   private EditText ceDate;
+   private Button beDate;
+   private Calendar myCalendar;
 
-    private List<CheckBox> weekdays;
-    private char[] days = {'0', '0', '0', '0', '0', '0', '0'};
+   private List<CheckBox> weekdays;
+   private char[] days = {'0', '0', '0', '0', '0', '0', '0'};
 
-    //private Spinner semester;
-    //private ArrayAdapter<CharSequence> spinnerAdapter;
-    private Button submitButton;
+   //private Spinner semester;
+   //private ArrayAdapter<CharSequence> spinnerAdapter;
+   private Button submitButton;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+   @Override protected void onCreate(Bundle savedInstanceState) {
 
-        Log.i(TAG, "$$$$$$ onCreate() Invoked... ");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_course);
+      Log.i(TAG, "$$$$$$ onCreate() Invoked... ");
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_add_course);
 
-        this.courseId = (EditText) findViewById(R.id.cId);
-        this.courseName = (EditText) findViewById(R.id.cName);
-        this.classLocation = (EditText) findViewById(R.id.cLocation);
+      this.courseId = (EditText) findViewById(R.id.cId);
+      this.courseName = (EditText) findViewById(R.id.cName);
+      this.classLocation = (EditText) findViewById(R.id.cLocation);
 
-        this.csTime = (EditText) findViewById(R.id.sTime);
-        this.bsTime = (Button) findViewById(R.id.sTimeButton);
-        bsTime.setOnClickListener(new View.OnClickListener(){
+      this.csTime = (EditText) findViewById(R.id.sTime);
+      this.bsTime = (Button) findViewById(R.id.sTimeButton);
+      bsTime.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                pickTime(csTime, bsTime);
-            }
-        });
+         @Override public void onClick(View v) {
+            pickTime(csTime, bsTime);
+         }
+      });
 
-        this.ceTime = (EditText) findViewById(R.id.eTime);
-        this.beTime = (Button) findViewById(R.id.eTimeButton);
-        beTime.setOnClickListener(new View.OnClickListener(){
+      this.ceTime = (EditText) findViewById(R.id.eTime);
+      this.beTime = (Button) findViewById(R.id.eTimeButton);
+      beTime.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                pickTime(ceTime, beTime);
-            }
-        });
+         @Override public void onClick(View v) {
+            pickTime(ceTime, beTime);
+         }
+      });
 
-        this.csDate = (EditText) findViewById(R.id.sDate);
-        bsDate = (Button) findViewById(R.id.sDateButton);
-        bsDate.setOnClickListener(new View.OnClickListener(){
+      this.csDate = (EditText) findViewById(R.id.sDate);
+      bsDate = (Button) findViewById(R.id.sDateButton);
+      bsDate.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                pickDate(csDate, bsDate);
-            }
-        });
+         @Override public void onClick(View v) {
+            pickDate(csDate, bsDate);
+         }
+      });
 
-        this.ceDate = (EditText) findViewById(R.id.eDate);
-        this.beDate = (Button) findViewById(R.id.eDateButton);
-        beDate.setOnClickListener(new View.OnClickListener(){
+      this.ceDate = (EditText) findViewById(R.id.eDate);
+      this.beDate = (Button) findViewById(R.id.eDateButton);
+      beDate.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                pickDate(ceDate, beDate);
-            }
-        });
+         @Override public void onClick(View v) {
+            pickDate(ceDate, beDate);
+         }
+      });
 
-        weekdays = new ArrayList<>(6);
+      weekdays = new ArrayList<>(6);
 
-        weekdays.add((CheckBox) findViewById(R.id.sunday));
-        weekdays.add((CheckBox) findViewById(R.id.monday));
-        weekdays.add((CheckBox) findViewById(R.id.tuesday));
-        weekdays.add((CheckBox) findViewById(R.id.wednesday));
-        weekdays.add((CheckBox) findViewById(R.id.thrusday));
-        weekdays.add((CheckBox) findViewById(R.id.friday));
-        weekdays.add((CheckBox) findViewById(R.id.saturday));
+      weekdays.add((CheckBox) findViewById(R.id.sunday));
+      weekdays.add((CheckBox) findViewById(R.id.monday));
+      weekdays.add((CheckBox) findViewById(R.id.tuesday));
+      weekdays.add((CheckBox) findViewById(R.id.wednesday));
+      weekdays.add((CheckBox) findViewById(R.id.thrusday));
+      weekdays.add((CheckBox) findViewById(R.id.friday));
+      weekdays.add((CheckBox) findViewById(R.id.saturday));
 
-        for (int i = 0; i < weekdays.size(); i++) {
-            CheckBox cb = weekdays.get(i);
-            final int j = i;
-            cb.setOnCheckedChangeListener(
-                    new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView,
-                                                     boolean isChecked) {
-                            days[j] = (isChecked == true) ? '1' : '0';
-                            Log.i(TAG,
-                                    "$$$$$$ AddCourseActivity.onCreateLoader called, days value is: " +
-                                            String.valueOf(days));
-                        }
-                    });
-        }
-
-        this.submitButton = (Button) findViewById(R.id.btn_Add_Course);
-        submitButton.setOnClickListener(this);
-    }
-
-    @Override public void onBackPressed() {
-        if (!AppContext.isUserLoggedIn()) {
-            super.onBackPressed();
-        }
-    }
-
-    //for the arrow back button on appBar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-              MenuInflater inflater = getMenuInflater();
-              inflater.inflate(R.menu.add_course_menu, menu);
-              return true;
-           }
-
-            @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-              switch (item.getItemId()) {
-
-                             case android.R.id.home:
-
-                                    Intent about = new Intent(this,ProfessorActivity.class);;
-                           startActivity(about);
-                            finish();
-
-                                    return true;
-
-                             default:
-                            return super.onOptionsItemSelected(item);
+      for (int i = 0; i < weekdays.size(); i++) {
+         CheckBox cb = weekdays.get(i);
+         final int j = i;
+         cb.setOnCheckedChangeListener(
+               new CompoundButton.OnCheckedChangeListener() {
+                  @Override
+                  public void onCheckedChanged(CompoundButton buttonView,
+                        boolean isChecked) {
+                     days[j] = (isChecked == true) ? '1' : '0';
+                     Log.i(TAG,
+                           "$$$$$$ AddCourseActivity.onCreateLoader called, days value is: " +
+                                 String.valueOf(days));
                   }
+               });
+      }
 
-                   }
+      this.submitButton = (Button) findViewById(R.id.btn_Add_Course);
+      submitButton.setOnClickListener(this);
+   }
 
-    //Implementing date picker
-    public void pickDate(final EditText dateText, final Button button){
+   @Override public void onBackPressed() {
+      if (!AppContext.isUserLoggedIn()) {
+         super.onBackPressed();
+      }
+   }
 
-        myCalendar = Calendar.getInstance();
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+   //for the arrow back button on appBar
+   @Override public boolean onCreateOptionsMenu(Menu menu) {
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.add_course_menu, menu);
+      return true;
+   }
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+   @Override public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
 
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(dateText);
+         case android.R.id.home:
+
+            String back = getIntent().getStringExtra("back");
+            if("home".equals(back)){
+               Intent about = new Intent(this, ProfessorHomeActivity.class);
+               startActivity(about);
+            }else {
+               Intent about = new Intent(this, ProfessorActivity.class);
+               startActivity(about);
             }
 
-        };
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(AddCourseActivity.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-    }
+            finish();
 
-    private void updateLabel(EditText updateDate) {
-        String myFormat = "dd-MMM-yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        updateDate.setText(sdf.format(myCalendar.getTime()));
-    }
+            return true;
 
-    //Implementing time picker
-    public void pickTime(final EditText timeText, final Button button){
-        myTime = Calendar.getInstance();
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                myTime.set(Calendar.HOUR_OF_DAY, selectedHour);
-                myTime.set(Calendar.MINUTE, selectedMinute);
-                updateTime(timeText);
-            }
-        };
+         default:
+            return super.onOptionsItemSelected(item);
+      }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new  TimePickerDialog(AddCourseActivity.this, time, myTime.get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();
-            }
-        });
-    }
+   }
 
-    private void updateTime(EditText updateTime) {
-        String myFormat = "HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        updateTime.setText(sdf.format(myTime.getTimeInMillis()));
-    }
+   //Implementing date picker
+   public void pickDate(final EditText dateText, final Button button) {
 
-    @Override
-    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
-        Log.i(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called");
+      myCalendar = Calendar.getInstance();
+      final DatePickerDialog.OnDateSetListener date =
+            new DatePickerDialog.OnDateSetListener() {
 
-        Course course = new Course();
-        course.setId(courseId.getText().toString());
-        course.setName(courseName.getText().toString());
-        course.setLocation(classLocation.getText().toString());
+               @Override
+               public void onDateSet(DatePicker view, int year, int monthOfYear,
+                     int dayOfMonth) {
 
-        User user = AppContext.getCurrentAppContext().getUser();
-        course.setProfessorId(user.getId());
+                  myCalendar.set(Calendar.YEAR, year);
+                  myCalendar.set(Calendar.MONTH, monthOfYear);
+                  myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                  updateLabel(dateText);
+               }
 
-        MeetingDate md = new MeetingDate();
-        md.setStartDate(csDate.getText().toString());
-        md.setEndDate(ceDate.getText().toString());
-        md.setStartTime(csTime.getText().toString());
-        md.setEndTime(ceTime.getText().toString());
+            };
 
-        course.setMeetingDate(md);
-        md.setMeetingDays(String.valueOf(days));
+      button.setOnClickListener(new View.OnClickListener() {
+         @Override public void onClick(View v) {
+            new DatePickerDialog(AddCourseActivity.this, date,
+                  myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                  myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+         }
+      });
+   }
 
-        return new AddCourseAsyncTaskLoader(this, course);
-    }
+   private void updateLabel(EditText updateDate) {
+      String myFormat = "dd-MMM-yyyy"; //In which you need put here
+      SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+      updateDate.setText(sdf.format(myCalendar.getTime()));
+   }
 
-    @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
-                                         AsyncLoaderStatus loaderStatus) {
+   //Implementing time picker
+   public void pickTime(final EditText timeText, final Button button) {
+      myTime = Calendar.getInstance();
+      final TimePickerDialog.OnTimeSetListener time =
+            new TimePickerDialog.OnTimeSetListener() {
+               @Override
+               public void onTimeSet(TimePicker view, int selectedHour,
+                     int selectedMinute) {
+                  myTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                  myTime.set(Calendar.MINUTE, selectedMinute);
+                  updateTime(timeText);
+               }
+            };
 
-        Log.i(TAG, "$$$$$$ RegisterActivity.onLoadFinished called");
-        if (loaderStatus.hasException()) {
-            Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Course has been added successfully.",
-                    Toast.LENGTH_LONG).show();
-        }
-        //finish();
-        //startActivity(getIntent());
-    }
+      button.setOnClickListener(new View.OnClickListener() {
+         @Override public void onClick(View v) {
+            new TimePickerDialog(AddCourseActivity.this, time,
+                  myTime.get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE),
+                  true).show();
+         }
+      });
+   }
 
-    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {
-    }
+   private void updateTime(EditText updateTime) {
+      String myFormat = "HH:mm";
+      SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+      updateTime.setText(sdf.format(myTime.getTimeInMillis()));
+   }
 
-    @Override public void onClick(View v) {
-        addCourse();
-    }
+   @Override
+   public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
+      Log.i(TAG, "$$$$$$ AddCourseActivity.onCreateLoader called");
 
-    public void addCourse() {
-        Log.i(TAG, "Adding Course");
-        submitButton.setEnabled(false);
+      Course course = new Course();
+      course.setId(courseId.getText().toString());
+      course.setName(courseName.getText().toString());
+      course.setLocation(classLocation.getText().toString());
 
-        final ProgressDialog progressDialog = new ProgressDialog(
-                AddCourseActivity.this,
-                R.style.Theme_AppCompat_Light_DarkActionBar);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Adding Course...");
-        progressDialog.show();
+      User user = AppContext.getCurrentAppContext().getUser();
+      course.setProfessorId(user.getId());
 
-        getLoaderManager().initLoader(101, null, this);
+      MeetingDate md = new MeetingDate();
+      md.setStartDate(csDate.getText().toString());
+      md.setEndDate(ceDate.getText().toString());
+      md.setStartTime(csTime.getText().toString());
+      md.setEndTime(ceTime.getText().toString());
+
+      course.setMeetingDate(md);
+      md.setMeetingDays(String.valueOf(days));
+
+      return new AddCourseAsyncTaskLoader(this, course);
+   }
+
+   @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
+         AsyncLoaderStatus loaderStatus) {
+
+      Log.i(TAG, "$$$$$$ RegisterActivity.onLoadFinished called");
+      if (loaderStatus.hasException()) {
+         Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
+               Toast.LENGTH_LONG).show();
+      } else {
+         Toast.makeText(this, "Course has been added successfully.",
+               Toast.LENGTH_LONG).show();
+      }
+      //finish();
+      //startActivity(getIntent());
+   }
+
+   @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {
+   }
+
+   @Override public void onClick(View v) {
+      addCourse();
+   }
+
+   public void addCourse() {
+      Log.i(TAG, "Adding Course");
+      submitButton.setEnabled(false);
+
+      final ProgressDialog progressDialog = new ProgressDialog(
+            AddCourseActivity.this,
+            R.style.Theme_AppCompat_Light_DarkActionBar);
+      progressDialog.setIndeterminate(true);
+      progressDialog.setMessage("Adding Course...");
+      progressDialog.show();
+
+      getLoaderManager().initLoader(101, null, this);
 
       progressDialog.hide();
 
-       Intent intent = new Intent(getApplicationContext(),ProfessorActivity.class);
-       startActivityForResult(intent, 0);
-       finish();
+      Intent intent = new Intent(getApplicationContext(),
+            ProfessorActivity.class);
+      startActivityForResult(intent, 0);
+      finish();
    }
 
 }
