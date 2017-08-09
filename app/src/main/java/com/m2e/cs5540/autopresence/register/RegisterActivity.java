@@ -1,7 +1,6 @@
 package com.m2e.cs5540.autopresence.register;
 
 import android.app.LoaderManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
@@ -72,29 +71,10 @@ public class RegisterActivity extends BaseActivity
       Log.i(TAG, "Signup");
       submitButton.setEnabled(false);
 
-      final ProgressDialog progressDialog = new ProgressDialog(
-            RegisterActivity.this, R.style.Theme_AppCompat_Light_DarkActionBar);
-      progressDialog.setIndeterminate(true);
-      progressDialog.setMessage("Creating Account...");
-      progressDialog.show();
-
       // TODO: Implementing your own signup logic here.
-      getLoaderManager().initLoader(105, null, this);
+      getLoaderManager().initLoader(105, null, this).forceLoad();
 
-      new android.os.Handler().postDelayed(new Runnable() {
-         public void run() {
-            // On complete call either onSignupSuccess or onSignupFailed
-            // depending on success
-            //onSignupSuccess();
-            // onSignupFailed();
-            progressDialog.dismiss();
-         }
-      }, 3000);
-      progressDialog.hide();
-
-      Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-      startActivityForResult(intent, 0);
-      finish();
+      showProgressDialog("Creating Account...");
    }
 
    @Override
@@ -115,8 +95,12 @@ public class RegisterActivity extends BaseActivity
          Toast.makeText(this,
                "You have been registered successfully, need to show on landing for professor/Student.",
                Toast.LENGTH_LONG).show();
+         Intent intent = new Intent(getApplicationContext(),
+               LoginActivity.class);
+         startActivityForResult(intent, 0);
       }
 
+      hideProgressDialog();
    }
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {

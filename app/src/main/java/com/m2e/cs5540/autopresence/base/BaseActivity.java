@@ -3,6 +3,8 @@ package com.m2e.cs5540.autopresence.base;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import com.m2e.cs5540.autopresence.R;
+
 /**
  * Created by maeswara on 7/8/2017.
  */
@@ -12,7 +14,8 @@ public class BaseActivity extends AppCompatActivity {
 
    protected void showProgressDialog(String message) {
       if (mProgressDialog == null) {
-         mProgressDialog = new ProgressDialog(this);
+         mProgressDialog = new ProgressDialog(this,
+               R.style.Theme_AppCompat_Light_DarkActionBar);
          mProgressDialog.setCancelable(false);
          mProgressDialog.setIndeterminate(true);
       }
