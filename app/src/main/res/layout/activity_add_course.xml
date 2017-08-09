@@ -51,7 +51,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.75"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp">
@@ -64,20 +64,14 @@
                     android:hint="Class Start Time" />
 
             </android.support.design.widget.TextInputLayout>
-            <android.support.v7.widget.ButtonBarLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
 
-                <Button
-                    android:id="@+id/sTimeButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Select Date" />
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/sTimeImage"
+                android:layout_width="71dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_access_time_black_24dp"/>
 
-            </android.support.v7.widget.ButtonBarLayout>
 
         </LinearLayout>
 
@@ -88,7 +82,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.75"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp">
@@ -102,20 +96,13 @@
                     />
 
             </android.support.design.widget.TextInputLayout>
-            <android.support.v7.widget.ButtonBarLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
 
-                <Button
-                    android:id="@+id/eTimeButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Select Date" />
-
-            </android.support.v7.widget.ButtonBarLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/eTimeImage"
+                android:layout_width="71dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_access_time_black_24dp"/>
 
         </LinearLayout>
 
@@ -127,7 +114,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.75"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp">
@@ -141,20 +128,13 @@
                     />
 
             </android.support.design.widget.TextInputLayout>
-            <android.support.v7.widget.ButtonBarLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
 
-                <Button
-                    android:id="@+id/sDateButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Select Date" />
-
-            </android.support.v7.widget.ButtonBarLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/sDateImage"
+                android:layout_width="71dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_date_range_black_24dp"/>
 
         </LinearLayout>
         <!-- Class Date -->
@@ -166,7 +146,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.75"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp">
@@ -180,20 +160,13 @@
                     />
 
             </android.support.design.widget.TextInputLayout>
-            <android.support.v7.widget.ButtonBarLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
 
-                <Button
-                    android:id="@+id/eDateButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Select Date" />
-
-            </android.support.v7.widget.ButtonBarLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/eDateImage"
+                android:layout_width="71dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_date_range_black_24dp"/>
 
         </LinearLayout>
 

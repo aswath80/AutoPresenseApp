@@ -17,6 +17,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -147,6 +149,18 @@ public class AddCourseActivity extends BaseActivity
       }
    }
 
+
+    private EditText csTime;
+    private ImageView bsTime;
+    private EditText ceTime;
+    private ImageView beTime;
+    private Calendar myTime;
+
+    private EditText csDate;
+    private ImageView bsDate;
+    private EditText ceDate;
+    private ImageView beDate;
+    private Calendar myCalendar;
    //for the arrow back button on appBar
    @Override public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
@@ -156,6 +170,7 @@ public class AddCourseActivity extends BaseActivity
 
    @Override public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
+
 
          case android.R.id.home:
 
@@ -173,12 +188,18 @@ public class AddCourseActivity extends BaseActivity
 
             return true;
 
+        this.csTime = (EditText) findViewById(R.id.sTime);
+        this.bsTime = (ImageView) findViewById(R.id.sTimeImage);
+        bsTime.setOnClickListener(new View.OnClickListener(){
          default:
             return super.onOptionsItemSelected(item);
       }
 
    }
 
+        this.ceTime = (EditText) findViewById(R.id.eTime);
+        this.beTime = (ImageView) findViewById(R.id.eTimeImage);
+        beTime.setOnClickListener(new View.OnClickListener(){
    //Implementing date picker
    public void pickDate(final EditText dateText, final Button button) {
 
@@ -186,6 +207,9 @@ public class AddCourseActivity extends BaseActivity
       final DatePickerDialog.OnDateSetListener date =
             new DatePickerDialog.OnDateSetListener() {
 
+        this.csDate = (EditText) findViewById(R.id.sDate);
+        bsDate = (ImageView) findViewById(R.id.sDateImage);
+        bsDate.setOnClickListener(new View.OnClickListener(){
                @Override
                public void onDateSet(DatePicker view, int year, int monthOfYear,
                      int dayOfMonth) {
@@ -196,6 +220,9 @@ public class AddCourseActivity extends BaseActivity
                   updateLabel(dateText);
                }
 
+        this.ceDate = (EditText) findViewById(R.id.eDate);
+        this.beDate = (ImageView) findViewById(R.id.eDateImage);
+        beDate.setOnClickListener(new View.OnClickListener(){
             };
 
       button.setOnClickListener(new View.OnClickListener() {
@@ -236,6 +263,8 @@ public class AddCourseActivity extends BaseActivity
       });
    }
 
+    //Implementing date picker
+    public void pickDate(final EditText dateText, final ImageView button){
    private void updateTime(EditText updateTime) {
       String myFormat = "HH:mm";
       SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
@@ -260,6 +289,33 @@ public class AddCourseActivity extends BaseActivity
       md.setStartTime(csTime.getText().toString());
       md.setEndTime(ceTime.getText().toString());
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(AddCourseActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    private void updateLabel(EditText updateDate) {
+        String myFormat = "dd-MMM-yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        updateDate.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    //Implementing time picker
+    public void pickTime(final EditText timeText, final ImageView button){
+        myTime = Calendar.getInstance();
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                myTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                myTime.set(Calendar.MINUTE, selectedMinute);
+                updateTime(timeText);
+            }
+        };
       course.setMeetingDate(md);
       md.setMeetingDays(String.valueOf(days));
 

@@ -14,11 +14,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
+
+
+
+import android.widget.ImageView;
+
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
+import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
@@ -28,140 +33,152 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ProfessorAttendanceActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<AsyncLoaderStatus>{
 
-    private static final String TAG = "ProfessorAtteActivity";
-    private RecyclerView studentAttendanceRecyclerView;
-    private ProfessoAttendanceAdapter professorMainAdaptor;
+public class ProfessorAttendanceActivity extends BaseActivity
+      implements LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
 
-    private EditText datepicker;
-    private Button datepickerButton;
-    private Calendar myCalendar;
-    private List<UserAttendance> attendanceList;
+   private static final String TAG = "ProfessorAtteActivity";
+   private RecyclerView studentAttendanceRecyclerView;
+   private ProfessoAttendanceAdapter professorMainAdaptor;
 
-    public void setAttendanceList(List<UserAttendance> attendanceList) {
-        if(attendanceList == null){
-            attendanceList = new ArrayList<>();
-        }
-        this.attendanceList = attendanceList;
+   private EditText datepicker;
+   private ImageView datepickerButton;
+   private Calendar myCalendar;
+   private List<UserAttendance> attendanceList;
 
-    }
+   public void setAttendanceList(List<UserAttendance> attendanceList) {
+      if (attendanceList == null) {
+         attendanceList = new ArrayList<>();
+      }
+      this.attendanceList = attendanceList;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_professor_attendance);
+   }
 
-        datepicker = (EditText) findViewById(R.id.datepicker);
-        datepickerButton = (Button) findViewById(R.id.datepickerButton);
+   @Override protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_professor_attendance);
 
-        datepickerButton.setOnClickListener(new View.OnClickListener(){
+      datepicker = (EditText) findViewById(R.id.datepicker);
+      datepickerButton = (ImageView) findViewById(R.id.datepickerButton);
 
-            @Override
-            public void onClick(View v) {
-                pickDate(datepicker, datepickerButton);
+      datepickerButton.setOnClickListener(new View.OnClickListener() {
 
-                initalizeLoader();
+         @Override public void onClick(View v) {
+            pickDate(datepicker, datepickerButton);
+
+            initalizeLoader();
+         }
+      });
+
+      datepicker.addTextChangedListener(new TextWatcher() {
+         @Override
+         public void beforeTextChanged(CharSequence s, int start, int count,
+               int after) {
+
+         }
+
+         @Override
+         public void onTextChanged(CharSequence s, int start, int before,
+               int count) {
+            List<UserAttendance> result = new ArrayList<>(
+                  attendanceList.size());
+            for (UserAttendance attendance : attendanceList) {
+               Log.i(TAG,
+                     "Date Picker, Date received is: " + datepicker.getText());
+               Log.i(TAG, "Date Picker, DbDate received is: " +
+                     attendance.getAttendanceDate());
+               if (attendance.getAttendanceDate().equals(
+                     datepicker.getText().toString())) {
+                  Log.i(TAG, "Date Picker, Matched id is: " +
+                        attendance.getUserId());
+                  result.add(attendance);
+               }
             }
-        });
+            Log.i(TAG, "Date Picker, Sending for update data size is: " +
+                  result.size());
+            professorMainAdaptor.setAttendanceList(result);
+         }
 
-        datepicker.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+         @Override public void afterTextChanged(Editable s) {
 
-            }
+         }
+      });
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<UserAttendance>  result = new ArrayList<>();
-                if(attendanceList != null && attendanceList.size() != 0){
-                    for (UserAttendance attendance : attendanceList){
-                        Log.i(TAG, "Date Picker, Date received is: " + datepicker.getText());
-                        Log.i(TAG, "Date Picker, DbDate received is: " + attendance.getAttendanceDate());
-                        if(attendance.getAttendanceDate().equals(datepicker.getText().toString())){
-                            Log.i(TAG, "Date Picker, Matched id is: " + attendance.getUserId());
-                            result.add(attendance);
-                        }
-                    }
-                }
-                Log.i(TAG, "Date Picker, Sending for update data size is: " + result.size());
-                professorMainAdaptor.setAttendanceList(result);
-            }
+      studentAttendanceRecyclerView = (RecyclerView) findViewById(
+            R.id.professorCourseRecyclerView);
+      professorMainAdaptor = new ProfessoAttendanceAdapter();
+      studentAttendanceRecyclerView.setAdapter(professorMainAdaptor);
 
-            @Override
-            public void afterTextChanged(Editable s) {
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
+            LinearLayoutManager.VERTICAL, false);
+      studentAttendanceRecyclerView.setLayoutManager(linearLayoutManager);
+      DatabaseUtil.getInstance().registerForCourseAttendances(
+            getIntent().getStringExtra("courseId"),
+            new StudentArrivalListener() {
+               @Override
+               public void onStudentArrival(UserAttendance studentAttendance) {
+                  List<UserAttendance> attendanceList =
+                        professorMainAdaptor.getAttendanceList();
+                  attendanceList.add(studentAttendance);
+                  Log.i(TAG, "Fetched data for user: " +
+                        studentAttendance.getUserId());
+                  professorMainAdaptor.setAttendanceList(attendanceList);
+               }
+            });
+   }
 
-            }
-        });
+   public void initalizeLoader() {
+      getLoaderManager().initLoader(107, null, this).forceLoad();
+      showProgressDialog("Loading data...");
+   }
 
-        studentAttendanceRecyclerView = (RecyclerView) findViewById(R.id.professorCourseRecyclerView);
-        professorMainAdaptor = new ProfessoAttendanceAdapter();
-        studentAttendanceRecyclerView.setAdapter(professorMainAdaptor);
+   public void pickDate(final EditText text, final ImageView button) {
+      myCalendar = Calendar.getInstance();
+      final DatePickerDialog.OnDateSetListener date =
+            new DatePickerDialog.OnDateSetListener() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        studentAttendanceRecyclerView.setLayoutManager(linearLayoutManager);
-        DatabaseUtil.getInstance().registerForCourseAttendances(getIntent().getStringExtra("courseId"), new StudentArrivalListener() {
-            @Override
-            public void onStudentArrival(UserAttendance studentAttendance) {
-                List<UserAttendance> attendanceList = professorMainAdaptor.getAttendanceList();
-                attendanceList.add(studentAttendance);
-                Log.i(TAG, "Fetched data for user: " + studentAttendance.getUserId());
-                professorMainAdaptor.setAttendanceList(attendanceList);
-            }
-        });
-    }
+               @Override
+               public void onDateSet(DatePicker view, int year, int monthOfYear,
+                     int dayOfMonth) {
+                  myCalendar.set(Calendar.YEAR, year);
+                  myCalendar.set(Calendar.MONTH, monthOfYear);
+                  myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                  updateLabel(text);
+               }
 
-    public void initalizeLoader(){
-        getLoaderManager().initLoader(107, null, this).forceLoad();
-    }
+            };
 
-    public void pickDate(final EditText text, final Button button){
-        myCalendar = Calendar.getInstance();
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+      button.setOnClickListener(new View.OnClickListener() {
+         @Override public void onClick(View v) {
+            new DatePickerDialog(ProfessorAttendanceActivity.this, date,
+                  myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                  myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+         }
+      });
+   }
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(text);
-            }
+   private void updateLabel(EditText v) {
+      String myFormat = "dd-MMM-yyyy"; //In which you need put here
+      SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+      v.setText(sdf.format(myCalendar.getTime()));
+   }
 
-        };
+   @Override public void onBackPressed() {
+      if (!AppContext.isUserLoggedIn()) {
+         super.onBackPressed();
+      }
+   }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(ProfessorAttendanceActivity.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-    }
+   @Override
+   public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
 
-    private void updateLabel(EditText v) {
-        String myFormat = "dd-MMM-yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        v.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    @Override public void onBackPressed() {
-        if (!AppContext.isUserLoggedIn()) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
-
-        String courseId = getIntent().getStringExtra("courseId");
-        if (courseId == null ) {
-            return null;
-        } else {
-            return new ProfessorAttendanceAsyncTaskLoader(this, courseId);
-        }
-    }
+      String courseId = getIntent().getStringExtra("courseId");
+      if (courseId == null) {
+         return null;
+      } else {
+         return new ProfessorAttendanceAsyncTaskLoader(this, courseId);
+      }
+   }
 
     @Override
     public void onLoadFinished(Loader<AsyncLoaderStatus> loader, AsyncLoaderStatus data) {
