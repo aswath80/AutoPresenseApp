@@ -14,8 +14,7 @@ public class BaseActivity extends AppCompatActivity {
 
    protected void showProgressDialog(String message) {
       if (mProgressDialog == null) {
-         mProgressDialog = new ProgressDialog(this,
-               R.style.Theme_AppCompat_Light_DarkActionBar);
+         mProgressDialog = new ProgressDialog(this);
          mProgressDialog.setCancelable(false);
          mProgressDialog.setIndeterminate(true);
       }
