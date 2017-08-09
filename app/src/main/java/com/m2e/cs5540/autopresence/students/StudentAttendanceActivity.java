@@ -1,7 +1,6 @@
 package com.m2e.cs5540.autopresence.students;
 
 import android.app.LoaderManager;
-import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -14,7 +13,6 @@ import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
-import com.m2e.cs5540.autopresence.professors.home.ProfessorHomeActivity;
 import com.m2e.cs5540.autopresence.vao.UserAttendance;
 
 import java.util.List;
@@ -46,6 +44,8 @@ public class StudentAttendanceActivity extends BaseActivity
             R.id.noStudentAttendanceDataTextLayout);
 
       getLoaderManager().initLoader(107, null, this).forceLoad();
+
+      showProgressDialog("Loading data...");
    }
 
    @Override public void onBackPressed() {
@@ -86,6 +86,7 @@ public class StudentAttendanceActivity extends BaseActivity
                   Toast.LENGTH_LONG).show();
          }
       }
+      hideProgressDialog();
    }
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {

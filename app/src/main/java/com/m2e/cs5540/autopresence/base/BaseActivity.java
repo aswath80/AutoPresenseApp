@@ -10,13 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 public class BaseActivity extends AppCompatActivity {
    private ProgressDialog mProgressDialog;
 
-   protected void showProgressDialog() {
+   protected void showProgressDialog(String message) {
       if (mProgressDialog == null) {
          mProgressDialog = new ProgressDialog(this);
          mProgressDialog.setCancelable(false);
-         mProgressDialog.setMessage("Loading...");
+         mProgressDialog.setIndeterminate(true);
       }
-
+      mProgressDialog.setMessage(message);
       mProgressDialog.show();
    }
 

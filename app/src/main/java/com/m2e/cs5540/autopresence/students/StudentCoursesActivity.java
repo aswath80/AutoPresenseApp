@@ -16,13 +16,14 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
+import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.student_enrollment.StudentEnrollmentDialogFragment;
 import com.m2e.cs5540.autopresence.vao.Course;
 
 import java.util.List;
 
-public class StudentCoursesActivity extends AppCompatActivity
+public class StudentCoursesActivity extends BaseActivity
       implements View.OnClickListener,
       LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
    private static final String TAG = "StudentCoursesActivity";
@@ -45,6 +46,8 @@ public class StudentCoursesActivity extends AppCompatActivity
             R.id.noStudentCourseDataTextLayout);
 
       getLoaderManager().initLoader(106, null, this).forceLoad();
+
+      showProgressDialog("Loading data...");
    }
 
    @Override public void onBackPressed() {
@@ -99,6 +102,7 @@ public class StudentCoursesActivity extends AppCompatActivity
                " database. Cause: " + data.getException().getClass() + ": " +
                "" + data.getException().getMessage(), Toast.LENGTH_LONG).show();
       }
+      hideProgressDialog();
    }
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {

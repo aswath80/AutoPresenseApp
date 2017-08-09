@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
+import com.m2e.cs5540.autopresence.base.BaseActivity;
 import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.login.LoginActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * Created by maeswara on 8/7/2017.
  */
-public class StudentHomeActivity extends AppCompatActivity
+public class StudentHomeActivity extends BaseActivity
       implements LoaderManager.LoaderCallbacks<AsyncLoaderStatus>,
       View.OnClickListener {
    private static final String TAG = "StudentHomeActivity";
@@ -61,6 +62,8 @@ public class StudentHomeActivity extends AppCompatActivity
       studentLogoutButton.setOnClickListener(this);
 
       getLoaderManager().initLoader(108, null, this).forceLoad();
+
+      showProgressDialog("Loading data...");
    }
 
    @Override
@@ -92,6 +95,7 @@ public class StudentHomeActivity extends AppCompatActivity
                data.getException().getClass() + ": " +
                data.getException().getMessage(), Toast.LENGTH_LONG).show();
       }
+      hideProgressDialog();
    }
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {
