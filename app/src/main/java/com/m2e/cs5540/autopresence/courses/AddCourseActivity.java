@@ -2,7 +2,6 @@ package com.m2e.cs5540.autopresence.courses;
 
 import android.app.DatePickerDialog;
 import android.app.LoaderManager;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.Loader;
@@ -17,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-
 import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -49,15 +47,15 @@ public class AddCourseActivity extends BaseActivity
    private EditText classLocation;
 
    private EditText csTime;
-   private Button bsTime;
+   private ImageView bsTime;
    private EditText ceTime;
-   private Button beTime;
+   private ImageView beTime;
    private Calendar myTime;
 
    private EditText csDate;
-   private Button bsDate;
+   private ImageView bsDate;
    private EditText ceDate;
-   private Button beDate;
+   private ImageView beDate;
    private Calendar myCalendar;
 
    private List<CheckBox> weekdays;
@@ -78,7 +76,7 @@ public class AddCourseActivity extends BaseActivity
       this.classLocation = (EditText) findViewById(R.id.cLocation);
 
       this.csTime = (EditText) findViewById(R.id.sTime);
-      this.bsTime = (Button) findViewById(R.id.sTimeButton);
+      this.bsTime = (ImageView) findViewById(R.id.sTimeImage);
       bsTime.setOnClickListener(new View.OnClickListener() {
 
          @Override public void onClick(View v) {
@@ -87,7 +85,7 @@ public class AddCourseActivity extends BaseActivity
       });
 
       this.ceTime = (EditText) findViewById(R.id.eTime);
-      this.beTime = (Button) findViewById(R.id.eTimeButton);
+      this.beTime = (ImageView) findViewById(R.id.eTimeImage);
       beTime.setOnClickListener(new View.OnClickListener() {
 
          @Override public void onClick(View v) {
@@ -96,7 +94,7 @@ public class AddCourseActivity extends BaseActivity
       });
 
       this.csDate = (EditText) findViewById(R.id.sDate);
-      bsDate = (Button) findViewById(R.id.sDateButton);
+      bsDate = (ImageView) findViewById(R.id.sDateImage);
       bsDate.setOnClickListener(new View.OnClickListener() {
 
          @Override public void onClick(View v) {
@@ -105,7 +103,7 @@ public class AddCourseActivity extends BaseActivity
       });
 
       this.ceDate = (EditText) findViewById(R.id.eDate);
-      this.beDate = (Button) findViewById(R.id.eDateButton);
+      this.beDate = (ImageView) findViewById(R.id.eDateImage);
       beDate.setOnClickListener(new View.OnClickListener() {
 
          @Override public void onClick(View v) {
@@ -149,18 +147,6 @@ public class AddCourseActivity extends BaseActivity
       }
    }
 
-
-    private EditText csTime;
-    private ImageView bsTime;
-    private EditText ceTime;
-    private ImageView beTime;
-    private Calendar myTime;
-
-    private EditText csDate;
-    private ImageView bsDate;
-    private EditText ceDate;
-    private ImageView beDate;
-    private Calendar myCalendar;
    //for the arrow back button on appBar
    @Override public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
@@ -171,45 +157,33 @@ public class AddCourseActivity extends BaseActivity
    @Override public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
 
-
          case android.R.id.home:
 
             String back = getIntent().getStringExtra("back");
-            if("home".equals(back)){
+            if ("home".equals(back)) {
                Intent about = new Intent(this, ProfessorHomeActivity.class);
                startActivity(about);
-            }else {
+            } else {
                Intent about = new Intent(this, ProfessorActivity.class);
                startActivity(about);
             }
-
-
             finish();
 
             return true;
 
-        this.csTime = (EditText) findViewById(R.id.sTime);
-        this.bsTime = (ImageView) findViewById(R.id.sTimeImage);
-        bsTime.setOnClickListener(new View.OnClickListener(){
          default:
             return super.onOptionsItemSelected(item);
       }
 
    }
 
-        this.ceTime = (EditText) findViewById(R.id.eTime);
-        this.beTime = (ImageView) findViewById(R.id.eTimeImage);
-        beTime.setOnClickListener(new View.OnClickListener(){
    //Implementing date picker
-   public void pickDate(final EditText dateText, final Button button) {
+   public void pickDate(final EditText dateText, final ImageView button) {
 
       myCalendar = Calendar.getInstance();
       final DatePickerDialog.OnDateSetListener date =
             new DatePickerDialog.OnDateSetListener() {
 
-        this.csDate = (EditText) findViewById(R.id.sDate);
-        bsDate = (ImageView) findViewById(R.id.sDateImage);
-        bsDate.setOnClickListener(new View.OnClickListener(){
                @Override
                public void onDateSet(DatePicker view, int year, int monthOfYear,
                      int dayOfMonth) {
@@ -220,9 +194,6 @@ public class AddCourseActivity extends BaseActivity
                   updateLabel(dateText);
                }
 
-        this.ceDate = (EditText) findViewById(R.id.eDate);
-        this.beDate = (ImageView) findViewById(R.id.eDateImage);
-        beDate.setOnClickListener(new View.OnClickListener(){
             };
 
       button.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +212,7 @@ public class AddCourseActivity extends BaseActivity
    }
 
    //Implementing time picker
-   public void pickTime(final EditText timeText, final Button button) {
+   public void pickTime(final EditText timeText, final ImageView button) {
       myTime = Calendar.getInstance();
       final TimePickerDialog.OnTimeSetListener time =
             new TimePickerDialog.OnTimeSetListener() {
@@ -263,8 +234,6 @@ public class AddCourseActivity extends BaseActivity
       });
    }
 
-    //Implementing date picker
-    public void pickDate(final EditText dateText, final ImageView button){
    private void updateTime(EditText updateTime) {
       String myFormat = "HH:mm";
       SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
@@ -289,33 +258,6 @@ public class AddCourseActivity extends BaseActivity
       md.setStartTime(csTime.getText().toString());
       md.setEndTime(ceTime.getText().toString());
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(AddCourseActivity.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-    }
-
-    private void updateLabel(EditText updateDate) {
-        String myFormat = "dd-MMM-yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-        updateDate.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    //Implementing time picker
-    public void pickTime(final EditText timeText, final ImageView button){
-        myTime = Calendar.getInstance();
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                myTime.set(Calendar.HOUR_OF_DAY, selectedHour);
-                myTime.set(Calendar.MINUTE, selectedMinute);
-                updateTime(timeText);
-            }
-        };
       course.setMeetingDate(md);
       md.setMeetingDays(String.valueOf(days));
 
@@ -332,7 +274,14 @@ public class AddCourseActivity extends BaseActivity
       } else {
          Toast.makeText(this, "Course has been added successfully.",
                Toast.LENGTH_LONG).show();
+
+         hideProgressDialog();
+         Intent intent = new Intent(getApplicationContext(),
+               ProfessorActivity.class);
+         startActivityForResult(intent, 0);
+         finish();
       }
+
       //finish();
       //startActivity(getIntent());
    }
@@ -348,21 +297,8 @@ public class AddCourseActivity extends BaseActivity
       Log.i(TAG, "Adding Course");
       submitButton.setEnabled(false);
 
-      final ProgressDialog progressDialog = new ProgressDialog(
-            AddCourseActivity.this,
-            R.style.Theme_AppCompat_Light_DarkActionBar);
-      progressDialog.setIndeterminate(true);
-      progressDialog.setMessage("Adding Course...");
-      progressDialog.show();
+      getLoaderManager().initLoader(101, null, this).forceLoad();
 
-      getLoaderManager().initLoader(101, null, this);
-
-      progressDialog.hide();
-
-      Intent intent = new Intent(getApplicationContext(),
-            ProfessorActivity.class);
-      startActivityForResult(intent, 0);
-      finish();
+      showProgressDialog("Adding Course...");
    }
-
 }
