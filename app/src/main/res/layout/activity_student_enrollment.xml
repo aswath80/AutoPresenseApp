@@ -33,6 +33,8 @@
 
         <!-- Course Add Button -->
         <android.support.v7.widget.AppCompatButton
+            android:background="@android:color/black"
+            android:textColor="@android:color/white"
             android:id="@+id/courseEnrollButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
